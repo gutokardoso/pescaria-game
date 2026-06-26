@@ -5439,6 +5439,10 @@ Missão: 0/0</div>
 </script>
 
 
+
+
+
+
 <script id="auth-gate-modal-safe">
 (function(){
   function logged(){
@@ -5451,10 +5455,7 @@ Missão: 0/0</div>
   }
 
   document.addEventListener('click', function(e){
-    // Nunca bloqueia nenhum clique dentro do painel de login.
-    if (e.target && e.target.closest && e.target.closest('#firebaseLoginPanel, .firebase-login-panel')) {
-      return;
-    }
+    if (e.target && e.target.closest && e.target.closest('#firebaseLoginPanel, .firebase-login-panel')) return;
 
     const el = e.target && e.target.closest ? e.target.closest('#startBtn, .start-btn, [data-start], button, a') : null;
     if (!el) return;
@@ -5508,6 +5509,9 @@ const db = getFirestore(app);
 const googleProvider = new GoogleAuthProvider();
 googleProvider.addScope("profile");
 googleProvider.addScope("email");
+googleProvider.setCustomParameters({ prompt: "select_account" });
+
+let googleLoginInProgress = false;
 
 function providerName(user) {
   const p = user?.providerData?.[0]?.providerId || "";
@@ -5547,18 +5551,15 @@ async function savePlayer(user) {
   const ref = doc(db, "players", user.uid);
   const snap = await getDoc(ref);
 
-  if (snap.exists()) {
-    await updateDoc(ref, data);
-  } else {
-    await setDoc(ref, {
-      ...data,
-      createdAt: serverTimestamp(),
-      firstLoginAt: serverTimestamp(),
-      inventory: {},
-      purchases: {},
-      ranking: {}
-    });
-  }
+  if (snap.exists()) await updateDoc(ref, data);
+  else await setDoc(ref, {
+    ...data,
+    createdAt: serverTimestamp(),
+    firstLoginAt: serverTimestamp(),
+    inventory: {},
+    purchases: {},
+    ranking: {}
+  });
 
   localStorage.setItem("pescaria_player", JSON.stringify({
     uid: data.uid,
@@ -5596,13 +5597,40 @@ function updateLoginUI(user) {
 }
 
 async function loginGoogle() {
+  if (googleLoginInProgress) return;
+  googleLoginInProgress = true;
+
+  const btn = document.getElementById("loginGoogleBtn");
+  if (btn) {
+    btn.disabled = true;
+    btn.dataset.originalText = btn.textContent || "";
+    btn.textContent = "Abrindo Google...";
+  }
+
   try {
     const result = await signInWithPopup(auth, googleProvider);
     await savePlayer(result.user);
     updateLoginUI(result.user);
   } catch(e) {
     console.error("Erro Google Login:", e);
+
+    if (e && e.code === "auth/cancelled-popup-request") {
+      // Silencioso: esse erro é causado por clique duplicado. O bloqueio acima evita novas ocorrências.
+      return;
+    }
+
+    if (e && e.code === "auth/popup-closed-by-user") {
+      alert("Login cancelado. Clique em Continuar com Google e escolha sua conta.");
+      return;
+    }
+
     alert("Não foi possível fazer login com Google: " + (e?.message || e));
+  } finally {
+    googleLoginInProgress = false;
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = btn.dataset.originalText || "G Continuar com Google";
+    }
   }
 }
 
@@ -5641,45 +5669,41 @@ async function loginEmail() {
   }
 }
 
+function replaceButtonWithClone(id, handler) {
+  const oldBtn = document.getElementById(id);
+  if (!oldBtn || oldBtn.__firebaseCleanBound) return;
+
+  const newBtn = oldBtn.cloneNode(true);
+  newBtn.__firebaseCleanBound = true;
+  newBtn.disabled = false;
+  newBtn.style.pointerEvents = "auto";
+  newBtn.addEventListener("click", function(ev) {
+    ev.preventDefault();
+    ev.stopPropagation();
+    handler();
+  }, false);
+
+  oldBtn.parentNode.replaceChild(newBtn, oldBtn);
+}
+
 function bindFirebaseLoginButtons() {
-  const g = document.getElementById("loginGoogleBtn");
-  const create = document.getElementById("createEmailAccountBtn");
-  const enter = document.getElementById("loginEmailBtn");
+  replaceButtonWithClone("loginGoogleBtn", loginGoogle);
+  replaceButtonWithClone("createEmailAccountBtn", createEmailAccount);
+  replaceButtonWithClone("loginEmailBtn", loginEmail);
+
   const logout = document.getElementById("firebaseLogoutBtn");
-
-  if (g) {
-    g.onclick = null;
-    g.addEventListener("click", function(ev) {
-      ev.preventDefault();
-      loginGoogle();
-    });
-  }
-
-  if (create) {
-    create.onclick = null;
-    create.addEventListener("click", function(ev) {
-      ev.preventDefault();
-      createEmailAccount();
-    });
-  }
-
-  if (enter) {
-    enter.onclick = null;
-    enter.addEventListener("click", function(ev) {
-      ev.preventDefault();
-      loginEmail();
-    });
-  }
-
-  if (logout) {
+  if (logout && !logout.__firebaseCleanBound) {
+    logout.__firebaseCleanBound = true;
     logout.onclick = null;
     logout.addEventListener("click", async function(ev) {
       ev.preventDefault();
+      ev.stopPropagation();
       await signOut(auth);
       localStorage.removeItem("pescaria_player");
       window.currentPlayer = null;
       updateLoginUI(null);
-    });
+      bindFirebaseLoginButtons();
+    }, false);
   }
 }
 
@@ -5753,6 +5777,7 @@ setTimeout(bindFirebaseLoginButtons, 1000);
 
 onAuthStateChanged(auth, async user => {
   updateLoginUI(user);
+  bindFirebaseLoginButtons();
   if (user) {
     try { await savePlayer(user); } catch(e) { console.warn(e); }
   }

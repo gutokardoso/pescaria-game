@@ -5086,51 +5086,7 @@ html body .firebase-login-panel{
 @media(max-width:560px){html body #firebaseLoginPanel.firebase-login-panel,html body #firebaseLoginPanel,html body .firebase-login-panel{position:fixed!important;left:50vw!important;top:60vh!important;bottom:auto!important;transform:translateX(-50%)!important;}}
 </style>
 
-<style id="final-login-structural-position">
-/* REVISÃO ESTRUTURAL: LOGIN EM POSIÇÃO FIXA E COMPACTA */
-html body #firebaseLoginPanel.firebase-login-panel,
-html body #firebaseLoginPanel,
-html body .firebase-login-panel {
-  position: fixed !important;
-  left: 50% !important;
-  top: 56% !important;
-  bottom: auto !important;
-  transform: translate(-50%, -50%) !important;
-  width: 250px !important;
-  max-width: 250px !important;
-  min-width: 250px !important;
-  padding: 7px 8px !important;
-  border-radius: 15px !important;
-  gap: 5px !important;
-  z-index: 99999 !important;
-}
 
-html body .firebase-login-title { font-size: 11px !important; line-height: 1 !important; margin: 0 !important; }
-html body .firebase-profile-row { gap: 6px !important; padding: 5px 6px !important; border-radius: 12px !important; }
-html body .firebase-profile-photo { width: 30px !important; height: 30px !important; border-width: 2px !important; }
-html body .firebase-profile-name { font-size: 9px !important; line-height: 1.05 !important; }
-html body .firebase-profile-email { font-size: 7px !important; line-height: 1.05 !important; }
-html body .firebase-logout-btn { padding: 5px 7px !important; font-size: 8px !important; }
-html body .firebase-login-buttons { gap: 5px !important; }
-html body .firebase-login-btn {
-  height: 25px !important;
-  min-height: 25px !important;
-  border-radius: 999px !important;
-  font-size: 9px !important;
-  line-height: 1 !important;
-}
-html body .email-login-form { gap: 5px !important; }
-html body .email-login-form input {
-  height: 24px !important;
-  min-height: 24px !important;
-  padding: 0 9px !important;
-  border-width: 2px !important;
-  font-size: 8px !important;
-  border-radius: 999px !important;
-}
-html body .email-login-actions { gap: 5px !important; }
-html body .firebase-login-note { font-size: 7px !important; line-height: 1.15 !important; margin-top: 0 !important; }
-</style>
 
 
 <style id="final-missions-structural-css">
@@ -5143,7 +5099,96 @@ html body #resultOverlay .mission-final-text{display:block!important;flex:1 1 au
 </style>
 
 
-<style id="ranking-structural-css">
+
+
+
+<style id="final-login-ranking-clean-css">
+/* LOGIN ESTÁVEL - SEM PISCAR */
+html body #firebaseLoginPanel,
+html body .firebase-login-panel {
+  position: fixed !important;
+  left: 50% !important;
+  top: 69% !important;
+  bottom: auto !important;
+  transform: translate(-50%, -50%) !important;
+  width: 250px !important;
+  max-width: 250px !important;
+  min-width: 250px !important;
+  padding: 7px 8px !important;
+  border-radius: 15px !important;
+  gap: 5px !important;
+  z-index: 99999 !important;
+}
+
+html body .firebase-login-title {
+  font-size: 11px !important;
+  line-height: 1 !important;
+  margin: 0 !important;
+}
+
+html body .firebase-profile-row {
+  gap: 6px !important;
+  padding: 5px 6px !important;
+  border-radius: 12px !important;
+}
+
+html body .firebase-profile-photo {
+  width: 30px !important;
+  height: 30px !important;
+  border-width: 2px !important;
+}
+
+html body .firebase-profile-name {
+  font-size: 9px !important;
+  line-height: 1.05 !important;
+}
+
+html body .firebase-profile-email {
+  font-size: 7px !important;
+  line-height: 1.05 !important;
+}
+
+html body .firebase-logout-btn {
+  padding: 5px 7px !important;
+  font-size: 8px !important;
+}
+
+html body .firebase-login-buttons {
+  gap: 5px !important;
+}
+
+html body .firebase-login-btn {
+  height: 25px !important;
+  min-height: 25px !important;
+  border-radius: 999px !important;
+  font-size: 9px !important;
+  line-height: 1 !important;
+}
+
+html body .email-login-form {
+  gap: 5px !important;
+}
+
+html body .email-login-form input {
+  height: 24px !important;
+  min-height: 24px !important;
+  padding: 0 9px !important;
+  border-width: 2px !important;
+  font-size: 8px !important;
+  border-radius: 999px !important;
+}
+
+html body .email-login-actions {
+  gap: 5px !important;
+}
+
+html body .firebase-login-note {
+  font-size: 7px !important;
+  line-height: 1.15 !important;
+  margin-top: 0 !important;
+}
+
+/* RANKING COM POSIÇÃO, FOTO, NOME E PONTUAÇÃO */
 html body .map-ranking-list,
 html body #rankingList,
 html body .ranking-list {
@@ -5151,6 +5196,7 @@ html body .ranking-list {
   flex-direction: column !important;
   gap: 8px !important;
 }
+
 html body .world-ranking-badge {
   display: flex !important;
   align-items: center !important;
@@ -5159,12 +5205,13 @@ html body .world-ranking-badge {
   padding: 6px 14px !important;
   border-radius: 999px !important;
   color: #fff !important;
-  background: linear-gradient(180deg,#1ea7ff,#004fa8) !important;
+  background: linear-gradient(180deg, #1ea7ff, #004fa8) !important;
   border: 2px solid rgba(255,255,255,.85) !important;
-  font-family: Arial Black,Impact,system-ui,sans-serif !important;
+  font-family: Arial Black, Impact, system-ui, sans-serif !important;
   font-size: 13px !important;
   text-shadow: 0 2px 0 rgba(0,0,0,.35) !important;
 }
+
 html body .world-ranking-row {
   width: 100% !important;
   min-height: 48px !important;
@@ -5176,19 +5223,48 @@ html body .world-ranking-row {
   padding: 5px 14px !important;
   border-radius: 999px !important;
   background: rgba(255,244,213,.94) !important;
-  box-shadow: inset 0 2px 0 rgba(255,255,255,.55),0 3px 0 rgba(0,0,0,.10) !important;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.55), 0 3px 0 rgba(0,0,0,.10) !important;
 }
+
 html body .world-ranking-pos,
 html body .world-ranking-name,
 html body .world-ranking-score {
   color: #07466b !important;
-  font-family: Arial Black,Impact,system-ui,sans-serif !important;
+  font-family: Arial Black, Impact, system-ui, sans-serif !important;
 }
-html body .world-ranking-pos { font-size: 18px !important; text-align: right !important; }
-html body .world-ranking-photo { width:34px!important;height:34px!important;border-radius:50%!important;object-fit:cover!important;border:2px solid #fff!important;background:#ffcf38!important; }
-html body .world-ranking-name { min-width:0!important;font-size:15px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important; }
-html body .world-ranking-score { font-size:17px!important;text-align:right!important; }
-html body .ranking-date, html body .map-ranking-date, html body .world-ranking-date { display:none!important; }
+
+html body .world-ranking-pos {
+  font-size: 18px !important;
+  text-align: right !important;
+}
+
+html body .world-ranking-photo {
+  width: 34px !important;
+  height: 34px !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+  border: 2px solid #fff !important;
+  background: #ffcf38 !important;
+}
+
+html body .world-ranking-name {
+  min-width: 0 !important;
+  font-size: 15px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+html body .world-ranking-score {
+  font-size: 17px !important;
+  text-align: right !important;
+}
+
+html body .ranking-date,
+html body .map-ranking-date,
+html body .world-ranking-date {
+  display: none !important;
+}
 </style>
 
 </head>
@@ -11023,6 +11099,45 @@ window.renderPescariaWorldRanking = renderPescariaWorldRankingFinal;
 
 
 /* REVISÃO ESTRUTURAL: RANKING MUNDIAL FIRESTORE */
+async function disabled_loadWorldRanking_old(limitCount = 100) {
+  const q = query(collection(db, "scores"), orderBy("score", "desc"), limit(limitCount));
+  const snap = await getDocs(q);
+  return snap.docs.map((docSnap, index) => {
+    const data = docSnap.data() || {};
+    return {
+      position: index + 1,
+      uid: data.uid || docSnap.id,
+      name: data.name || "Jogador",
+      photoURL: data.photoURL || "",
+      score: Number(data.score || 0),
+      phase: data.phase || 1
+    };
+  });
+}
+
+async function disabled_renderWorldRankingIntoGame_old() {
+  try {
+    const rows = await loadWorldRanking(100);
+    const list = document.querySelector(".map-ranking-list") || document.getElementById("rankingList") || document.querySelector(".ranking-list");
+    if (!list) return;
+    list.innerHTML = '<div class="world-ranking-badge">🌎 Ranking mundial</div>' + rows.slice(0,10).map(row => `
+      <div class="ranking-row world-ranking-row">
+        <span class="world-ranking-pos">${row.position}.</span>
+        <img class="world-ranking-photo" src="${row.photoURL || './assets/fish-normal.png'}" alt="">
+        <span class="world-ranking-name">${row.name || 'Jogador'}</span>
+        <span class="world-ranking-score">${row.score || 0}</span>
+      </div>
+    `).join("");
+  } catch (error) {
+    console.warn("Erro ao carregar ranking mundial:", error);
+  }
+}
+
+window.loadPescariaWorldRanking = loadWorldRanking;
+window.renderPescariaWorldRanking = renderWorldRankingIntoGame;
+
+
+/* RANKING MUNDIAL LIMPO */
 async function loadWorldRanking(limitCount = 100) {
   const q = query(collection(db, "scores"), orderBy("score", "desc"), limit(limitCount));
   const snap = await getDocs(q);
@@ -11044,6 +11159,10 @@ async function renderWorldRankingIntoGame() {
     const rows = await loadWorldRanking(100);
     const list = document.querySelector(".map-ranking-list") || document.getElementById("rankingList") || document.querySelector(".ranking-list");
     if (!list) return;
+    if (!rows.length) {
+      if (typeof window.refreshRankingClean === "function") window.refreshRankingClean();
+      return;
+    }
     list.innerHTML = '<div class="world-ranking-badge">🌎 Ranking mundial</div>' + rows.slice(0,10).map(row => `
       <div class="ranking-row world-ranking-row">
         <span class="world-ranking-pos">${row.position}.</span>
@@ -11054,6 +11173,7 @@ async function renderWorldRankingIntoGame() {
     `).join("");
   } catch (error) {
     console.warn("Erro ao carregar ranking mundial:", error);
+    if (typeof window.refreshRankingClean === "function") window.refreshRankingClean();
   }
 }
 
@@ -11233,102 +11353,102 @@ window.renderPescariaWorldRanking = renderWorldRankingIntoGame;
 (function(){function forceFixedLogin(){const p=document.getElementById('firebaseLoginPanel')||document.querySelector('.firebase-login-panel');if(!p)return;p.style.setProperty('position','fixed','important');p.style.setProperty('left','50vw','important');p.style.setProperty('top','60vh','important');p.style.setProperty('right','auto','important');p.style.setProperty('bottom','auto','important');p.style.setProperty('transform','translateX(-50%)','important');p.style.setProperty('z-index','2147483000','important');p.style.setProperty('width','250px','important');p.style.setProperty('max-width','250px','important');p.style.setProperty('min-width','250px','important');}document.addEventListener('DOMContentLoaded',forceFixedLogin);window.addEventListener('load',forceFixedLogin);[50,150,350,800,1500,3000].forEach(t=>setTimeout(forceFixedLogin,t));setInterval(forceFixedLogin,1000);})();
 </script>
 
-<script id="final-login-structural-position">
-(function(){
-  function fixLoginPanelPosition(){
-    const panel = document.getElementById('firebaseLoginPanel') || document.querySelector('.firebase-login-panel');
-    if(!panel) return;
-    panel.style.setProperty('position','fixed','important');
-    panel.style.setProperty('left','50%','important');
-    panel.style.setProperty('top','56%','important');
-    panel.style.setProperty('bottom','auto','important');
-    panel.style.setProperty('transform','translate(-50%, -50%)','important');
-    panel.style.setProperty('width','250px','important');
-    panel.style.setProperty('max-width','250px','important');
-    panel.style.setProperty('min-width','250px','important');
-    panel.style.setProperty('z-index','99999','important');
-  }
-  document.addEventListener('DOMContentLoaded', fixLoginPanelPosition);
-  window.addEventListener('load', fixLoginPanelPosition);
-  setTimeout(fixLoginPanelPosition, 100);
-  setTimeout(fixLoginPanelPosition, 500);
-  setTimeout(fixLoginPanelPosition, 1200);
-  window.fixLoginPanelPosition = fixLoginPanelPosition;
-})();
-</script>
 
 
-<script id="ranking-structural-open-hook">
+
+
+
+
+
+
+
+<script id="final-login-ranking-clean-js">
 (function(){
-  function refreshRanking(){
+  function profileSafe(){
     try {
-      if (typeof window.renderPescariaWorldRanking === 'function') {
-        window.renderPescariaWorldRanking();
-      } else if (typeof renderMapRanking === 'function') {
-        renderMapRanking();
-      } else if (typeof renderRanking === 'function') {
-        renderRanking();
-      }
+      const raw = localStorage.getItem('pescaria_player');
+      if (raw) return JSON.parse(raw) || {};
     } catch(e) {}
+    return window.currentPlayer || {};
   }
-  document.addEventListener('click', function(e){
-    const txt = ((e.target && (e.target.textContent || e.target.className || e.target.id)) || '').toString().toLowerCase();
-    if (txt.includes('ranking') || txt.includes('trophy') || txt.includes('troféu')) {
-      setTimeout(refreshRanking, 120);
-      setTimeout(refreshRanking, 600);
-    }
-  }, true);
-  window.refreshStructuralRanking = refreshRanking;
-})();
-</script>
 
-
-<script id="render-map-ranking-global-override">
-(function(){
-  function getProfile(){
-    try { return JSON.parse(localStorage.getItem('pescaria_player') || '{}') || {}; } catch(e){ return {}; }
-  }
-  function localEntries(){
-    const keys = ['pescariaRanking','ranking','scores','pescaria_scores','pescaria_ranking'];
+  function rankingEntriesSafe(){
+    const keys = ['pescariaRanking', 'ranking', 'scores', 'pescaria_scores', 'pescaria_ranking'];
     for (const key of keys) {
       try {
         const raw = localStorage.getItem(key);
         if (!raw) continue;
-        const v = JSON.parse(raw);
-        if (Array.isArray(v)) return v;
-      } catch(e){}
+        const value = JSON.parse(raw);
+        if (Array.isArray(value)) return value;
+      } catch(e) {}
     }
     return [];
   }
-  function normalize(entry, index){
-    const p = getProfile();
-    if (typeof entry === 'number') return {position:index+1,name:p.name||'Jogador',photoURL:p.photoURL||'./assets/fish-normal.png',score:entry};
+
+  function normalizeEntry(entry, index){
+    const p = profileSafe();
+    if (typeof entry === 'number') {
+      return {
+        position: index + 1,
+        name: p.name || 'Jogador',
+        photoURL: p.photoURL || './assets/fish-normal.png',
+        score: entry
+      };
+    }
     entry = entry || {};
     return {
-      position:index+1,
-      name:entry.name||entry.playerName||entry.nome||p.name||'Jogador',
-      photoURL:entry.photoURL||entry.photo||entry.foto||p.photoURL||'./assets/fish-normal.png',
-      score:Number(entry.score||entry.points||entry.pontos||entry.value||0)
+      position: index + 1,
+      name: entry.name || entry.playerName || entry.nome || p.name || 'Jogador',
+      photoURL: entry.photoURL || entry.photo || entry.foto || p.photoURL || './assets/fish-normal.png',
+      score: Number(entry.score || entry.points || entry.pontos || entry.value || 0)
     };
   }
-  function draw(list, rows){
+
+  function renderRows(list, entries){
     if (!list) return;
-    rows = (rows || []).map(normalize).slice(0,10);
+    const rows = (entries || []).map(normalizeEntry).slice(0, 10);
     list.innerHTML = '<div class="world-ranking-badge">🌎 Ranking mundial</div>' + rows.map(row => `
       <div class="ranking-row world-ranking-row">
         <span class="world-ranking-pos">${row.position}.</span>
-        <img class="world-ranking-photo" src="${row.photoURL}" alt="">
-        <span class="world-ranking-name">${row.name}</span>
-        <span class="world-ranking-score">${row.score}</span>
+        <img class="world-ranking-photo" src="${row.photoURL || './assets/fish-normal.png'}" alt="">
+        <span class="world-ranking-name">${row.name || 'Jogador'}</span>
+        <span class="world-ranking-score">${row.score || 0}</span>
       </div>
     `).join('');
   }
-  window.renderMapRanking = function(){
+
+  function localRankingRender(){
     const list = document.querySelector('.map-ranking-list') || document.getElementById('rankingList') || document.querySelector('.ranking-list');
-    draw(list, localEntries());
-    if (typeof window.renderPescariaWorldRanking === 'function') setTimeout(window.renderPescariaWorldRanking, 120);
+    if (!list) return;
+    renderRows(list, rankingEntriesSafe());
+  }
+
+  window.renderMapRanking = function(){
+    localRankingRender();
+    if (typeof window.renderPescariaWorldRanking === 'function') {
+      setTimeout(function(){
+        window.renderPescariaWorldRanking();
+      }, 120);
+    }
   };
+
   window.renderRanking = window.renderMapRanking;
+
+  function refreshOnRankingOpen(){
+    const list = document.querySelector('.map-ranking-list') || document.getElementById('rankingList') || document.querySelector('.ranking-list');
+    if (!list) return;
+    if (typeof window.renderMapRanking === 'function') window.renderMapRanking();
+  }
+
+  document.addEventListener('click', function(e){
+    const txt = ((e.target && (e.target.textContent || e.target.className || e.target.id)) || '').toString().toLowerCase();
+    if (txt.includes('ranking') || txt.includes('troféu') || txt.includes('trophy')) {
+      setTimeout(refreshOnRankingOpen, 120);
+      setTimeout(refreshOnRankingOpen, 500);
+    }
+  }, true);
+
+  window.refreshRankingClean = refreshOnRankingOpen;
 })();
 </script>
 

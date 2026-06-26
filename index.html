@@ -5114,55 +5114,6 @@ body:not(.player-authenticated) #startBtn,body:not(.player-authenticated) .start
 </style>
 
 
-<style id="login-box-position-and-auth-gate-fix">
-/* SUBIR CAIXA DE LOGIN E MANTER BOTÃO JOGAR VISÍVEL */
-.firebase-login-panel {
-  bottom: 24.5% !important;
-}
-
-@media (max-width: 560px) {
-  .firebase-login-panel {
-    bottom: 24.5% !important;
-  }
-}
-
-/* Indicação visual de bloqueio quando não está logado */
-body:not(.player-authenticated) #startBtn,
-body:not(.player-authenticated) .start-btn,
-body:not(.player-authenticated) [data-start],
-body:not(.player-authenticated) button[onclick*="start"] {
-  filter: grayscale(.2) brightness(.74) !important;
-}
-</style>
-
-
-<style id="login-box-up-90-and-world-ranking-css">
-.firebase-login-panel{bottom:calc(24.5% + 90px)!important}
-@media(max-width:560px){.firebase-login-panel{bottom:calc(24.5% + 90px)!important}}
-.world-ranking-badge{display:inline-flex!important;align-items:center!important;justify-content:center!important;margin:0 auto 8px auto!important;padding:6px 14px!important;border-radius:999px!important;color:#fff!important;background:linear-gradient(180deg,#1ea7ff,#004fa8)!important;border:2px solid rgba(255,255,255,.85)!important;box-shadow:0 4px 0 rgba(0,0,0,.20)!important;font-family:Arial Black,Impact,system-ui,sans-serif!important;font-size:13px!important;text-shadow:0 2px 0 rgba(0,0,0,.32)!important}
-</style>
-
-<style id="login-position-real-fix">
-/* POSIÇÃO REAL DA CAIXA DE LOGIN: 90PX MAIS ALTA */
-html body .firebase-login-panel,
-html body #firebaseLoginPanel {
-  top: 58.5% !important;
-  bottom: auto !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-  position: absolute !important;
-}
-
-@media (max-width: 560px) {
-  html body .firebase-login-panel,
-  html body #firebaseLoginPanel {
-    top: 58.5% !important;
-    bottom: auto !important;
-  }
-}
-</style>
-
-
 <style id="mission-bars-final-css-safe">
 html body #resultOverlay #finalMissionStatusList.mission-bars-final{width:min(92%,680px)!important;max-width:min(92%,680px)!important;margin:12px auto 10px auto!important;display:flex!important;flex-direction:column!important;align-items:center!important;gap:8px!important;box-sizing:border-box!important}
 html body #resultOverlay .mission-final-bar{position:relative!important;width:100%!important;max-width:100%!important;min-height:42px!important;box-sizing:border-box!important;border-radius:22px!important;display:flex!important;align-items:center!important;justify-content:flex-start!important;padding:6px 18px 6px 54px!important;overflow:hidden!important;box-shadow:inset 0 3px 0 rgba(255,255,255,.26),0 5px 0 rgba(0,0,0,.18),0 8px 14px rgba(0,0,0,.18)!important;font-family:Arial Black,Impact,system-ui,sans-serif!important;color:#fff!important;text-shadow:0 2px 0 rgba(0,0,0,.48),0 0 5px rgba(0,0,0,.35)!important}
@@ -5173,94 +5124,63 @@ html body #resultOverlay .mission-final-text{display:block!important;flex:1 1 au
 </style>
 
 
-<style id="login-position-320px-up-final">
-/* CAIXA DE LOGIN: 320PX MAIS ALTA */
-html body #firebaseLoginPanel,
-html body .firebase-login-panel {
-  top: 42% !important;
-  bottom: auto !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-  position: absolute !important;
-}
 
-@media (max-width: 560px) {
+
+<style id="FINAL_LOGIN_RANKING_OVERRIDE_20260626">
+/* DEFINITIVO: painel de login sobre a caixa de texto da tela inicial */
+html body #firebaseLoginPanel.firebase-login-panel,
+html body #firebaseLoginPanel,
+html body .firebase-login-panel{
+  position:absolute!important;
+  left:50%!important;
+  top:60%!important;
+  bottom:auto!important;
+  transform:translateX(-50%)!important;
+  z-index:99999!important;
+  width:250px!important;
+  max-width:250px!important;
+  min-width:250px!important;
+}
+@media(max-width:560px){
+  html body #firebaseLoginPanel.firebase-login-panel,
   html body #firebaseLoginPanel,
-  html body .firebase-login-panel {
-    top: 42% !important;
-    bottom: auto !important;
+  html body .firebase-login-panel{
+    top:60%!important;
+    bottom:auto!important;
+    transform:translateX(-50%)!important;
   }
 }
+/* DEFINITIVO: ranking sem data, com posição/foto/nome/pontuação */
+html body .map-ranking-list, html body #rankingList, html body .ranking-list{
+  display:flex!important; flex-direction:column!important; gap:8px!important;
+}
+html body .world-ranking-badge{display:flex!important;align-items:center!important;justify-content:center!important;margin:0 auto 8px auto!important;padding:6px 14px!important;border-radius:999px!important;color:#fff!important;background:linear-gradient(180deg,#1ea7ff,#004fa8)!important;border:2px solid rgba(255,255,255,.85)!important;font-family:Arial Black,Impact,system-ui,sans-serif!important;font-size:13px!important;text-shadow:0 2px 0 rgba(0,0,0,.35)!important;}
+html body .ranking-item.world-ranking-row, html body .world-ranking-row{width:100%!important;min-height:48px!important;box-sizing:border-box!important;display:grid!important;grid-template-columns:42px 40px minmax(0,1fr) 100px!important;align-items:center!important;gap:8px!important;padding:5px 14px!important;border-radius:999px!important;background:rgba(255,244,213,.94)!important;box-shadow:inset 0 2px 0 rgba(255,255,255,.55),0 3px 0 rgba(0,0,0,.10)!important;}
+html body .world-ranking-pos{color:#07466b!important;font-family:Arial Black,Impact,system-ui,sans-serif!important;font-size:18px!important;text-align:right!important;}
+html body .world-ranking-photo{width:34px!important;height:34px!important;border-radius:50%!important;object-fit:cover!important;border:2px solid #fff!important;background:#ffcf38!important;}
+html body .world-ranking-name{min-width:0!important;color:#07466b!important;font-family:Arial Black,Impact,system-ui,sans-serif!important;font-size:15px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;}
+html body .world-ranking-score{color:#07466b!important;font-family:Arial Black,Impact,system-ui,sans-serif!important;font-size:17px!important;text-align:right!important;}
+html body .ranking-date, html body .map-ranking-date, html body .world-ranking-date{display:none!important;}
 </style>
 
 
-<style id="world-ranking-photo-table-css">
-/* RANKING MUNDIAL COM FOTO, NOME E PONTUAÇÃO */
-.world-ranking-badge {
-  width: auto !important;
-  display: inline-flex !important;
-  margin: 0 auto 8px auto !important;
+<style id="FINAL_FIXED_LOGIN_POSITION_LAST">
+html body #firebaseLoginPanel.firebase-login-panel,
+html body #firebaseLoginPanel,
+html body .firebase-login-panel{
+  position:fixed!important;
+  left:50vw!important;
+  top:60vh!important;
+  right:auto!important;
+  bottom:auto!important;
+  transform:translateX(-50%)!important;
+  z-index:2147483000!important;
+  width:250px!important;
+  max-width:250px!important;
+  min-width:250px!important;
 }
-
-.world-ranking-table {
-  width: 100% !important;
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 7px !important;
-}
-
-.world-ranking-row {
-  width: 100% !important;
-  min-height: 42px !important;
-  box-sizing: border-box !important;
-  display: grid !important;
-  grid-template-columns: 38px 36px minmax(0, 1fr) 92px !important;
-  align-items: center !important;
-  gap: 8px !important;
-  padding: 5px 12px !important;
-  border-radius: 999px !important;
-  background: rgba(255, 244, 213, .92) !important;
-  box-shadow: inset 0 2px 0 rgba(255,255,255,.55), 0 3px 0 rgba(0,0,0,.10) !important;
-  font-family: Arial Black, Impact, system-ui, sans-serif !important;
-}
-
-.world-ranking-pos {
-  color: #07466b !important;
-  font-size: 16px !important;
-  text-align: right !important;
-}
-
-.world-ranking-photo {
-  width: 32px !important;
-  height: 32px !important;
-  border-radius: 50% !important;
-  object-fit: cover !important;
-  border: 2px solid #fff !important;
-  background: #ffcf38 !important;
-}
-
-.world-ranking-name {
-  min-width: 0 !important;
-  color: #07466b !important;
-  font-size: 14px !important;
-  white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-}
-
-.world-ranking-score {
-  color: #07466b !important;
-  font-size: 15px !important;
-  text-align: right !important;
-}
-
-.map-ranking-list .ranking-date,
-.ranking-list .ranking-date,
-.world-ranking-date {
-  display: none !important;
-}
+@media(max-width:560px){html body #firebaseLoginPanel.firebase-login-panel,html body #firebaseLoginPanel,html body .firebase-login-panel{position:fixed!important;left:50vw!important;top:60vh!important;bottom:auto!important;transform:translateX(-50%)!important;}}
 </style>
-
 </head>
 <body>
   <main class="game-shell" id="game">
@@ -5897,6 +5817,41 @@ Missão: 0/0</div>
     }
 
 
+
+    
+    function getCurrentPlayerRankingProfile() {
+      try {
+        const saved = JSON.parse(localStorage.getItem('pescaria_player') || '{}');
+        const current = window.currentPlayer || {};
+        return {
+          name: current.name || saved.name || 'Jogador',
+          photoURL: current.photoURL || saved.photoURL || './assets/fish-normal.png'
+        };
+      } catch (error) {
+        return { name: 'Jogador', photoURL: './assets/fish-normal.png' };
+      }
+    }
+
+
+    
+    function buildRankingRowHtml(row) {
+      const profile = getCurrentPlayerRankingProfile();
+      const position = row.position || 1;
+      let name = String(row.name || profile.name || 'Jogador');
+      if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(name.trim())) name = profile.name || 'Jogador';
+      const score = Number(row.score || 0);
+      const photo = row.photoURL || profile.photoURL || './assets/fish-normal.png';
+      return `
+        <div class="ranking-item world-ranking-row">
+          <span class="world-ranking-pos">${position}.</span>
+          <img class="world-ranking-photo" src="${photo}" alt="">
+          <span class="world-ranking-name">${name}</span>
+          <strong class="world-ranking-score">${score}</strong>
+        </div>
+      `;
+    }
+
+
     function getRanking() {
       try {
         return JSON.parse(localStorage.getItem('pescariaTop5') || '[]');
@@ -5911,37 +5866,42 @@ Missão: 0/0</div>
 
     function updateRanking(scoreValue) {
       const ranking = getRanking();
-      const now = new Date();
+      const profile = getCurrentPlayerRankingProfile();
       ranking.push({
         score: scoreValue,
-        date: now.toLocaleDateString('pt-BR')
+        name: profile.name,
+        photoURL: profile.photoURL
       });
       ranking.sort((a, b) => b.score - a.score);
       saveRanking(ranking);
       renderRanking();
+      if (typeof window.submitPescariaWorldScore === 'function') {
+        window.submitPescariaWorldScore(scoreValue, { phase: currentPhase || 1, coins: coins || 0 });
+      }
     }
 
+    
     function renderRanking() {
       const ranking = getRanking();
-      //  é atualizada em finishRound().
-
       if (!rankingListEl) return;
+      const profile = getCurrentPlayerRankingProfile();
 
       if (!ranking.length) {
-        rankingListEl.innerHTML = '<div class="ranking-empty">Nenhuma pescaria ainda</div>';
+        rankingListEl.innerHTML = '<div class="world-ranking-badge">🌎 Ranking mundial</div><div class="ranking-empty">Nenhuma pescaria ainda</div>';
         return;
       }
 
-      rankingListEl.innerHTML = ranking
+      rankingListEl.innerHTML = '<div class="world-ranking-badge">🌎 Ranking mundial</div>' + ranking
         .slice(0, 5)
-        .map((item, index) => `
-          <div class="ranking-item">
-            <span>${index + 1}. ${item.date}</span>
-            <strong>${item.score}</strong>
-          </div>
-        `)
+        .map((item, index) => buildRankingRowHtml({
+          position: index + 1,
+          name: item.name || profile.name,
+          photoURL: item.photoURL || profile.photoURL,
+          score: item.score || 0
+        }))
         .join('');
     }
+
 
     function updateRainbowTimer() {
       if (!rainbowTimerEl) return;
@@ -8506,20 +8466,37 @@ applyHookVisuals();
         popup.setAttribute('aria-hidden', 'false');
       };
 
+      
       window.renderMapRanking = function() {
         if (!mapRankingListEl) return;
         const ranking = typeof getRanking === 'function' ? getRanking() : [];
+        const profile = typeof getCurrentPlayerRankingProfile === 'function'
+          ? getCurrentPlayerRankingProfile()
+          : { name: 'Jogador', photoURL: './assets/fish-normal.png' };
+
         if (!ranking.length) {
-          mapRankingListEl.innerHTML = '<div class="ranking-empty">Nenhuma pescaria ainda</div>';
+          mapRankingListEl.innerHTML = '<div class="world-ranking-badge">🌎 Ranking mundial</div><div class="ranking-empty">Nenhuma pescaria ainda</div>';
           return;
         }
-        mapRankingListEl.innerHTML = ranking.slice(0, 5).map((item, index) => `
-          <div class="ranking-item">
-            <span>${index + 1}. ${item.date}</span>
-            <strong>${item.score}</strong>
-          </div>
-        `).join('');
+
+        mapRankingListEl.innerHTML = '<div class="world-ranking-badge">🌎 Ranking mundial</div>' + ranking.slice(0, 10).map((item, index) =>
+          buildRankingRowHtml({
+            position: index + 1,
+            name: item.name || profile.name,
+            photoURL: item.photoURL || profile.photoURL,
+            score: item.score || 0
+          })
+        ).join('');
+
+        // Se o ranking mundial estiver disponível, substitui o ranking local quando carregar.
+        if (typeof window.loadPescariaWorldRanking === 'function') {
+          window.loadPescariaWorldRanking(10).then(rows => {
+            if (!rows || !rows.length) return;
+            mapRankingListEl.innerHTML = '<div class="world-ranking-badge">🌎 Ranking mundial</div>' + rows.map(row => buildRankingRowHtml(row)).join('');
+          }).catch(() => {});
+        }
       };
+
 
       window.updateMapSoundButton = function() {
         if (!mapSoundToggleBtnEl) return;
@@ -10856,7 +10833,7 @@ async function loadWorldRanking(limitCount = 100) {
 async function renderWorldRankingIntoGame() {
   try {
     const rows = await loadWorldRanking(100);
-    const list = document.getElementById("rankingList") || document.querySelector(".ranking-list") || document.querySelector(".map-ranking-list");
+    const list = document.querySelector(".map-ranking-list") || document.getElementById("rankingList") || document.querySelector(".ranking-list");
     if (!list) return;
 
     list.querySelectorAll(".ranking-row, .world-ranking-row, .world-ranking-badge, .world-ranking-table").forEach(el => el.remove());
@@ -10892,6 +10869,25 @@ async function renderWorldRankingIntoGame() {
 window.submitPescariaWorldScore = submitWorldRankingScore;
 window.loadPescariaWorldRanking = loadWorldRanking;
 window.renderPescariaWorldRanking = renderWorldRankingIntoGame;
+
+
+async function renderPescariaWorldRankingFinal() {
+  try {
+    if (typeof loadWorldRanking !== "function") return;
+    const rows = await loadWorldRanking(100);
+    const list = document.querySelector(".map-ranking-list") || document.getElementById("rankingList") || document.querySelector(".ranking-list");
+    if (!list || !rows.length) return;
+    list.innerHTML = '<div class="world-ranking-badge">🌎 Ranking mundial</div>' + rows.slice(0,10).map(row => `
+      <div class="ranking-item world-ranking-row">
+        <span class="world-ranking-pos">${row.position}.</span>
+        <img class="world-ranking-photo" src="${row.photoURL || './assets/fish-normal.png'}" alt="">
+        <span class="world-ranking-name">${row.name || 'Jogador'}</span>
+        <strong class="world-ranking-score">${Number(row.score || 0)}</strong>
+      </div>
+    `).join('');
+  } catch (error) { console.warn(error); }
+}
+window.renderPescariaWorldRanking = renderPescariaWorldRankingFinal;
 </script>
 
 
@@ -11029,65 +11025,41 @@ window.renderPescariaWorldRanking = renderWorldRankingIntoGame;
 </script>
 
 
-<script id="force-login-position-real">
+
+
+<script id="FINAL_RUNTIME_GUARD_20260626">
 (function(){
-  function forceLoginPanelHigher(){
-    try{
-      const panel = document.getElementById('firebaseLoginPanel') || document.querySelector('.firebase-login-panel');
-      if(!panel) return;
-      panel.style.setProperty('position','absolute','important');
-      panel.style.setProperty('left','50%','important');
-      panel.style.setProperty('top','58.5%','important');
-      panel.style.setProperty('bottom','auto','important');
-      panel.style.setProperty('transform','translateX(-50%)','important');
-    }catch(e){}
+  function forceLoginPanelPosition(){
+    const p=document.getElementById('firebaseLoginPanel')||document.querySelector('.firebase-login-panel');
+    if(!p)return;
+    p.style.setProperty('position','absolute','important');
+    p.style.setProperty('left','50%','important');
+    p.style.setProperty('top','60%','important');
+    p.style.setProperty('bottom','auto','important');
+    p.style.setProperty('transform','translateX(-50%)','important');
+    p.style.setProperty('z-index','99999','important');
   }
-  document.addEventListener('DOMContentLoaded', forceLoginPanelHigher);
-  window.addEventListener('load', forceLoginPanelHigher);
-  setTimeout(forceLoginPanelHigher, 100);
-  setTimeout(forceLoginPanelHigher, 500);
-  setTimeout(forceLoginPanelHigher, 1500);
-  window.forceLoginPanelHigher = forceLoginPanelHigher;
+  function profile(){try{return JSON.parse(localStorage.getItem('pescaria_player')||'{}')}catch(e){return {}}}
+  function sanitizeRankingDOM(){
+    const list=document.querySelector('.map-ranking-list')||document.getElementById('rankingList')||document.querySelector('.ranking-list');
+    if(!list)return;
+    if(list.querySelector('.world-ranking-row')){
+      list.querySelectorAll('.world-ranking-name').forEach(n=>{if(/^\d{1,2}\/\d{1,2}\/\d{4}$/.test((n.textContent||'').trim())) n.textContent=profile().name||'Jogador';});
+      return;
+    }
+    if(typeof window.renderMapRanking==='function') window.renderMapRanking();
+  }
+  document.addEventListener('DOMContentLoaded',()=>{forceLoginPanelPosition();setTimeout(sanitizeRankingDOM,300);});
+  window.addEventListener('load',()=>{forceLoginPanelPosition();setTimeout(sanitizeRankingDOM,300);});
+  [50,250,800,1600,3000].forEach(t=>setTimeout(()=>{forceLoginPanelPosition();sanitizeRankingDOM();},t));
+  setInterval(forceLoginPanelPosition,1500);
+  document.addEventListener('click',e=>{const s=((e.target&&(e.target.textContent||e.target.id||e.target.className))||'').toString().toLowerCase(); if(s.includes('ranking')||s.includes('trophy')||s.includes('troféu')) setTimeout(sanitizeRankingDOM,200);},true);
 })();
 </script>
 
 
-<script id="force-login-position-320px-final">
-(function(){
-  function forceLoginPanelUp320(){
-    try{
-      const panel = document.getElementById('firebaseLoginPanel') || document.querySelector('.firebase-login-panel');
-      if(!panel) return;
-      panel.style.setProperty('position','absolute','important');
-      panel.style.setProperty('left','50%','important');
-      panel.style.setProperty('top','42%','important');
-      panel.style.setProperty('bottom','auto','important');
-      panel.style.setProperty('transform','translateX(-50%)','important');
-    }catch(e){}
-  }
-  document.addEventListener('DOMContentLoaded', forceLoginPanelUp320);
-  window.addEventListener('load', forceLoginPanelUp320);
-  setTimeout(forceLoginPanelUp320, 50);
-  setTimeout(forceLoginPanelUp320, 250);
-  setTimeout(forceLoginPanelUp320, 900);
-  setTimeout(forceLoginPanelUp320, 1800);
-  window.forceLoginPanelUp320 = forceLoginPanelUp320;
-})();
+<script id="FINAL_FIXED_LOGIN_POSITION_SCRIPT_LAST">
+(function(){function forceFixedLogin(){const p=document.getElementById('firebaseLoginPanel')||document.querySelector('.firebase-login-panel');if(!p)return;p.style.setProperty('position','fixed','important');p.style.setProperty('left','50vw','important');p.style.setProperty('top','60vh','important');p.style.setProperty('right','auto','important');p.style.setProperty('bottom','auto','important');p.style.setProperty('transform','translateX(-50%)','important');p.style.setProperty('z-index','2147483000','important');p.style.setProperty('width','250px','important');p.style.setProperty('max-width','250px','important');p.style.setProperty('min-width','250px','important');}document.addEventListener('DOMContentLoaded',forceFixedLogin);window.addEventListener('load',forceFixedLogin);[50,150,350,800,1500,3000].forEach(t=>setTimeout(forceFixedLogin,t));setInterval(forceFixedLogin,1000);})();
 </script>
-
-
-<script id="ranking-photo-format-fallback">
-(function(){
-  function hideRankingDates(){
-    try{
-      document.querySelectorAll('.ranking-date').forEach(el => el.remove());
-    }catch(e){}
-  }
-  document.addEventListener('DOMContentLoaded', hideRankingDates);
-  window.addEventListener('load', hideRankingDates);
-  setInterval(hideRankingDates, 1500);
-})();
-</script>
-
 </body>
 </html>

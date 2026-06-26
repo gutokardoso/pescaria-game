@@ -5172,6 +5172,95 @@ html body #resultOverlay .mission-final-icon{position:absolute!important;left:5p
 html body #resultOverlay .mission-final-text{display:block!important;flex:1 1 auto!important;width:100%!important;min-width:0!important;max-width:100%!important;font-size:13px!important;line-height:1!important;white-space:nowrap!important;overflow:visible!important;text-overflow:clip!important;text-align:left!important;color:#fff!important}
 </style>
 
+
+<style id="login-position-320px-up-final">
+/* CAIXA DE LOGIN: 320PX MAIS ALTA */
+html body #firebaseLoginPanel,
+html body .firebase-login-panel {
+  top: 42% !important;
+  bottom: auto !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  position: absolute !important;
+}
+
+@media (max-width: 560px) {
+  html body #firebaseLoginPanel,
+  html body .firebase-login-panel {
+    top: 42% !important;
+    bottom: auto !important;
+  }
+}
+</style>
+
+
+<style id="world-ranking-photo-table-css">
+/* RANKING MUNDIAL COM FOTO, NOME E PONTUAÇÃO */
+.world-ranking-badge {
+  width: auto !important;
+  display: inline-flex !important;
+  margin: 0 auto 8px auto !important;
+}
+
+.world-ranking-table {
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 7px !important;
+}
+
+.world-ranking-row {
+  width: 100% !important;
+  min-height: 42px !important;
+  box-sizing: border-box !important;
+  display: grid !important;
+  grid-template-columns: 38px 36px minmax(0, 1fr) 92px !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 5px 12px !important;
+  border-radius: 999px !important;
+  background: rgba(255, 244, 213, .92) !important;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.55), 0 3px 0 rgba(0,0,0,.10) !important;
+  font-family: Arial Black, Impact, system-ui, sans-serif !important;
+}
+
+.world-ranking-pos {
+  color: #07466b !important;
+  font-size: 16px !important;
+  text-align: right !important;
+}
+
+.world-ranking-photo {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+  border: 2px solid #fff !important;
+  background: #ffcf38 !important;
+}
+
+.world-ranking-name {
+  min-width: 0 !important;
+  color: #07466b !important;
+  font-size: 14px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.world-ranking-score {
+  color: #07466b !important;
+  font-size: 15px !important;
+  text-align: right !important;
+}
+
+.map-ranking-list .ranking-date,
+.ranking-list .ranking-date,
+.world-ranking-date {
+  display: none !important;
+}
+</style>
+
 </head>
 <body>
   <main class="game-shell" id="game">
@@ -10763,29 +10852,42 @@ async function loadWorldRanking(limitCount = 100) {
   });
 }
 
+
 async function renderWorldRankingIntoGame() {
   try {
     const rows = await loadWorldRanking(100);
     const list = document.getElementById("rankingList") || document.querySelector(".ranking-list") || document.querySelector(".map-ranking-list");
     if (!list) return;
 
-    list.querySelectorAll(".ranking-row, .world-ranking-row, .world-ranking-badge").forEach(el => el.remove());
+    list.querySelectorAll(".ranking-row, .world-ranking-row, .world-ranking-badge, .world-ranking-table").forEach(el => el.remove());
 
     const badge = document.createElement("div");
     badge.className = "world-ranking-badge";
     badge.textContent = "🌎 Ranking mundial";
     list.appendChild(badge);
 
+    const table = document.createElement("div");
+    table.className = "world-ranking-table";
+
     rows.slice(0, 10).forEach(row => {
       const div = document.createElement("div");
-      div.className = "ranking-row world-ranking-row";
-      div.innerHTML = `<span class="ranking-pos">${row.position}.</span><span class="ranking-name">${row.name}</span><span class="ranking-score">${row.score}</span>`;
-      list.appendChild(div);
+      div.className = "world-ranking-row";
+      const photo = row.photoURL || "./assets/fish-normal.png";
+      div.innerHTML = `
+        <span class="world-ranking-pos">${row.position}.</span>
+        <img class="world-ranking-photo" src="${photo}" alt="${row.name}">
+        <span class="world-ranking-name">${row.name}</span>
+        <span class="world-ranking-score">${row.score}</span>
+      `;
+      table.appendChild(div);
     });
+
+    list.appendChild(table);
   } catch (error) {
     console.warn("Erro ao carregar ranking mundial:", error);
   }
 }
+
 
 window.submitPescariaWorldScore = submitWorldRankingScore;
 window.loadPescariaWorldRanking = loadWorldRanking;
@@ -10946,6 +11048,44 @@ window.renderPescariaWorldRanking = renderWorldRankingIntoGame;
   setTimeout(forceLoginPanelHigher, 500);
   setTimeout(forceLoginPanelHigher, 1500);
   window.forceLoginPanelHigher = forceLoginPanelHigher;
+})();
+</script>
+
+
+<script id="force-login-position-320px-final">
+(function(){
+  function forceLoginPanelUp320(){
+    try{
+      const panel = document.getElementById('firebaseLoginPanel') || document.querySelector('.firebase-login-panel');
+      if(!panel) return;
+      panel.style.setProperty('position','absolute','important');
+      panel.style.setProperty('left','50%','important');
+      panel.style.setProperty('top','42%','important');
+      panel.style.setProperty('bottom','auto','important');
+      panel.style.setProperty('transform','translateX(-50%)','important');
+    }catch(e){}
+  }
+  document.addEventListener('DOMContentLoaded', forceLoginPanelUp320);
+  window.addEventListener('load', forceLoginPanelUp320);
+  setTimeout(forceLoginPanelUp320, 50);
+  setTimeout(forceLoginPanelUp320, 250);
+  setTimeout(forceLoginPanelUp320, 900);
+  setTimeout(forceLoginPanelUp320, 1800);
+  window.forceLoginPanelUp320 = forceLoginPanelUp320;
+})();
+</script>
+
+
+<script id="ranking-photo-format-fallback">
+(function(){
+  function hideRankingDates(){
+    try{
+      document.querySelectorAll('.ranking-date').forEach(el => el.remove());
+    }catch(e){}
+  }
+  document.addEventListener('DOMContentLoaded', hideRankingDates);
+  window.addEventListener('load', hideRankingDates);
+  setInterval(hideRankingDates, 1500);
 })();
 </script>
 

@@ -1,2 +1,0 @@
-# pescaria-game
-Pescaria

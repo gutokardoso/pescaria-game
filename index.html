@@ -5030,61 +5030,8 @@ html body #resultOverlay .mission-final-text{display:block!important;flex:1 1 au
 
 
 
-<style id="FINAL_LOGIN_RANKING_OVERRIDE_20260626">
-/* DEFINITIVO: painel de login sobre a caixa de texto da tela inicial */
-html body #firebaseLoginPanel.firebase-login-panel,
-html body #firebaseLoginPanel,
-html body .firebase-login-panel{
-  position:absolute!important;
-  left:50%!important;
-  top:60%!important;
-  bottom:auto!important;
-  transform:translateX(-50%)!important;
-  z-index:99999!important;
-  width:250px!important;
-  max-width:250px!important;
-  min-width:250px!important;
-}
-@media(max-width:560px){
-  html body #firebaseLoginPanel.firebase-login-panel,
-  html body #firebaseLoginPanel,
-  html body .firebase-login-panel{
-    top:60%!important;
-    bottom:auto!important;
-    transform:translateX(-50%)!important;
-  }
-}
-/* DEFINITIVO: ranking sem data, com posição/foto/nome/pontuação */
-html body .map-ranking-list, html body #rankingList, html body .ranking-list{
-  display:flex!important; flex-direction:column!important; gap:8px!important;
-}
-html body .world-ranking-badge{display:flex!important;align-items:center!important;justify-content:center!important;margin:0 auto 8px auto!important;padding:6px 14px!important;border-radius:999px!important;color:#fff!important;background:linear-gradient(180deg,#1ea7ff,#004fa8)!important;border:2px solid rgba(255,255,255,.85)!important;font-family:Arial Black,Impact,system-ui,sans-serif!important;font-size:13px!important;text-shadow:0 2px 0 rgba(0,0,0,.35)!important;}
-html body .ranking-item.world-ranking-row, html body .world-ranking-row{width:100%!important;min-height:48px!important;box-sizing:border-box!important;display:grid!important;grid-template-columns:42px 40px minmax(0,1fr) 100px!important;align-items:center!important;gap:8px!important;padding:5px 14px!important;border-radius:999px!important;background:rgba(255,244,213,.94)!important;box-shadow:inset 0 2px 0 rgba(255,255,255,.55),0 3px 0 rgba(0,0,0,.10)!important;}
-html body .world-ranking-pos{color:#07466b!important;font-family:Arial Black,Impact,system-ui,sans-serif!important;font-size:18px!important;text-align:right!important;}
-html body .world-ranking-photo{width:34px!important;height:34px!important;border-radius:50%!important;object-fit:cover!important;border:2px solid #fff!important;background:#ffcf38!important;}
-html body .world-ranking-name{min-width:0!important;color:#07466b!important;font-family:Arial Black,Impact,system-ui,sans-serif!important;font-size:15px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;}
-html body .world-ranking-score{color:#07466b!important;font-family:Arial Black,Impact,system-ui,sans-serif!important;font-size:17px!important;text-align:right!important;}
-html body .ranking-date, html body .map-ranking-date, html body .world-ranking-date{display:none!important;}
-</style>
 
 
-<style id="FINAL_FIXED_LOGIN_POSITION_LAST">
-html body #firebaseLoginPanel.firebase-login-panel,
-html body #firebaseLoginPanel,
-html body .firebase-login-panel{
-  position:fixed!important;
-  left:50vw!important;
-  top:60vh!important;
-  right:auto!important;
-  bottom:auto!important;
-  transform:translateX(-50%)!important;
-  z-index:2147483000!important;
-  width:250px!important;
-  max-width:250px!important;
-  min-width:250px!important;
-}
-@media(max-width:560px){html body #firebaseLoginPanel.firebase-login-panel,html body #firebaseLoginPanel,html body .firebase-login-panel{position:fixed!important;left:50vw!important;top:60vh!important;bottom:auto!important;transform:translateX(-50%)!important;}}
-</style>
 
 
 
@@ -5102,169 +5049,63 @@ html body #resultOverlay .mission-final-text{display:block!important;flex:1 1 au
 
 
 
-<style id="final-login-ranking-clean-css">
-/* LOGIN ESTÁVEL - SEM PISCAR */
+
+
+<style id="STABLE_LOGIN_AND_RANKING_FIX_20260626">
+/* Login: regra única, sem intervalos, 320px acima da posição anterior */
+html body #firebaseLoginPanel.firebase-login-panel,
 html body #firebaseLoginPanel,
-html body .firebase-login-panel {
-  position: fixed !important;
-  left: 50% !important;
-  top: 69% !important;
-  bottom: auto !important;
-  transform: translate(-50%, -50%) !important;
-  width: 250px !important;
-  max-width: 250px !important;
-  min-width: 250px !important;
-  padding: 7px 8px !important;
-  border-radius: 15px !important;
-  gap: 5px !important;
-  z-index: 99999 !important;
+html body .firebase-login-panel{
+  position:fixed!important;
+  left:50vw!important;
+  top:60vh!important;
+  right:auto!important;
+  bottom:auto!important;
+  transform:translate(-50%, -320px)!important;
+  z-index:2147483000!important;
+  width:250px!important;
+  max-width:250px!important;
+  min-width:250px!important;
+  padding:7px 8px!important;
+  border-radius:15px!important;
+  gap:5px!important;
+  pointer-events:auto!important;
 }
+html body .firebase-login-title{font-size:11px!important;line-height:1!important;margin:0!important;}
+html body .firebase-profile-row{gap:6px!important;padding:5px 6px!important;border-radius:12px!important;}
+html body .firebase-profile-photo{width:30px!important;height:30px!important;border-width:2px!important;}
+html body .firebase-profile-name{font-size:9px!important;line-height:1.05!important;}
+html body .firebase-profile-email{font-size:7px!important;line-height:1.05!important;}
+html body .firebase-logout-btn{padding:5px 7px!important;font-size:8px!important;}
+html body .firebase-login-buttons{gap:5px!important;}
+html body .firebase-login-btn{height:25px!important;min-height:25px!important;border-radius:999px!important;font-size:9px!important;line-height:1!important;}
+html body .email-login-form{gap:5px!important;}
+html body .email-login-form input{height:24px!important;min-height:24px!important;padding:0 9px!important;border-width:2px!important;font-size:8px!important;border-radius:999px!important;}
+html body .email-login-actions{gap:5px!important;}
+html body .firebase-login-note{font-size:7px!important;line-height:1.15!important;margin-top:0!important;}
+/* Ranking: posição, foto, nome, pontuação inteira e sem data */
+html body .map-ranking-list,html body #rankingList,html body .ranking-list{display:flex!important;flex-direction:column!important;gap:8px!important;}
+html body .world-ranking-badge{display:flex!important;align-items:center!important;justify-content:center!important;width:fit-content!important;margin:0 auto 8px auto!important;padding:6px 14px!important;border-radius:999px!important;color:#fff!important;background:linear-gradient(180deg,#1ea7ff,#004fa8)!important;border:2px solid rgba(255,255,255,.85)!important;font-family:Arial Black,Impact,system-ui,sans-serif!important;font-size:13px!important;text-shadow:0 2px 0 rgba(0,0,0,.35)!important;}
+html body .ranking-item.world-ranking-row,html body .world-ranking-row{width:100%!important;min-height:48px!important;box-sizing:border-box!important;display:grid!important;grid-template-columns:42px 40px minmax(0,1fr) 130px!important;align-items:center!important;gap:8px!important;padding:5px 14px!important;border-radius:999px!important;background:rgba(255,244,213,.94)!important;box-shadow:inset 0 2px 0 rgba(255,255,255,.55),0 3px 0 rgba(0,0,0,.10)!important;}
+html body .world-ranking-pos{color:#07466b!important;font-family:Arial Black,Impact,system-ui,sans-serif!important;font-size:18px!important;text-align:right!important;white-space:nowrap!important;}
+html body .world-ranking-photo{width:34px!important;height:34px!important;border-radius:50%!important;object-fit:cover!important;border:2px solid #fff!important;background:#ffcf38!important;}
+html body .world-ranking-name{min-width:0!important;color:#07466b!important;font-family:Arial Black,Impact,system-ui,sans-serif!important;font-size:15px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;}
+html body .world-ranking-score{color:#07466b!important;font-family:Arial Black,Impact,system-ui,sans-serif!important;font-size:17px!important;text-align:right!important;white-space:nowrap!important;overflow:visible!important;min-width:120px!important;}
+html body .ranking-date,html body .map-ranking-date,html body .world-ranking-date{display:none!important;}
+</style>
 
-html body .firebase-login-title {
-  font-size: 11px !important;
-  line-height: 1 !important;
-  margin: 0 !important;
-}
 
-html body .firebase-profile-row {
-  gap: 6px !important;
-  padding: 5px 6px !important;
-  border-radius: 12px !important;
+<style id="stable-login-modal-css">
+#firebaseLoginPanel,.firebase-login-panel{
+  position:fixed!important;left:50%!important;top:50%!important;right:auto!important;bottom:auto!important;
+  transform:translate(-50%,-50%)!important;width:280px!important;max-width:82vw!important;min-width:260px!important;
+  max-height:82vh!important;overflow:visible!important;padding:10px 12px!important;border-radius:18px!important;gap:7px!important;
+  z-index:2147483647!important;pointer-events:auto!important;opacity:1!important;visibility:visible!important;
+  will-change:auto!important;animation:none!important;transition:none!important
 }
-
-html body .firebase-profile-photo {
-  width: 30px !important;
-  height: 30px !important;
-  border-width: 2px !important;
-}
-
-html body .firebase-profile-name {
-  font-size: 9px !important;
-  line-height: 1.05 !important;
-}
-
-html body .firebase-profile-email {
-  font-size: 7px !important;
-  line-height: 1.05 !important;
-}
-
-html body .firebase-logout-btn {
-  padding: 5px 7px !important;
-  font-size: 8px !important;
-}
-
-html body .firebase-login-buttons {
-  gap: 5px !important;
-}
-
-html body .firebase-login-btn {
-  height: 25px !important;
-  min-height: 25px !important;
-  border-radius: 999px !important;
-  font-size: 9px !important;
-  line-height: 1 !important;
-}
-
-html body .email-login-form {
-  gap: 5px !important;
-}
-
-html body .email-login-form input {
-  height: 24px !important;
-  min-height: 24px !important;
-  padding: 0 9px !important;
-  border-width: 2px !important;
-  font-size: 8px !important;
-  border-radius: 999px !important;
-}
-
-html body .email-login-actions {
-  gap: 5px !important;
-}
-
-html body .firebase-login-note {
-  font-size: 7px !important;
-  line-height: 1.15 !important;
-  margin-top: 0 !important;
-}
-
-/* RANKING COM POSIÇÃO, FOTO, NOME E PONTUAÇÃO */
-html body .map-ranking-list,
-html body #rankingList,
-html body .ranking-list {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 8px !important;
-}
-
-html body .world-ranking-badge {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  margin: 0 auto 8px auto !important;
-  padding: 6px 14px !important;
-  border-radius: 999px !important;
-  color: #fff !important;
-  background: linear-gradient(180deg, #1ea7ff, #004fa8) !important;
-  border: 2px solid rgba(255,255,255,.85) !important;
-  font-family: Arial Black, Impact, system-ui, sans-serif !important;
-  font-size: 13px !important;
-  text-shadow: 0 2px 0 rgba(0,0,0,.35) !important;
-}
-
-html body .world-ranking-row {
-  width: 100% !important;
-  min-height: 48px !important;
-  box-sizing: border-box !important;
-  display: grid !important;
-  grid-template-columns: 42px 40px minmax(0,1fr) 100px !important;
-  align-items: center !important;
-  gap: 8px !important;
-  padding: 5px 14px !important;
-  border-radius: 999px !important;
-  background: rgba(255,244,213,.94) !important;
-  box-shadow: inset 0 2px 0 rgba(255,255,255,.55), 0 3px 0 rgba(0,0,0,.10) !important;
-}
-
-html body .world-ranking-pos,
-html body .world-ranking-name,
-html body .world-ranking-score {
-  color: #07466b !important;
-  font-family: Arial Black, Impact, system-ui, sans-serif !important;
-}
-
-html body .world-ranking-pos {
-  font-size: 18px !important;
-  text-align: right !important;
-}
-
-html body .world-ranking-photo {
-  width: 34px !important;
-  height: 34px !important;
-  border-radius: 50% !important;
-  object-fit: cover !important;
-  border: 2px solid #fff !important;
-  background: #ffcf38 !important;
-}
-
-html body .world-ranking-name {
-  min-width: 0 !important;
-  font-size: 15px !important;
-  white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-}
-
-html body .world-ranking-score {
-  font-size: 17px !important;
-  text-align: right !important;
-}
-
-html body .ranking-date,
-html body .map-ranking-date,
-html body .world-ranking-date {
-  display: none !important;
-}
+#firebaseLoginPanel *,.firebase-login-panel *{animation:none!important;transition:none!important}
+.firebase-login-title{font-size:13px!important;line-height:1!important}.firebase-profile-row{gap:7px!important;padding:6px!important;border-radius:13px!important}.firebase-profile-photo{width:34px!important;height:34px!important}.firebase-profile-name{font-size:10px!important;line-height:1.05!important}.firebase-profile-email{font-size:8px!important;line-height:1.05!important}.firebase-logout-btn{padding:6px 8px!important;font-size:8px!important}.firebase-login-buttons{gap:6px!important}.firebase-login-btn{height:30px!important;min-height:30px!important;font-size:10px!important;border-radius:999px!important}.email-login-form{gap:6px!important}.email-login-form input{height:29px!important;min-height:29px!important;padding:0 10px!important;font-size:9px!important;border-radius:999px!important}.email-login-actions{gap:6px!important}.firebase-login-note{font-size:8px!important;line-height:1.12!important}
+body.player-authenticated #firebaseLoginPanel,body.player-authenticated .firebase-login-panel{display:none!important}
 </style>
 
 </head>
@@ -11318,137 +11159,101 @@ window.renderPescariaWorldRanking = renderWorldRankingIntoGame;
 
 
 
-<script id="FINAL_RUNTIME_GUARD_20260626">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script id="STABLE_LOGIN_AND_RANKING_FIX_20260626">
 (function(){
-  function forceLoginPanelPosition(){
+  function stableLoginPosition(){
     const p=document.getElementById('firebaseLoginPanel')||document.querySelector('.firebase-login-panel');
     if(!p)return;
-    p.style.setProperty('position','absolute','important');
-    p.style.setProperty('left','50%','important');
-    p.style.setProperty('top','60%','important');
+    p.style.setProperty('position','fixed','important');
+    p.style.setProperty('left','50vw','important');
+    p.style.setProperty('top','60vh','important');
+    p.style.setProperty('right','auto','important');
     p.style.setProperty('bottom','auto','important');
-    p.style.setProperty('transform','translateX(-50%)','important');
-    p.style.setProperty('z-index','99999','important');
+    p.style.setProperty('transform','translate(-50%, -320px)','important');
+    p.style.setProperty('z-index','2147483000','important');
+    p.style.setProperty('width','250px','important');
+    p.style.setProperty('max-width','250px','important');
+    p.style.setProperty('min-width','250px','important');
   }
-  function profile(){try{return JSON.parse(localStorage.getItem('pescaria_player')||'{}')}catch(e){return {}}}
-  function sanitizeRankingDOM(){
-    const list=document.querySelector('.map-ranking-list')||document.getElementById('rankingList')||document.querySelector('.ranking-list');
-    if(!list)return;
-    if(list.querySelector('.world-ranking-row')){
-      list.querySelectorAll('.world-ranking-name').forEach(n=>{if(/^\d{1,2}\/\d{1,2}\/\d{4}$/.test((n.textContent||'').trim())) n.textContent=profile().name||'Jogador';});
-      return;
-    }
-    if(typeof window.renderMapRanking==='function') window.renderMapRanking();
+  function cleanRankingRows(){
+    document.querySelectorAll('.ranking-date,.map-ranking-date,.world-ranking-date').forEach(el=>el.remove());
+    document.querySelectorAll('.world-ranking-score').forEach(el=>{
+      el.style.setProperty('white-space','nowrap','important');
+      el.style.setProperty('overflow','visible','important');
+      el.style.setProperty('min-width','120px','important');
+    });
   }
-  document.addEventListener('DOMContentLoaded',()=>{forceLoginPanelPosition();setTimeout(sanitizeRankingDOM,300);});
-  window.addEventListener('load',()=>{forceLoginPanelPosition();setTimeout(sanitizeRankingDOM,300);});
-  [50,250,800,1600,3000].forEach(t=>setTimeout(()=>{forceLoginPanelPosition();sanitizeRankingDOM();},t));
-  setInterval(forceLoginPanelPosition,1500);
-  document.addEventListener('click',e=>{const s=((e.target&&(e.target.textContent||e.target.id||e.target.className))||'').toString().toLowerCase(); if(s.includes('ranking')||s.includes('trophy')||s.includes('troféu')) setTimeout(sanitizeRankingDOM,200);},true);
+  document.addEventListener('DOMContentLoaded',()=>{stableLoginPosition();cleanRankingRows();});
+  window.addEventListener('load',()=>{stableLoginPosition();cleanRankingRows();});
+  [50,250,800].forEach(t=>setTimeout(()=>{stableLoginPosition();cleanRankingRows();},t));
+  document.addEventListener('click',e=>{
+    const s=((e.target&&(e.target.textContent||e.target.id||e.target.className))||'').toString().toLowerCase();
+    if(s.includes('ranking')||s.includes('troféu')||s.includes('trophy')) setTimeout(cleanRankingRows,250);
+  },true);
 })();
 </script>
 
 
-<script id="FINAL_FIXED_LOGIN_POSITION_SCRIPT_LAST">
-(function(){function forceFixedLogin(){const p=document.getElementById('firebaseLoginPanel')||document.querySelector('.firebase-login-panel');if(!p)return;p.style.setProperty('position','fixed','important');p.style.setProperty('left','50vw','important');p.style.setProperty('top','60vh','important');p.style.setProperty('right','auto','important');p.style.setProperty('bottom','auto','important');p.style.setProperty('transform','translateX(-50%)','important');p.style.setProperty('z-index','2147483000','important');p.style.setProperty('width','250px','important');p.style.setProperty('max-width','250px','important');p.style.setProperty('min-width','250px','important');}document.addEventListener('DOMContentLoaded',forceFixedLogin);window.addEventListener('load',forceFixedLogin);[50,150,350,800,1500,3000].forEach(t=>setTimeout(forceFixedLogin,t));setInterval(forceFixedLogin,1000);})();
+<script id="stable-login-modal-js">
+(function(){
+  function stabilizeLoginModal(){
+    const panel=document.getElementById('firebaseLoginPanel')||document.querySelector('.firebase-login-panel');
+    if(!panel)return;
+    panel.style.setProperty('position','fixed','important');
+    panel.style.setProperty('left','50%','important');
+    panel.style.setProperty('top','50%','important');
+    panel.style.setProperty('right','auto','important');
+    panel.style.setProperty('bottom','auto','important');
+    panel.style.setProperty('transform','translate(-50%,-50%)','important');
+    panel.style.setProperty('width','280px','important');
+    panel.style.setProperty('max-width','82vw','important');
+    panel.style.setProperty('min-width','260px','important');
+    panel.style.setProperty('z-index','2147483647','important');
+    panel.style.setProperty('pointer-events','auto','important');
+    panel.style.setProperty('opacity','1','important');
+    panel.style.setProperty('visibility','visible','important');
+    panel.style.setProperty('animation','none','important');
+    panel.style.setProperty('transition','none','important');
+  }
+  document.addEventListener('DOMContentLoaded',stabilizeLoginModal);
+  window.addEventListener('load',stabilizeLoginModal);
+  setTimeout(stabilizeLoginModal,50);
+  setTimeout(stabilizeLoginModal,250);
+  setTimeout(stabilizeLoginModal,800);
+  window.stabilizeLoginModal=stabilizeLoginModal;
+})();
 </script>
 
 
-
-
-
-
-
-
-
-
-<script id="final-login-ranking-clean-js">
+<script id="auth-gate-modal-safe">
 (function(){
-  function profileSafe(){
-    try {
-      const raw = localStorage.getItem('pescaria_player');
-      if (raw) return JSON.parse(raw) || {};
-    } catch(e) {}
-    return window.currentPlayer || {};
+  function logged(){
+    try{return (typeof window.isPescariaPlayerLoggedIn==='function'&&window.isPescariaPlayerLoggedIn())||(window.currentPlayer&&window.currentPlayer.uid)||document.body.classList.contains('player-authenticated')}catch(e){return false}
   }
-
-  function rankingEntriesSafe(){
-    const keys = ['pescariaRanking', 'ranking', 'scores', 'pescaria_scores', 'pescaria_ranking'];
-    for (const key of keys) {
-      try {
-        const raw = localStorage.getItem(key);
-        if (!raw) continue;
-        const value = JSON.parse(raw);
-        if (Array.isArray(value)) return value;
-      } catch(e) {}
+  document.addEventListener('click',function(e){
+    if(e.target&&e.target.closest&&e.target.closest('#firebaseLoginPanel,.firebase-login-panel'))return;
+    const el=e.target&&e.target.closest?e.target.closest('#startBtn,.start-btn,[data-start],button,a'):null;
+    if(!el)return;
+    const txt=((el.textContent||'')+' '+(el.id||'')+' '+(el.className||'')).toLowerCase();
+    if((txt.includes('jogar')||txt.includes('start')||txt.includes('play'))&&!logged()){
+      e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
+      alert('Faça login com Google ou crie uma conta com e-mail e senha para jogar.');
     }
-    return [];
-  }
-
-  function normalizeEntry(entry, index){
-    const p = profileSafe();
-    if (typeof entry === 'number') {
-      return {
-        position: index + 1,
-        name: p.name || 'Jogador',
-        photoURL: p.photoURL || './assets/fish-normal.png',
-        score: entry
-      };
-    }
-    entry = entry || {};
-    return {
-      position: index + 1,
-      name: entry.name || entry.playerName || entry.nome || p.name || 'Jogador',
-      photoURL: entry.photoURL || entry.photo || entry.foto || p.photoURL || './assets/fish-normal.png',
-      score: Number(entry.score || entry.points || entry.pontos || entry.value || 0)
-    };
-  }
-
-  function renderRows(list, entries){
-    if (!list) return;
-    const rows = (entries || []).map(normalizeEntry).slice(0, 10);
-    list.innerHTML = '<div class="world-ranking-badge">🌎 Ranking mundial</div>' + rows.map(row => `
-      <div class="ranking-row world-ranking-row">
-        <span class="world-ranking-pos">${row.position}.</span>
-        <img class="world-ranking-photo" src="${row.photoURL || './assets/fish-normal.png'}" alt="">
-        <span class="world-ranking-name">${row.name || 'Jogador'}</span>
-        <span class="world-ranking-score">${row.score || 0}</span>
-      </div>
-    `).join('');
-  }
-
-  function localRankingRender(){
-    const list = document.querySelector('.map-ranking-list') || document.getElementById('rankingList') || document.querySelector('.ranking-list');
-    if (!list) return;
-    renderRows(list, rankingEntriesSafe());
-  }
-
-  window.renderMapRanking = function(){
-    localRankingRender();
-    if (typeof window.renderPescariaWorldRanking === 'function') {
-      setTimeout(function(){
-        window.renderPescariaWorldRanking();
-      }, 120);
-    }
-  };
-
-  window.renderRanking = window.renderMapRanking;
-
-  function refreshOnRankingOpen(){
-    const list = document.querySelector('.map-ranking-list') || document.getElementById('rankingList') || document.querySelector('.ranking-list');
-    if (!list) return;
-    if (typeof window.renderMapRanking === 'function') window.renderMapRanking();
-  }
-
-  document.addEventListener('click', function(e){
-    const txt = ((e.target && (e.target.textContent || e.target.className || e.target.id)) || '').toString().toLowerCase();
-    if (txt.includes('ranking') || txt.includes('troféu') || txt.includes('trophy')) {
-      setTimeout(refreshOnRankingOpen, 120);
-      setTimeout(refreshOnRankingOpen, 500);
-    }
-  }, true);
-
-  window.refreshRankingClean = refreshOnRankingOpen;
+  },true);
 })();
 </script>
 

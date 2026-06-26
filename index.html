@@ -9,136 +9,54 @@
 
   <link rel="stylesheet" href="./css/styles.css" />
 
-<style id="asset-visibility-v3">
-/* v3 - restaura imagens dos cenários e elementos visuais */
-#startOverlay.start-overlay-image,
-.start-overlay-image {
-  background: #052845 !important;
-  overflow: hidden !important;
-}
 
-#startOverlay .panel {
-  position: relative !important;
-  overflow: hidden !important;
-  background: transparent !important;
-}
 
+
+
+<style id="asset-paths-v4">
+/* v4 - restaura os caminhos das imagens sem alterar o layout original */
 .start-screen-bg {
-  position: absolute !important;
-  inset: 0 !important;
-  z-index: 0 !important;
-  display: block !important;
-  width: 100% !important;
-  height: 100% !important;
   background-image: url('./assets/start-screen.png') !important;
   background-size: cover !important;
   background-position: center center !important;
   background-repeat: no-repeat !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  pointer-events: none !important;
-}
-
-.start-button-wrap {
-  z-index: 5 !important;
-}
-
-#firebaseLoginPanel,
-.firebase-login-panel {
-  z-index: 20 !important;
-}
-
-#world,
-.world {
-  position: absolute !important;
-  inset: 0 !important;
-  overflow: hidden !important;
-  z-index: 0 !important;
-  pointer-events: none !important;
 }
 
 .sky-image {
-  position: absolute !important;
-  left: 0 !important;
-  top: 0 !important;
-  width: 100% !important;
-  height: 35% !important;
-  display: block !important;
   background-image: url('./assets/sky.png') !important;
   background-size: cover !important;
   background-position: center top !important;
   background-repeat: no-repeat !important;
-  opacity: 1 !important;
-  visibility: visible !important;
 }
 
 .sea-background {
-  position: absolute !important;
-  left: 0 !important;
-  top: 15% !important;
-  width: 100% !important;
-  height: 100% !important;
-  display: block !important;
   background-image: url('./assets/sea-bg.png') !important;
   background-size: cover !important;
   background-position: center top !important;
   background-repeat: repeat-y !important;
-  opacity: 1 !important;
-  visibility: visible !important;
 }
 
 .boat-wrap#boat,
 .boat-wrap {
-  position: absolute !important;
-  left: 50% !important;
-  top: 8% !important;
-  width: min(52vw, 420px) !important;
-  aspect-ratio: 900 / 500 !important;
-  transform: translateX(-50%) !important;
-  display: block !important;
   background-image: url('./assets/boat.png') !important;
   background-size: contain !important;
   background-position: center center !important;
   background-repeat: no-repeat !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  z-index: 2 !important;
 }
 
 .hook#hook,
 .hook {
-  position: absolute !important;
-  display: block !important;
-  width: 54px !important;
-  height: 80px !important;
   background-image: url('./assets/hook.png') !important;
   background-size: contain !important;
   background-position: center center !important;
   background-repeat: no-repeat !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  z-index: 6 !important;
 }
 
-.fish,
-.fish-item,
-.game-fish {
-  background-size: contain !important;
-  background-position: center center !important;
-  background-repeat: no-repeat !important;
-}
-</style>
-
-
-<style id="fish-asset-fallback-v3">
-[data-fish-type="normal"], .fish-normal { background-image: url('./assets/fish-normal.png') !important; }
-[data-fish-type="gold"], .fish-gold, .gold-fish { background-image: url('./assets/fish-gold.png') !important; }
-[data-fish-type="baiacu"], [data-fish-type="puffer"], .fish-baiacu, .puffer-fish { background-image: url('./assets/fish-baiacu.png') !important; }
-[data-fish-type="rainbow"], .fish-rainbow { background-image: url('./assets/fish-rainbow.png') !important; }
-[data-fish-type="turtle"], [data-fish-type="tartaruga"], .tartaruga-marinha { background-image: url('./assets/tartaruga-marinha.png') !important; }
-[data-fish-type="seahorse"], [data-fish-type="cavalo"], .cavalo-marinho { background-image: url('./assets/cavalo-marinho.png') !important; }
-[data-fish-type="shark"], [data-fish-type="tubarao"], .tubarao { background-image: url('./assets/tubarao.png') !important; }
-[data-fish-type="giant"], .fish-giant { background-image: url('./assets/fish-giant.png') !important; }
+/* Fallback apenas de imagem; não muda posição/tamanho dos peixes */
+.fish[data-type="normal"], .fish.normal, .fish-normal { background-image: url('./assets/fish-normal.png') !important; }
+.fish[data-type="gold"], .fish.gold, .fish-gold { background-image: url('./assets/fish-gold.png') !important; }
+.fish[data-type="baiacu"], .fish[data-type="puffer"], .fish.baiacu, .fish.puffer, .fish-baiacu { background-image: url('./assets/fish-baiacu.png') !important; }
+.fish[data-type="rainbow"], .fish.rainbow, .fish-rainbow { background-image: url('./assets/fish-rainbow.png') !important; }
 </style>
 
 </head>

@@ -1,0 +1,6 @@
+pescaria-game-v4
+
+Correção aplicada:
+- Removidos os blocos asset-visibility-v3 e fish-asset-fallback-v3 que alteravam posição/tamanho do cenário.
+- Adicionado asset-paths-v4 somente para restaurar caminhos de imagem, sem mudar layout original.
+- Validados assets principais e sintaxe JS inline.

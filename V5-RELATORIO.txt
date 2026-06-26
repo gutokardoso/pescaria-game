@@ -1,0 +1,7 @@
+pescaria-game-v5
+
+Correção aplicada em js/game.js:
+- Criado finalMissionResultSnapshot para guardar fase, missão, progresso e meta de pontos antes de advanceOrRepeatPhase().
+- renderFinalMissionStatusRows agora usa esse snapshot da fase encerrada.
+- Snapshot é limpo ao iniciar nova rodada.
+- JS validado com node --check.

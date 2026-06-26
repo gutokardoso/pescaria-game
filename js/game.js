@@ -609,6 +609,7 @@ const game = document.getElementById('game');
 
 
     let lockedMissionProgressSnapshot = null;
+    let finalMissionResultSnapshot = null;
 
     function lockMissionProgressSnapshot() {
       lockedMissionProgressSnapshot = getMissionProgress();
@@ -617,6 +618,41 @@ const game = document.getElementById('game');
     function unlockMissionProgressSnapshot() {
       lockedMissionProgressSnapshot = null;
     }
+
+
+    function lockFinalMissionResultSnapshot(phaseScoreValue) {
+      try {
+        const phaseForResult = currentPhase;
+        const captureGoal = typeof getPhaseCaptureGoalForPhase === 'function'
+          ? getPhaseCaptureGoalForPhase(phaseForResult)
+          : { label: 'Complete a missão', target: 1, type: 'normal' };
+
+        const captureProgress = typeof getPhaseCaptureProgress === 'function'
+          ? getPhaseCaptureProgress()
+          : 0;
+
+        const scoreTarget = typeof getPhaseScoreRequiredForPhase === 'function'
+          ? getPhaseScoreRequiredForPhase(phaseForResult)
+          : 0;
+
+        const scoreValue = Number.isFinite(Number(phaseScoreValue)) ? Number(phaseScoreValue) : score;
+
+        finalMissionResultSnapshot = {
+          phase: phaseForResult,
+          captureGoal: captureGoal ? { ...captureGoal } : { label: 'Complete a missão', target: 1, type: 'normal' },
+          captureProgress: Number(captureProgress || 0),
+          scoreTarget: Number(scoreTarget || 0),
+          scoreValue: Number(scoreValue || 0)
+        };
+      } catch (error) {
+        finalMissionResultSnapshot = null;
+      }
+    }
+
+    function clearFinalMissionResultSnapshot() {
+      finalMissionResultSnapshot = null;
+    }
+
 
 
     function getMissionProgress() {
@@ -2601,6 +2637,7 @@ applyHookVisuals();
       updateMissionProgress();
       refreshGameplayUiVisibility();
       unlockMissionProgressSnapshot();
+      clearFinalMissionResultSnapshot();
       setDepthUiVisible(true);
       updateDepthNumber();
       updateShopButtonVisibility();
@@ -2682,6 +2719,7 @@ applyHookVisuals();
       if (state === 'result') return;
       state = 'result';
       const phaseScoreBeforeConversion = score;
+      lockFinalMissionResultSnapshot(phaseScoreBeforeConversion);
       const missionCompletedForMusic = checkMissionComplete();
       
       cancelAnimationFrame(animationId);
@@ -5022,73 +5060,55 @@ applyHookVisuals();
 
 
     /* FUNÇÃO FINAL ÚNICA: BARRAS DE MISSÃO SEM CONFLITO */
-    function renderFinalMissionStatusRows(phaseScoreValue) {
+    
+function renderFinalMissionStatusRows(phaseScoreValue) {
       try {
         const target = document.getElementById('finalMissionStatusList');
         if (!target) return;
 
-        const captureGoal = typeof getPhaseCaptureGoalForPhase === 'function'
+        const snapshot = finalMissionResultSnapshot || {};
+        const captureGoal = snapshot.captureGoal || (typeof getPhaseCaptureGoalForPhase === 'function'
           ? getPhaseCaptureGoalForPhase(currentPhase)
-          : { text: 'Complete a missão', target: 1 };
+          : { label: 'Complete a missão', target: 1 });
 
-        const captureCurrent = typeof getPhaseCaptureProgress === 'function' ? getPhaseCaptureProgress() : 0;
+        const captureCurrent = Number.isFinite(Number(snapshot.captureProgress))
+          ? Number(snapshot.captureProgress)
+          : (typeof getPhaseCaptureProgress === 'function' ? Number(getPhaseCaptureProgress() || 0) : 0);
+
         const captureTarget = Number(captureGoal && captureGoal.target ? captureGoal.target : 1);
         const captureDone = captureCurrent >= captureTarget;
 
-        const scoreTarget = typeof getPhaseScoreRequiredForPhase === 'function'
-          ? getPhaseScoreRequiredForPhase(currentPhase)
-          : 0;
+        const scoreTarget = Number.isFinite(Number(snapshot.scoreTarget))
+          ? Number(snapshot.scoreTarget)
+          : (typeof getPhaseScoreRequiredForPhase === 'function' ? Number(getPhaseScoreRequiredForPhase(currentPhase) || 0) : 0);
 
-        const finalScoreValue = Number.isFinite(Number(phaseScoreValue)) ? Number(phaseScoreValue) : score;
-        const scoreDone = finalScoreValue >= scoreTarget;
+        const scoreValue = Number.isFinite(Number(snapshot.scoreValue))
+          ? Number(snapshot.scoreValue)
+          : (Number.isFinite(Number(phaseScoreValue)) ? Number(phaseScoreValue) : Number(score || 0));
 
-        const captureText = captureGoal && captureGoal.text ? String(captureGoal.text) : `Complete ${captureTarget} capturas`;
+        const scoreDone = scoreValue >= scoreTarget;
+
+        const captureLabel = captureGoal && (captureGoal.label || captureGoal.text || captureGoal.title)
+          ? (captureGoal.label || captureGoal.text || captureGoal.title)
+          : 'Complete a missão';
 
         const rows = [
-          { done: captureDone, label: captureText },
+          { done: captureDone, label: captureLabel },
           { done: scoreDone, label: `Ganhe ${scoreTarget} pontos` }
         ];
 
-        const panel = target.closest('.result-panel') || target.closest('.panel') || document.querySelector('#resultOverlay .panel') || document.querySelector('#resultOverlay');
-        const panelWidth = panel && panel.getBoundingClientRect ? panel.getBoundingClientRect().width : 700;
-        const realWidth = Math.max(520, Math.min(680, Math.round(panelWidth * 0.78)));
+        target.innerHTML = rows.map(row => `
+          <div class="final-mission-row ${row.done ? 'completed' : 'failed'}">
+            <span class="final-mission-icon">${row.done ? '✓' : '×'}</span>
+            <span class="final-mission-text">${row.label}</span>
+          </div>
+        `).join('');
 
-        target.innerHTML = '';
-        target.className = 'final-mission-status-list mission-bars-final';
-        target.style.setProperty('width', realWidth + 'px', 'important');
-        target.style.setProperty('max-width', '92%', 'important');
-        target.style.setProperty('margin', '12px auto 10px auto', 'important');
-        target.style.setProperty('display', 'flex', 'important');
-        target.style.setProperty('flex-direction', 'column', 'important');
-        target.style.setProperty('align-items', 'center', 'important');
-        target.style.setProperty('gap', '8px', 'important');
-
-        rows.forEach(row => {
-          const bar = document.createElement('div');
-          bar.className = 'mission-final-bar ' + (row.done ? 'done completed' : 'fail failed');
-          bar.style.setProperty('width', realWidth + 'px', 'important');
-          bar.style.setProperty('max-width', '100%', 'important');
-
-          const icon = document.createElement('span');
-          icon.className = 'mission-final-icon';
-          icon.textContent = row.done ? '✓' : '×';
-
-          const text = document.createElement('span');
-          text.className = 'mission-final-text';
-          text.textContent = row.label;
-
-          // Ajuste automático: se a missão for longa, reduz levemente a fonte.
-          if (row.label.length > 22) {
-            text.style.setProperty('font-size', '12px', 'important');
-          } else {
-            text.style.setProperty('font-size', '13px', 'important');
-          }
-
-          bar.appendChild(icon);
-          bar.appendChild(text);
-          target.appendChild(bar);
-        });
-      } catch (error) {}
+        if (typeof forceFinalMissionBarsRestored === 'function') forceFinalMissionBarsRestored();
+        if (typeof fixFinalMissionBarsTextFull === 'function') fixFinalMissionBarsTextFull();
+      } catch (error) {
+        console.warn('Erro ao renderizar missões finais:', error);
+      }
     }
 
 

@@ -5113,6 +5113,28 @@ body:not(.player-authenticated) #startBtn,body:not(.player-authenticated) .start
 }
 </style>
 
+
+<style id="login-box-position-and-auth-gate-fix">
+/* SUBIR CAIXA DE LOGIN E MANTER BOTÃO JOGAR VISÍVEL */
+.firebase-login-panel {
+  bottom: 24.5% !important;
+}
+
+@media (max-width: 560px) {
+  .firebase-login-panel {
+    bottom: 24.5% !important;
+  }
+}
+
+/* Indicação visual de bloqueio quando não está logado */
+body:not(.player-authenticated) #startBtn,
+body:not(.player-authenticated) .start-btn,
+body:not(.player-authenticated) [data-start],
+body:not(.player-authenticated) button[onclick*="start"] {
+  filter: grayscale(.2) brightness(.74) !important;
+}
+</style>
+
 </head>
 <body>
   <main class="game-shell" id="game">
@@ -7907,6 +7929,7 @@ applyHookVisuals();
 
 
     function startRound() {
+      if (typeof window.requirePescariaLoginBeforeStart === 'function' && !window.requirePescariaLoginBeforeStart()) return false;
       cleanupRareAnimalSprites();
       forceHudLayout();
       setGameScreen('playing');
@@ -10579,6 +10602,103 @@ document.addEventListener("DOMContentLoaded",bindLoginButtons);window.addEventLi
 onAuthStateChanged(auth,async user=>{authReady=true;currentFirebaseUser=user;updateUI(user);if(user){try{await savePlayer(user)}catch(e){console.warn(e)}}});
 window.savePescariaPlayerProgress=async()=>{if(auth.currentUser)await savePlayer(auth.currentUser)};
 window.getPescariaFirebaseUser=()=>auth.currentUser;window.isPescariaPlayerLoggedIn=()=>!!auth.currentUser;
+</script>
+
+
+<script id="hard-auth-gate-script">
+/* BLOQUEIO REAL: NÃO DEIXA INICIAR O JOGO SEM LOGIN */
+(function() {
+  function isLoggedInHardGate() {
+    try {
+      if (typeof window.isPescariaPlayerLoggedIn === 'function' && window.isPescariaPlayerLoggedIn()) return true;
+      if (window.currentPlayer && window.currentPlayer.uid) return true;
+      if (document.body.classList.contains('player-authenticated')) return true;
+    } catch (error) {}
+    return false;
+  }
+
+  function showLoginRequiredMessage() {
+    alert('Faça login com Google ou crie uma conta com e-mail e senha para jogar.');
+  }
+
+  function shouldBlockStartTarget(target) {
+    if (!target || isLoggedInHardGate()) return false;
+
+    const el = target.closest ? target.closest('button, a, .start-btn, #startBtn, [data-start], [onclick]') : null;
+    if (!el) return false;
+
+    const text = ((el.textContent || '') + ' ' + (el.alt || '') + ' ' + (el.title || '') + ' ' + (el.getAttribute('aria-label') || '') + ' ' + (el.id || '') + ' ' + (el.className || '') + ' ' + (el.getAttribute('onclick') || '')).toLowerCase();
+
+    return (
+      el.id === 'startBtn' ||
+      text.includes('jogar agora') ||
+      text.includes('começar') ||
+      text.includes('start') ||
+      text.includes('play')
+    );
+  }
+
+  document.addEventListener('click', function(event) {
+    if (shouldBlockStartTarget(event.target)) {
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+      showLoginRequiredMessage();
+      return false;
+    }
+  }, true);
+
+  document.addEventListener('pointerdown', function(event) {
+    if (shouldBlockStartTarget(event.target)) {
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+      return false;
+    }
+  }, true);
+
+  function wrapStartFunction(name) {
+    try {
+      const fn = window[name];
+      if (typeof fn !== 'function' || fn.__authGateWrapped) return;
+      const wrapped = function(...args) {
+        if (!isLoggedInHardGate()) {
+          showLoginRequiredMessage();
+          return false;
+        }
+        return fn.apply(this, args);
+      };
+      wrapped.__authGateWrapped = true;
+      window[name] = wrapped;
+    } catch (error) {}
+  }
+
+  function installFunctionGates() {
+    [
+      'startGame',
+      'startRound',
+      'startLevel',
+      'startFishing',
+      'beginGame',
+      'playGame',
+      'start'
+    ].forEach(wrapStartFunction);
+  }
+
+  document.addEventListener('DOMContentLoaded', installFunctionGates);
+  window.addEventListener('load', installFunctionGates);
+  setTimeout(installFunctionGates, 100);
+  setTimeout(installFunctionGates, 500);
+  setTimeout(installFunctionGates, 1200);
+
+  window.requirePescariaLoginBeforeStart = function() {
+    if (!isLoggedInHardGate()) {
+      showLoginRequiredMessage();
+      return false;
+    }
+    return true;
+  };
+})();
 </script>
 
 </body>

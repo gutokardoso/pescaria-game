@@ -1,0 +1,6 @@
+pescaria-game-v3
+
+Correção aplicada:
+- Restauradas imagens da tela inicial e do jogo via CSS.
+- Validadas referências principais de assets.
+- JavaScript inline validado com node --check.

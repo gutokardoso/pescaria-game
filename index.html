@@ -5774,6 +5774,125 @@ window.loginPescariaGoogle = loginGoogle;
 </script>
 
 
+
+
+
+
+<script id="real-start-button-fix">
+(function(){
+  function isLogged(){
+    try {
+      if (typeof window.isPescariaPlayerLoggedIn === 'function' && window.isPescariaPlayerLoggedIn()) return true;
+      if (window.currentPlayer && window.currentPlayer.uid) return true;
+      if (document.body.classList.contains('player-authenticated')) return true;
+      const raw = localStorage.getItem('pescaria_player');
+      if (raw) {
+        const p = JSON.parse(raw);
+        if (p && p.uid) return true;
+      }
+    } catch(e) {}
+    return false;
+  }
+
+  function showElement(el, displayValue){
+    if (!el) return;
+    el.style.setProperty('display', displayValue || 'block', 'important');
+    el.style.setProperty('visibility', 'visible', 'important');
+    el.style.setProperty('opacity', '1', 'important');
+    el.classList.remove('hidden', 'hide', 'is-hidden');
+  }
+
+  function hideElement(el){
+    if (!el) return;
+    el.style.setProperty('display', 'none', 'important');
+    el.style.setProperty('visibility', 'hidden', 'important');
+    el.style.setProperty('opacity', '0', 'important');
+    el.classList.add('hidden');
+  }
+
+  function startGameReal(){
+    if (!isLogged()) {
+      alert('Faça login com Google ou crie uma conta com e-mail e senha para jogar.');
+      return false;
+    }
+
+    // Esconde login para liberar a tela.
+    hideElement(document.getElementById('firebaseLoginPanel') || document.querySelector('.firebase-login-panel'));
+
+    // Possíveis telas iniciais.
+    const startScreens = [
+      document.getElementById('startScreen'),
+      document.getElementById('homeScreen'),
+      document.getElementById('introScreen'),
+      document.querySelector('.start-screen'),
+      document.querySelector('.home-screen'),
+      document.querySelector('.intro-screen')
+    ];
+    startScreens.forEach(hideElement);
+
+    // Possíveis telas do jogo/mapa.
+    const gameScreens = [
+      document.getElementById('gameScreen'),
+      document.getElementById('mapScreen'),
+      document.getElementById('gameMap'),
+      document.querySelector('.game-screen'),
+      document.querySelector('.map-screen'),
+      document.querySelector('.game-map'),
+      document.querySelector('.game-area'),
+      document.querySelector('canvas')
+    ];
+    gameScreens.forEach(el => showElement(el, el && el.tagName === 'CANVAS' ? 'block' : 'block'));
+
+    document.body.classList.add('game-started');
+    document.body.classList.remove('start-open', 'home-open');
+
+    // Tenta chamar funções reais existentes, se alguma estiver disponível no escopo global.
+    ['initGame','initRound','startLevel','startPhase','goToMap','openMap','showMap','showGame','launchGame'].forEach(function(name){
+      try {
+        if (typeof window[name] === 'function') window[name]();
+      } catch(e) {
+        console.warn('Falha ao chamar ' + name, e);
+      }
+    });
+
+    // Dispara evento customizado caso o jogo escute.
+    try { window.dispatchEvent(new CustomEvent('pescaria:start')); } catch(e) {}
+
+    return true;
+  }
+
+  function bindStartButton(){
+    const btns = Array.from(document.querySelectorAll('#startBtn, .start-btn, [data-start], button, a')).filter(function(el){
+      const txt = ((el.textContent || '') + ' ' + (el.id || '') + ' ' + (el.className || '')).toLowerCase();
+      return el.id === 'startBtn' || txt.includes('jogar agora') || txt.includes('jogar') || txt.includes('start');
+    });
+
+    btns.forEach(function(btn){
+      if (btn.__realStartFixed) return;
+      btn.__realStartFixed = true;
+      btn.style.pointerEvents = 'auto';
+      btn.disabled = false;
+
+      btn.addEventListener('click', function(e){
+        if (!isLogged()) return; // auth-gate mostra alerta.
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        startGameReal();
+      }, true);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', bindStartButton);
+  window.addEventListener('load', bindStartButton);
+  setTimeout(bindStartButton, 300);
+  setTimeout(bindStartButton, 1000);
+
+  window.startPescariaGameReal = startGameReal;
+})();
+</script>
+
+
 <script id="auth-gate-modal-safe">
 (function(){
   function logged(){
@@ -5797,7 +5916,7 @@ window.loginPescariaGoogle = loginGoogle;
     if (!el) return;
 
     const txt = ((el.textContent || '') + ' ' + (el.id || '') + ' ' + (el.className || '')).toLowerCase();
-    const isStart = txt.includes('jogar') || txt.includes('start') || txt.includes('play');
+    const isStart = el.id === 'startBtn' || txt.includes('jogar agora') || txt.includes('start');
 
     if (isStart && !logged()) {
       e.preventDefault();
@@ -5805,63 +5924,7 @@ window.loginPescariaGoogle = loginGoogle;
       e.stopImmediatePropagation();
       alert('Faça login com Google ou crie uma conta com e-mail e senha para jogar.');
     }
-    // Se estiver logado, NÃO bloqueia e deixa o clique original do jogo acontecer.
   }, true);
-
-  window.isPescariaAccessAllowed = logged;
-})();
-</script>
-
-
-<script id="start-after-login-fallback">
-(function(){
-  function logged(){
-    try {
-      if (typeof window.isPescariaAccessAllowed === 'function' && window.isPescariaAccessAllowed()) return true;
-      if (typeof window.isPescariaPlayerLoggedIn === 'function' && window.isPescariaPlayerLoggedIn()) return true;
-      if (window.currentPlayer && window.currentPlayer.uid) return true;
-      if (document.body.classList.contains('player-authenticated')) return true;
-      const raw = localStorage.getItem('pescaria_player');
-      if (raw) {
-        const p = JSON.parse(raw);
-        if (p && p.uid) return true;
-      }
-    } catch(e) {}
-    return false;
-  }
-
-  function tryStartGameFallback(){
-    if (!logged()) return;
-
-    const names = ['startGame', 'startRound', 'beginGame', 'playGame', 'startFishing', 'start'];
-    for (const name of names) {
-      try {
-        if (typeof window[name] === 'function') {
-          window[name]();
-          return;
-        }
-      } catch(e) {
-        console.warn('Falha ao chamar', name, e);
-      }
-    }
-
-    // fallback visual comum: esconder tela inicial caso exista
-    try {
-      const startScreen = document.getElementById('startScreen') || document.querySelector('.start-screen');
-      const gameScreen = document.getElementById('gameScreen') || document.querySelector('.game-screen');
-      if (startScreen) startScreen.style.display = 'none';
-      if (gameScreen) gameScreen.style.display = 'block';
-    } catch(e) {}
-  }
-
-  document.addEventListener('click', function(e){
-    const el = e.target && e.target.closest ? e.target.closest('#startBtn, .start-btn, [data-start]') : null;
-    if (!el) return;
-    if (!logged()) return;
-
-    // Deixa o handler original rodar primeiro; se não iniciar, tenta fallback.
-    setTimeout(tryStartGameFallback, 80);
-  }, false);
 })();
 </script>
 

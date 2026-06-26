@@ -5361,80 +5361,6 @@ Missão: 0/0</div>
   
 
 
-<script id="auth-gate-modal-safe">
-(function(){
-  function logged(){
-    try {
-      if (typeof window.isPescariaPlayerLoggedIn === 'function' && window.isPescariaPlayerLoggedIn()) return true;
-      if (window.currentPlayer && window.currentPlayer.uid) return true;
-      if (document.body.classList.contains('player-authenticated')) return true;
-    } catch(e) {}
-    return false;
-  }
-
-  document.addEventListener('click', function(e){
-    if (e.target && e.target.closest && e.target.closest('#firebaseLoginPanel, .firebase-login-panel')) return;
-
-    const el = e.target && e.target.closest ? e.target.closest('#startBtn, .start-btn, [data-start], button, a') : null;
-    if (!el) return;
-
-    const txt = ((el.textContent || '') + ' ' + (el.id || '') + ' ' + (el.className || '')).toLowerCase();
-    if ((txt.includes('jogar') || txt.includes('start') || txt.includes('play')) && !logged()) {
-      e.preventDefault();
-      e.stopPropagation();
-      e.stopImmediatePropagation();
-      alert('Faça login com Google ou crie uma conta com e-mail e senha para jogar.');
-    }
-  }, true);
-})();
-
-    /* FINAL SEGURO: NÃO TRAVA A FASE */
-    function renderFinalMissionStatusRows(phaseScoreValue) {
-      try {
-        const target = document.getElementById('finalMissionStatusList');
-        if (!target) return;
-
-        const phaseForResult = (typeof finishedPhaseForResultGlobal !== 'undefined' && finishedPhaseForResultGlobal)
-          ? finishedPhaseForResultGlobal
-          : (typeof currentPhase !== 'undefined' ? currentPhase : 1);
-
-        let captureGoal = null;
-        try {
-          captureGoal = typeof finishedMissionGoalForResultGlobal !== 'undefined' && finishedMissionGoalForResultGlobal
-            ? finishedMissionGoalForResultGlobal
-            : (typeof getPhaseCaptureGoalForPhase === 'function' ? getPhaseCaptureGoalForPhase(phaseForResult) : null);
-        } catch(e) {
-          captureGoal = null;
-        }
-
-        const captureTarget = Number(captureGoal && captureGoal.target ? captureGoal.target : 1);
-        const captureText = captureGoal && captureGoal.text ? String(captureGoal.text) : 'Complete a missão';
-        let captureCurrent = 0;
-        try { captureCurrent = typeof getPhaseCaptureProgress === 'function' ? getPhaseCaptureProgress() : 0; } catch(e) {}
-        const captureDone = captureCurrent >= captureTarget;
-
-        let scoreTarget = 0;
-        try { scoreTarget = typeof getPhaseScoreRequiredForPhase === 'function' ? getPhaseScoreRequiredForPhase(phaseForResult) : 0; } catch(e) {}
-        const finalScoreValue = Number.isFinite(Number(phaseScoreValue)) ? Number(phaseScoreValue) : (typeof score !== 'undefined' ? score : 0);
-        const scoreDone = Number(finalScoreValue) >= Number(scoreTarget || 0);
-
-        const rows = [
-          { done: captureDone, label: captureText },
-          { done: scoreDone, label: `Ganhe ${scoreTarget} pontos` }
-        ];
-
-        target.innerHTML = rows.map(row => `
-          <div class="mission-final-bar ${row.done ? 'done completed' : 'fail failed'}">
-            <span class="mission-final-icon">${row.done ? '✓' : '×'}</span>
-            <span class="mission-final-text">${row.label}</span>
-          </div>
-        `).join('');
-      } catch (err) {
-        console.warn('renderFinalMissionStatusRows seguro falhou:', err);
-      }
-    }
-
-</script>
 
 
 <script id="login-never-disappear-js">
@@ -5487,15 +5413,6 @@ Missão: 0/0</div>
 </script>
 
 
-<script id="login-click-pass-through">
-(function(){
-  document.addEventListener('click', function(e){
-    if (e.target && e.target.closest && e.target.closest('#firebaseLoginPanel, .firebase-login-panel')) {
-      e.stopPropagation();
-    }
-  }, false);
-})();
-</script>
 
 
 <script id="safe-final-score-submit">
@@ -5519,6 +5436,335 @@ Missão: 0/0</div>
     }
   };
 })();
+</script>
+
+
+<script id="auth-gate-modal-safe">
+(function(){
+  function logged(){
+    try {
+      if (typeof window.isPescariaPlayerLoggedIn === 'function' && window.isPescariaPlayerLoggedIn()) return true;
+      if (window.currentPlayer && window.currentPlayer.uid) return true;
+      if (document.body.classList.contains('player-authenticated')) return true;
+    } catch(e) {}
+    return false;
+  }
+
+  document.addEventListener('click', function(e){
+    // Nunca bloqueia nenhum clique dentro do painel de login.
+    if (e.target && e.target.closest && e.target.closest('#firebaseLoginPanel, .firebase-login-panel')) {
+      return;
+    }
+
+    const el = e.target && e.target.closest ? e.target.closest('#startBtn, .start-btn, [data-start], button, a') : null;
+    if (!el) return;
+
+    const txt = ((el.textContent || '') + ' ' + (el.id || '') + ' ' + (el.className || '')).toLowerCase();
+
+    if ((txt.includes('jogar') || txt.includes('start') || txt.includes('play')) && !logged()) {
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      alert('Faça login com Google ou crie uma conta com e-mail e senha para jogar.');
+    }
+  }, true);
+})();
+</script>
+
+
+<script type="module" id="firebase-login-module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  serverTimestamp,
+  collection,
+  query,
+  orderBy,
+  limit,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+const firebaseConfig = {"apiKey": "AIzaSyCLJz-EC_mfIlB_cDFnmYwM_aWPICF0kbs", "authDomain": "pescaria-9327b.firebaseapp.com", "projectId": "pescaria-9327b", "storageBucket": "pescaria-9327b.firebasestorage.app", "messagingSenderId": "862603556027", "appId": "1:862603556027:web:208e383a43c0592b8f659e", "measurementId": "G-ZCGFX028G1"};
+const app = initializeApp(firebaseConfig);
+try { getAnalytics(app); } catch(e) {}
+
+const auth = getAuth(app);
+const db = getFirestore(app);
+const googleProvider = new GoogleAuthProvider();
+googleProvider.addScope("profile");
+googleProvider.addScope("email");
+
+function providerName(user) {
+  const p = user?.providerData?.[0]?.providerId || "";
+  if (p === "google.com") return "Google";
+  if (p === "password") return "E-mail";
+  return "Login";
+}
+
+function getGameState() {
+  let phase = 1, coins = 0, score = 0;
+  try { phase = window.currentPhase ?? (typeof currentPhase !== "undefined" ? currentPhase : 1); } catch(e) {}
+  try { coins = window.coins ?? (typeof coins !== "undefined" ? coins : 0); } catch(e) {}
+  try { score = window.score ?? (typeof score !== "undefined" ? score : 0); } catch(e) {}
+  return {
+    currentPhase: phase,
+    coins,
+    score,
+    bestScore: Number(localStorage.getItem("pescaria_best_score") || "0") || 0,
+    updatedAtLocal: new Date().toISOString()
+  };
+}
+
+async function savePlayer(user) {
+  if (!user) return;
+
+  const data = {
+    uid: user.uid,
+    name: user.displayName || "Jogador",
+    email: user.email || "",
+    photoURL: user.photoURL || "",
+    provider: providerName(user),
+    isAnonymous: false,
+    game: getGameState(),
+    updatedAt: serverTimestamp()
+  };
+
+  const ref = doc(db, "players", user.uid);
+  const snap = await getDoc(ref);
+
+  if (snap.exists()) {
+    await updateDoc(ref, data);
+  } else {
+    await setDoc(ref, {
+      ...data,
+      createdAt: serverTimestamp(),
+      firstLoginAt: serverTimestamp(),
+      inventory: {},
+      purchases: {},
+      ranking: {}
+    });
+  }
+
+  localStorage.setItem("pescaria_player", JSON.stringify({
+    uid: data.uid,
+    name: data.name,
+    email: data.email,
+    photoURL: data.photoURL,
+    provider: data.provider
+  }));
+
+  window.currentPlayer = data;
+}
+
+function updateLoginUI(user) {
+  const row = document.getElementById("firebaseProfileRow");
+  const buttons = document.getElementById("firebaseLoginButtons");
+  const photo = document.getElementById("firebaseProfilePhoto");
+  const name = document.getElementById("firebaseProfileName");
+  const email = document.getElementById("firebaseProfileEmail");
+  const panel = document.getElementById("firebaseLoginPanel") || document.querySelector(".firebase-login-panel");
+
+  if (user) {
+    document.body.classList.add("player-authenticated");
+    if (row) row.classList.add("logged");
+    if (buttons) buttons.style.display = "none";
+    if (photo) photo.src = user.photoURL || "./assets/fish-normal.png";
+    if (name) name.textContent = user.displayName || "Jogador";
+    if (email) email.textContent = user.email || providerName(user);
+    if (panel) panel.style.display = "flex";
+  } else {
+    document.body.classList.remove("player-authenticated");
+    if (row) row.classList.remove("logged");
+    if (buttons) buttons.style.display = "flex";
+    if (panel) panel.style.display = "flex";
+  }
+}
+
+async function loginGoogle() {
+  try {
+    const result = await signInWithPopup(auth, googleProvider);
+    await savePlayer(result.user);
+    updateLoginUI(result.user);
+  } catch(e) {
+    console.error("Erro Google Login:", e);
+    alert("Não foi possível fazer login com Google: " + (e?.message || e));
+  }
+}
+
+async function createEmailAccount() {
+  try {
+    const name = (document.getElementById("emailLoginName")?.value || "").trim();
+    const email = (document.getElementById("emailLoginEmail")?.value || "").trim();
+    const password = document.getElementById("emailLoginPassword")?.value || "";
+    if (!name) return alert("Digite o nome do jogador.");
+    if (!email) return alert("Digite o e-mail.");
+    if (password.length < 6) return alert("A senha precisa ter no mínimo 6 caracteres.");
+
+    const result = await createUserWithEmailAndPassword(auth, email, password);
+    await updateProfile(result.user, { displayName: name });
+    await savePlayer(result.user);
+    updateLoginUI(result.user);
+  } catch(e) {
+    console.error("Erro criar conta:", e);
+    alert("Não foi possível criar a conta: " + (e?.message || e));
+  }
+}
+
+async function loginEmail() {
+  try {
+    const email = (document.getElementById("emailLoginEmail")?.value || "").trim();
+    const password = document.getElementById("emailLoginPassword")?.value || "";
+    if (!email) return alert("Digite o e-mail.");
+    if (!password) return alert("Digite a senha.");
+
+    const result = await signInWithEmailAndPassword(auth, email, password);
+    await savePlayer(result.user);
+    updateLoginUI(result.user);
+  } catch(e) {
+    console.error("Erro login e-mail:", e);
+    alert("Não foi possível entrar: " + (e?.message || e));
+  }
+}
+
+function bindFirebaseLoginButtons() {
+  const g = document.getElementById("loginGoogleBtn");
+  const create = document.getElementById("createEmailAccountBtn");
+  const enter = document.getElementById("loginEmailBtn");
+  const logout = document.getElementById("firebaseLogoutBtn");
+
+  if (g) {
+    g.onclick = null;
+    g.addEventListener("click", function(ev) {
+      ev.preventDefault();
+      loginGoogle();
+    });
+  }
+
+  if (create) {
+    create.onclick = null;
+    create.addEventListener("click", function(ev) {
+      ev.preventDefault();
+      createEmailAccount();
+    });
+  }
+
+  if (enter) {
+    enter.onclick = null;
+    enter.addEventListener("click", function(ev) {
+      ev.preventDefault();
+      loginEmail();
+    });
+  }
+
+  if (logout) {
+    logout.onclick = null;
+    logout.addEventListener("click", async function(ev) {
+      ev.preventDefault();
+      await signOut(auth);
+      localStorage.removeItem("pescaria_player");
+      window.currentPlayer = null;
+      updateLoginUI(null);
+    });
+  }
+}
+
+async function submitWorldRankingScore(finalScore, extra = {}) {
+  const user = auth.currentUser;
+  if (!user) return;
+
+  const numericScore = Number(finalScore || 0);
+  if (!Number.isFinite(numericScore) || numericScore <= 0) return;
+
+  const ref = doc(db, "scores", user.uid);
+  const snap = await getDoc(ref);
+  const previousBest = snap.exists() ? Number(snap.data().score || 0) : 0;
+
+  if (!snap.exists() || numericScore > previousBest) {
+    await setDoc(ref, {
+      uid: user.uid,
+      name: user.displayName || "Jogador",
+      email: user.email || "",
+      photoURL: user.photoURL || "",
+      score: numericScore,
+      phase: extra.phase || window.currentPhase || 1,
+      coins: extra.coins || window.coins || 0,
+      provider: providerName(user),
+      updatedAt: serverTimestamp(),
+      createdAt: snap.exists() ? snap.data().createdAt || serverTimestamp() : serverTimestamp()
+    }, { merge: true });
+  }
+
+  await savePlayer(user);
+}
+
+async function loadWorldRanking(limitCount = 100) {
+  const q = query(collection(db, "scores"), orderBy("score", "desc"), limit(limitCount));
+  const snap = await getDocs(q);
+  return snap.docs.map((docSnap, index) => {
+    const data = docSnap.data() || {};
+    return {
+      position: index + 1,
+      uid: data.uid || docSnap.id,
+      name: data.name || "Jogador",
+      photoURL: data.photoURL || "",
+      score: Number(data.score || 0),
+      phase: data.phase || 1
+    };
+  });
+}
+
+async function renderWorldRankingIntoGame() {
+  try {
+    const rows = await loadWorldRanking(100);
+    const list = document.querySelector(".map-ranking-list") || document.getElementById("rankingList") || document.querySelector(".ranking-list");
+    if (!list || !rows.length) return;
+    list.innerHTML = '<div class="world-ranking-badge">🌎 Ranking mundial</div>' + rows.slice(0,10).map(row => `
+      <div class="ranking-row world-ranking-row">
+        <span class="world-ranking-pos">${row.position}.</span>
+        <img class="world-ranking-photo" src="${row.photoURL || './assets/fish-normal.png'}" alt="">
+        <span class="world-ranking-name">${row.name || 'Jogador'}</span>
+        <span class="world-ranking-score">${row.score || 0}</span>
+      </div>
+    `).join("");
+  } catch(e) {
+    console.warn("Erro ao carregar ranking mundial:", e);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", bindFirebaseLoginButtons);
+window.addEventListener("load", bindFirebaseLoginButtons);
+setTimeout(bindFirebaseLoginButtons, 300);
+setTimeout(bindFirebaseLoginButtons, 1000);
+
+onAuthStateChanged(auth, async user => {
+  updateLoginUI(user);
+  if (user) {
+    try { await savePlayer(user); } catch(e) { console.warn(e); }
+  }
+});
+
+window.savePescariaPlayerProgress = async () => { if (auth.currentUser) await savePlayer(auth.currentUser); };
+window.getPescariaFirebaseUser = () => auth.currentUser;
+window.isPescariaPlayerLoggedIn = () => !!auth.currentUser;
+window.submitPescariaWorldScore = submitWorldRankingScore;
+window.loadPescariaWorldRanking = loadWorldRanking;
+window.renderPescariaWorldRanking = renderWorldRankingIntoGame;
+window.loginPescariaGoogle = loginGoogle;
 </script>
 
 </body>

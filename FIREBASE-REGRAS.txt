@@ -6,7 +6,11 @@ service cloud.firestore {
     match /players/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
+
+    match /scores/{userId} {
+      allow read: if true;
+      allow create, update: if request.auth != null && request.auth.uid == userId;
+      allow delete: if false;
+    }
   }
 }
-
-Adicione também o domínio da Vercel em Authentication > Configurações > Domínios autorizados.

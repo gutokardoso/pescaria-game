@@ -5135,6 +5135,43 @@ body:not(.player-authenticated) button[onclick*="start"] {
 }
 </style>
 
+
+<style id="login-box-up-90-and-world-ranking-css">
+.firebase-login-panel{bottom:calc(24.5% + 90px)!important}
+@media(max-width:560px){.firebase-login-panel{bottom:calc(24.5% + 90px)!important}}
+.world-ranking-badge{display:inline-flex!important;align-items:center!important;justify-content:center!important;margin:0 auto 8px auto!important;padding:6px 14px!important;border-radius:999px!important;color:#fff!important;background:linear-gradient(180deg,#1ea7ff,#004fa8)!important;border:2px solid rgba(255,255,255,.85)!important;box-shadow:0 4px 0 rgba(0,0,0,.20)!important;font-family:Arial Black,Impact,system-ui,sans-serif!important;font-size:13px!important;text-shadow:0 2px 0 rgba(0,0,0,.32)!important}
+</style>
+
+<style id="login-position-real-fix">
+/* POSIÇÃO REAL DA CAIXA DE LOGIN: 90PX MAIS ALTA */
+html body .firebase-login-panel,
+html body #firebaseLoginPanel {
+  top: 58.5% !important;
+  bottom: auto !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  position: absolute !important;
+}
+
+@media (max-width: 560px) {
+  html body .firebase-login-panel,
+  html body #firebaseLoginPanel {
+    top: 58.5% !important;
+    bottom: auto !important;
+  }
+}
+</style>
+
+
+<style id="mission-bars-final-css-safe">
+html body #resultOverlay #finalMissionStatusList.mission-bars-final{width:min(92%,680px)!important;max-width:min(92%,680px)!important;margin:12px auto 10px auto!important;display:flex!important;flex-direction:column!important;align-items:center!important;gap:8px!important;box-sizing:border-box!important}
+html body #resultOverlay .mission-final-bar{position:relative!important;width:100%!important;max-width:100%!important;min-height:42px!important;box-sizing:border-box!important;border-radius:22px!important;display:flex!important;align-items:center!important;justify-content:flex-start!important;padding:6px 18px 6px 54px!important;overflow:hidden!important;box-shadow:inset 0 3px 0 rgba(255,255,255,.26),0 5px 0 rgba(0,0,0,.18),0 8px 14px rgba(0,0,0,.18)!important;font-family:Arial Black,Impact,system-ui,sans-serif!important;color:#fff!important;text-shadow:0 2px 0 rgba(0,0,0,.48),0 0 5px rgba(0,0,0,.35)!important}
+html body #resultOverlay .mission-final-bar.done{background:linear-gradient(180deg,#5de45d 0%,#22ba36 100%)!important}
+html body #resultOverlay .mission-final-bar.fail{background:linear-gradient(180deg,#ff3535 0%,#dc0018 100%)!important}
+html body #resultOverlay .mission-final-icon{position:absolute!important;left:5px!important;top:50%!important;transform:translateY(-50%)!important;width:36px!important;height:36px!important;border-radius:50%!important;display:flex!important;align-items:center!important;justify-content:center!important;font-size:28px!important;line-height:1!important;font-weight:900!important;color:#fff!important;background:rgba(255,255,255,.22)!important;text-shadow:0 3px 0 rgba(0,0,0,.30)!important;box-shadow:inset 0 2px 0 rgba(255,255,255,.24)!important}
+html body #resultOverlay .mission-final-text{display:block!important;flex:1 1 auto!important;width:100%!important;min-width:0!important;max-width:100%!important;font-size:13px!important;line-height:1!important;white-space:nowrap!important;overflow:visible!important;text-overflow:clip!important;text-align:left!important;color:#fff!important}
+</style>
+
 </head>
 <body>
   <main class="game-shell" id="game">
@@ -5334,6 +5371,7 @@ Missão: 0/0</div>
 </main>
 
   <script>
+    let finishedPhaseForResultGlobal = 1;
     const game = document.getElementById('game');
     const coinDimOverlayEl = document.getElementById('coinDimOverlay');
     const world = document.getElementById('world');
@@ -8010,6 +8048,7 @@ applyHookVisuals();
     }
 
     async function finishRound() {
+      finishedPhaseForResultGlobal = currentPhase;
       cleanupRareAnimalSprites();
       setGameScreen('result');
       refreshGameplayUiVisibility();
@@ -10358,7 +10397,7 @@ applyHookVisuals();
 
 
     /* FUNÇÃO FINAL ÚNICA: BARRAS DE MISSÃO SEM CONFLITO */
-    function renderFinalMissionStatusRows(phaseScoreValue) {
+    function disabled_renderFinalMissionStatusRows_old(phaseScoreValue) {
       try {
         const target = document.getElementById('finalMissionStatusList');
         if (!target) return;
@@ -10566,6 +10605,82 @@ applyHookVisuals();
       registerMissionCapture.__turtleMissionFixWrapped = true;
     }
 
+
+    /* FUNÇÃO FINAL ÚNICA: MISSÕES DA FASE QUE ACABOU */
+    function renderFinalMissionStatusRows(phaseScoreValue) {
+      try {
+        const target = document.getElementById('finalMissionStatusList');
+        if (!target) return;
+
+        const phaseForResult = (typeof finishedPhaseForResultGlobal !== 'undefined' && finishedPhaseForResultGlobal)
+          ? finishedPhaseForResultGlobal
+          : currentPhase;
+
+        const captureGoal = typeof getPhaseCaptureGoalForPhase === 'function'
+          ? getPhaseCaptureGoalForPhase(phaseForResult)
+          : { text: 'Complete a missão', target: 1 };
+
+        const captureCurrent = typeof getPhaseCaptureProgress === 'function' ? getPhaseCaptureProgress() : 0;
+        const captureTarget = Number(captureGoal && captureGoal.target ? captureGoal.target : 1);
+        const captureDone = captureCurrent >= captureTarget;
+
+        const scoreTarget = typeof getPhaseScoreRequiredForPhase === 'function'
+          ? getPhaseScoreRequiredForPhase(phaseForResult)
+          : 0;
+
+        const finalScoreValue = Number.isFinite(Number(phaseScoreValue)) ? Number(phaseScoreValue) : score;
+        const scoreDone = finalScoreValue >= scoreTarget;
+
+        const captureText = captureGoal && captureGoal.text ? String(captureGoal.text) : `Complete ${captureTarget} capturas`;
+
+        const rows = [
+          { done: captureDone, label: captureText },
+          { done: scoreDone, label: `Ganhe ${scoreTarget} pontos` }
+        ];
+
+        const panel = target.closest('.result-panel') || target.closest('.panel') || document.querySelector('#resultOverlay .panel') || document.querySelector('#resultOverlay');
+        const panelWidth = panel && panel.getBoundingClientRect ? panel.getBoundingClientRect().width : 700;
+        const realWidth = Math.max(520, Math.min(680, Math.round(panelWidth * 0.78)));
+
+        target.innerHTML = '';
+        target.className = 'final-mission-status-list mission-bars-final';
+        target.style.setProperty('width', realWidth + 'px', 'important');
+        target.style.setProperty('max-width', '92%', 'important');
+        target.style.setProperty('margin', '12px auto 10px auto', 'important');
+        target.style.setProperty('display', 'flex', 'important');
+        target.style.setProperty('flex-direction', 'column', 'important');
+        target.style.setProperty('align-items', 'center', 'important');
+        target.style.setProperty('gap', '8px', 'important');
+
+        rows.forEach(row => {
+          const bar = document.createElement('div');
+          bar.className = 'mission-final-bar ' + (row.done ? 'done completed' : 'fail failed');
+          bar.style.setProperty('width', realWidth + 'px', 'important');
+          bar.style.setProperty('max-width', '100%', 'important');
+
+          const icon = document.createElement('span');
+          icon.className = 'mission-final-icon';
+          icon.textContent = row.done ? '✓' : '×';
+
+          const text = document.createElement('span');
+          text.className = 'mission-final-text';
+          text.textContent = row.label;
+
+          if (row.label.length > 22) {
+            text.style.setProperty('font-size', '12px', 'important');
+          } else {
+            text.style.setProperty('font-size', '13px', 'important');
+          }
+
+          bar.appendChild(icon);
+          bar.appendChild(text);
+          target.appendChild(bar);
+        });
+      } catch (error) {
+        console.warn('Erro ao renderizar missões finais:', error);
+      }
+    }
+
 </script>
 
 <script>
@@ -10582,7 +10697,7 @@ setTimeout(()=>{
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, serverTimestamp, collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 const firebaseConfig = {"apiKey": "AIzaSyCLJz-EC_mfIlB_cDFnmYwM_aWPICF0kbs", "authDomain": "pescaria-9327b.firebaseapp.com", "projectId": "pescaria-9327b", "storageBucket": "pescaria-9327b.firebasestorage.app", "messagingSenderId": "862603556027", "appId": "1:862603556027:web:208e383a43c0592b8f659e", "measurementId": "G-ZCGFX028G1"};
 const app = initializeApp(firebaseConfig);
 try{getAnalytics(app)}catch(e){}
@@ -10602,6 +10717,79 @@ document.addEventListener("DOMContentLoaded",bindLoginButtons);window.addEventLi
 onAuthStateChanged(auth,async user=>{authReady=true;currentFirebaseUser=user;updateUI(user);if(user){try{await savePlayer(user)}catch(e){console.warn(e)}}});
 window.savePescariaPlayerProgress=async()=>{if(auth.currentUser)await savePlayer(auth.currentUser)};
 window.getPescariaFirebaseUser=()=>auth.currentUser;window.isPescariaPlayerLoggedIn=()=>!!auth.currentUser;
+
+/* RANKING MUNDIAL FIRESTORE */
+async function submitWorldRankingScore(finalScore, extra = {}) {
+  const user = auth.currentUser;
+  if (!user) return;
+  const numericScore = Number(finalScore || 0);
+  if (!Number.isFinite(numericScore) || numericScore <= 0) return;
+
+  const scoreRef = doc(db, "scores", user.uid);
+  const existing = await getDoc(scoreRef);
+  const previousBest = existing.exists() ? Number(existing.data().score || 0) : 0;
+
+  if (!existing.exists() || numericScore > previousBest) {
+    await setDoc(scoreRef, {
+      uid: user.uid,
+      name: user.displayName || (window.currentPlayer && window.currentPlayer.name) || "Jogador",
+      email: user.email || "",
+      photoURL: user.photoURL || "",
+      score: numericScore,
+      phase: extra.phase || window.currentPhase || 1,
+      coins: extra.coins || window.coins || 0,
+      provider: providerName(user),
+      updatedAt: serverTimestamp(),
+      createdAt: existing.exists() ? existing.data().createdAt || serverTimestamp() : serverTimestamp()
+    }, { merge: true });
+  }
+
+  if (typeof savePlayer === "function") await savePlayer(user);
+}
+
+async function loadWorldRanking(limitCount = 100) {
+  const q = query(collection(db, "scores"), orderBy("score", "desc"), limit(limitCount));
+  const snap = await getDocs(q);
+  return snap.docs.map((docSnap, index) => {
+    const data = docSnap.data() || {};
+    return {
+      position: index + 1,
+      uid: data.uid || docSnap.id,
+      name: data.name || "Jogador",
+      photoURL: data.photoURL || "",
+      score: Number(data.score || 0),
+      phase: data.phase || 1
+    };
+  });
+}
+
+async function renderWorldRankingIntoGame() {
+  try {
+    const rows = await loadWorldRanking(100);
+    const list = document.getElementById("rankingList") || document.querySelector(".ranking-list") || document.querySelector(".map-ranking-list");
+    if (!list) return;
+
+    list.querySelectorAll(".ranking-row, .world-ranking-row, .world-ranking-badge").forEach(el => el.remove());
+
+    const badge = document.createElement("div");
+    badge.className = "world-ranking-badge";
+    badge.textContent = "🌎 Ranking mundial";
+    list.appendChild(badge);
+
+    rows.slice(0, 10).forEach(row => {
+      const div = document.createElement("div");
+      div.className = "ranking-row world-ranking-row";
+      div.innerHTML = `<span class="ranking-pos">${row.position}.</span><span class="ranking-name">${row.name}</span><span class="ranking-score">${row.score}</span>`;
+      list.appendChild(div);
+    });
+  } catch (error) {
+    console.warn("Erro ao carregar ranking mundial:", error);
+  }
+}
+
+window.submitPescariaWorldScore = submitWorldRankingScore;
+window.loadPescariaWorldRanking = loadWorldRanking;
+window.renderPescariaWorldRanking = renderWorldRankingIntoGame;
 </script>
 
 
@@ -10698,6 +10886,66 @@ window.getPescariaFirebaseUser=()=>auth.currentUser;window.isPescariaPlayerLogge
     }
     return true;
   };
+})();
+</script>
+
+
+<script id="world-ranking-submit-hook">
+(function(){
+  let lastSubmittedScore = 0;
+  function getScore(){
+    try{
+      const vals=[window.phaseScoreBeforeConversion,window.finalScore,window.score,window.currentScore];
+      for(const v of vals){const n=Number(v);if(Number.isFinite(n)&&n>0)return n}
+      const text=document.body.innerText||"";
+      const m=text.match(/Pontuação da fase:\s*([0-9]+)/i);
+      if(m)return Number(m[1]);
+    }catch(e){}
+    return 0;
+  }
+  function submit(){
+    const score=getScore();
+    if(!score||score===lastSubmittedScore)return;
+    lastSubmittedScore=score;
+    if(typeof window.submitPescariaWorldScore==="function"){
+      window.submitPescariaWorldScore(score,{phase:window.currentPhase||1,coins:window.coins||0});
+    }
+  }
+  function renderRanking(){
+    if(typeof window.renderPescariaWorldRanking==="function"){
+      window.renderPescariaWorldRanking();
+    }
+  }
+  const observer=new MutationObserver(()=>{
+    const text=document.body.innerText||"";
+    if(/Missão concluída|Missão não concluída|Pontuação da fase/i.test(text))setTimeout(submit,250);
+    if(/Ranking/i.test(text))setTimeout(renderRanking,250);
+  });
+  document.addEventListener("DOMContentLoaded",()=>observer.observe(document.body,{childList:true,subtree:true,characterData:true}));
+  window.addEventListener("load",()=>setTimeout(renderRanking,800));
+})();
+</script>
+
+
+<script id="force-login-position-real">
+(function(){
+  function forceLoginPanelHigher(){
+    try{
+      const panel = document.getElementById('firebaseLoginPanel') || document.querySelector('.firebase-login-panel');
+      if(!panel) return;
+      panel.style.setProperty('position','absolute','important');
+      panel.style.setProperty('left','50%','important');
+      panel.style.setProperty('top','58.5%','important');
+      panel.style.setProperty('bottom','auto','important');
+      panel.style.setProperty('transform','translateX(-50%)','important');
+    }catch(e){}
+  }
+  document.addEventListener('DOMContentLoaded', forceLoginPanelHigher);
+  window.addEventListener('load', forceLoginPanelHigher);
+  setTimeout(forceLoginPanelHigher, 100);
+  setTimeout(forceLoginPanelHigher, 500);
+  setTimeout(forceLoginPanelHigher, 1500);
+  window.forceLoginPanelHigher = forceLoginPanelHigher;
 })();
 </script>
 

@@ -22,3 +22,8 @@ FIREBASE-REGRAS.txt
 - Install Command: vazio
 
 Depois de subir estes arquivos no GitHub, faça Redeploy na Vercel.
+
+
+## Lógica de acesso atual
+
+O jogo exige autenticação antes de iniciar: Google ou conta por e-mail e senha. O botão Jogar agora fica bloqueado até o jogador estar autenticado. Os dados são salvos em `players/{uid}` no Firestore.

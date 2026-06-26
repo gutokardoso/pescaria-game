@@ -5004,6 +5004,16 @@ html body #resultOverlay .final-mission-progress {
 @media(max-width:560px){.firebase-login-panel{bottom:14.5%!important;width:min(88vw,370px)!important;padding:11px 12px!important}.firebase-login-btn{height:34px!important;font-size:11px!important}}
 </style>
 
+
+<style id="login-google-email-only-css">
+
+.email-login-form{width:100%!important;display:flex!important;flex-direction:column!important;gap:7px!important}
+.email-login-form input{width:100%!important;height:34px!important;box-sizing:border-box!important;border:3px solid rgba(255,255,255,.86)!important;border-radius:999px!important;background:rgba(255,255,255,.96)!important;color:#06466d!important;padding:0 13px!important;font-family:Arial Black,Impact,system-ui,sans-serif!important;font-size:12px!important;outline:none!important}
+.email-login-actions{display:flex!important;gap:8px!important;width:100%!important}.email-login-actions .firebase-login-btn{flex:1 1 0!important}
+.firebase-login-btn.email{background:linear-gradient(180deg,#ffd34e,#f78b00)!important}.firebase-login-btn.email.secondary{background:linear-gradient(180deg,#39d86d,#10a32e)!important}
+body:not(.player-authenticated) #startBtn,body:not(.player-authenticated) .start-btn{filter:grayscale(.25) brightness(.78)!important}
+</style>
+
 </head>
 <body>
   <main class="game-shell" id="game">
@@ -5060,11 +5070,17 @@ Missão: 0/0</div>
   </div>
   <div class="firebase-login-buttons" id="firebaseLoginButtons">
     <button type="button" class="firebase-login-btn google" id="loginGoogleBtn">G Continuar com Google</button>
-    <button type="button" class="firebase-login-btn apple" id="loginAppleBtn"> Continuar com Apple</button>
-    <button type="button" class="firebase-login-btn facebook" id="loginFacebookBtn">f Continuar com Facebook</button>
-    <button type="button" class="firebase-login-btn guest" id="loginGuestBtn">Jogar como visitante</button>
+    <div class="email-login-form" id="emailLoginForm">
+      <input id="emailLoginName" type="text" maxlength="20" placeholder="Nome do jogador">
+      <input id="emailLoginEmail" type="email" placeholder="E-mail">
+      <input id="emailLoginPassword" type="password" minlength="6" placeholder="Senha (mín. 6 caracteres)">
+      <div class="email-login-actions">
+        <button type="button" class="firebase-login-btn email" id="createEmailAccountBtn">Criar conta</button>
+        <button type="button" class="firebase-login-btn email secondary" id="loginEmailBtn">Entrar</button>
+      </div>
+    </div>
   </div>
-  <div class="firebase-login-note">Nome, e-mail, foto, moedas, fase e progresso serão salvos.</div>
+  <div class="firebase-login-note">Entre com Google ou crie uma conta para salvar ranking, loja e progresso.</div>
 </div>
 
 <button id="startBtn"><img src="./assets/btn-jogar-agora.png" alt="Jogar agora"></button>
@@ -10437,94 +10453,33 @@ setTimeout(()=>{
 },500);
 </script>
 
+
+
+
 <script type="module" id="firebase-login-module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
-import { getAuth, GoogleAuthProvider, FacebookAuthProvider, OAuthProvider, signInWithPopup, signInAnonymously, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-
 const firebaseConfig = {"apiKey": "AIzaSyCLJz-EC_mfIlB_cDFnmYwM_aWPICF0kbs", "authDomain": "pescaria-9327b.firebaseapp.com", "projectId": "pescaria-9327b", "storageBucket": "pescaria-9327b.firebasestorage.app", "messagingSenderId": "862603556027", "appId": "1:862603556027:web:208e383a43c0592b8f659e", "measurementId": "G-ZCGFX028G1"};
 const app = initializeApp(firebaseConfig);
-try { getAnalytics(app); } catch(e) {}
-const auth = getAuth(app);
-const db = getFirestore(app);
-const googleProvider = new GoogleAuthProvider();
-googleProvider.addScope("profile"); googleProvider.addScope("email");
-const facebookProvider = new FacebookAuthProvider();
-facebookProvider.addScope("public_profile"); facebookProvider.addScope("email");
-const appleProvider = new OAuthProvider("apple.com");
-appleProvider.addScope("email"); appleProvider.addScope("name");
-
-function providerName(user) {
-  const p = user?.providerData?.[0]?.providerId || (user?.isAnonymous ? "anonymous" : "");
-  return p === "google.com" ? "Google" : p === "facebook.com" ? "Facebook" : p === "apple.com" ? "Apple" : p === "anonymous" ? "Visitante" : "Login";
-}
-function gameState() {
-  return {
-    currentPhase: window.currentPhase ?? (typeof currentPhase !== "undefined" ? currentPhase : 1),
-    coins: window.coins ?? (typeof coins !== "undefined" ? coins : 0),
-    score: window.score ?? (typeof score !== "undefined" ? score : 0),
-    bestScore: Number(localStorage.getItem("pescaria_best_score") || "0") || 0
-  };
-}
-async function savePlayer(user) {
-  if (!user) return;
-  const data = {
-    uid: user.uid,
-    name: user.displayName || (user.isAnonymous ? "Visitante" : "Jogador"),
-    email: user.email || "",
-    photoURL: user.photoURL || "",
-    provider: providerName(user),
-    isAnonymous: !!user.isAnonymous,
-    game: gameState(),
-    updatedAt: serverTimestamp()
-  };
-  const ref = doc(db, "players", user.uid);
-  const snap = await getDoc(ref);
-  if (snap.exists()) await updateDoc(ref, data);
-  else await setDoc(ref, {...data, createdAt: serverTimestamp(), firstLoginAt: serverTimestamp()});
-  localStorage.setItem("pescaria_player", JSON.stringify({uid:data.uid,name:data.name,email:data.email,photoURL:data.photoURL,provider:data.provider}));
-  window.currentPlayer = data;
-}
-function updateUI(user) {
-  const row = document.getElementById("firebaseProfileRow");
-  const buttons = document.getElementById("firebaseLoginButtons");
-  const photo = document.getElementById("firebaseProfilePhoto");
-  const name = document.getElementById("firebaseProfileName");
-  const email = document.getElementById("firebaseProfileEmail");
-  if (!row || !buttons) return;
-  if (user) {
-    row.classList.add("logged"); buttons.style.display = "none";
-    if (photo) photo.src = user.photoURL || "./assets/fish-normal.png";
-    if (name) name.textContent = user.displayName || (user.isAnonymous ? "Visitante" : "Jogador");
-    if (email) email.textContent = user.email || providerName(user);
-  } else {
-    row.classList.remove("logged"); buttons.style.display = "flex";
-  }
-}
-async function login(provider) {
-  try {
-    const p = provider === "facebook" ? facebookProvider : provider === "apple" ? appleProvider : googleProvider;
-    const result = await signInWithPopup(auth, p);
-    await savePlayer(result.user); updateUI(result.user);
-  } catch(e) { alert("Não foi possível fazer login: " + (e.message || e)); }
-}
-async function guest() {
-  try { const result = await signInAnonymously(auth); await savePlayer(result.user); updateUI(result.user); }
-  catch(e) { alert("Não foi possível entrar como visitante: " + (e.message || e)); }
-}
-function bind() {
-  const g=document.getElementById("loginGoogleBtn"), a=document.getElementById("loginAppleBtn"), f=document.getElementById("loginFacebookBtn"), v=document.getElementById("loginGuestBtn"), s=document.getElementById("firebaseLogoutBtn");
-  if(g&&!g.__b){g.__b=1;g.onclick=()=>login("google")}
-  if(a&&!a.__b){a.__b=1;a.onclick=()=>login("apple")}
-  if(f&&!f.__b){f.__b=1;f.onclick=()=>login("facebook")}
-  if(v&&!v.__b){v.__b=1;v.onclick=guest}
-  if(s&&!s.__b){s.__b=1;s.onclick=async()=>{await signOut(auth); localStorage.removeItem("pescaria_player"); updateUI(null);}}
-}
-document.addEventListener("DOMContentLoaded", bind); window.addEventListener("load", bind);
-onAuthStateChanged(auth, async user => { updateUI(user); if(user){ try{await savePlayer(user)}catch(e){console.warn(e)} } });
-window.savePescariaPlayerProgress = async function() { if(auth.currentUser) await savePlayer(auth.currentUser); };
-window.getPescariaFirebaseUser = () => auth.currentUser;
+try{getAnalytics(app)}catch(e){}
+const auth=getAuth(app), db=getFirestore(app);
+const googleProvider=new GoogleAuthProvider(); googleProvider.addScope("profile"); googleProvider.addScope("email");
+let authReady=false, currentFirebaseUser=null;
+function providerName(u){const p=u?.providerData?.[0]?.providerId||"";return p==="google.com"?"Google":p==="password"?"E-mail":"Login"}
+function gameState(){return{currentPhase:window.currentPhase??(typeof currentPhase!=="undefined"?currentPhase:1),coins:window.coins??(typeof coins!=="undefined"?coins:0),score:window.score??(typeof score!=="undefined"?score:0),bestScore:Number(localStorage.getItem("pescaria_best_score")||"0")||0,updatedAtLocal:new Date().toISOString()}}
+async function savePlayer(user){if(!user)return;const data={uid:user.uid,name:user.displayName||"Jogador",email:user.email||"",photoURL:user.photoURL||"",provider:providerName(user),isAnonymous:false,game:gameState(),updatedAt:serverTimestamp()};const ref=doc(db,"players",user.uid);const snap=await getDoc(ref);if(snap.exists())await updateDoc(ref,data);else await setDoc(ref,{...data,createdAt:serverTimestamp(),firstLoginAt:serverTimestamp(),inventory:{},purchases:{},ranking:{}});localStorage.setItem("pescaria_player",JSON.stringify({uid:data.uid,name:data.name,email:data.email,photoURL:data.photoURL,provider:data.provider}));window.currentPlayer=data}
+function setAuthGate(ok){document.body.classList.toggle("player-authenticated",!!ok);const b=document.getElementById("startBtn")||document.querySelector(".start-btn");if(b)b.dataset.requiresLogin=ok?"0":"1"}
+function updateUI(user){const row=document.getElementById("firebaseProfileRow"),buttons=document.getElementById("firebaseLoginButtons"),photo=document.getElementById("firebaseProfilePhoto"),name=document.getElementById("firebaseProfileName"),email=document.getElementById("firebaseProfileEmail");if(!row||!buttons)return;if(user){row.classList.add("logged");buttons.style.display="none";if(photo)photo.src=user.photoURL||"./assets/fish-normal.png";if(name)name.textContent=user.displayName||"Jogador";if(email)email.textContent=user.email||providerName(user)}else{row.classList.remove("logged");buttons.style.display="flex"}setAuthGate(!!user)}
+async function loginGoogle(){try{const r=await signInWithPopup(auth,googleProvider);await savePlayer(r.user);updateUI(r.user)}catch(e){alert("Não foi possível fazer login com Google: "+(e.message||e))}}
+async function createEmailAccount(){try{const name=(document.getElementById("emailLoginName")?.value||"").trim(),email=(document.getElementById("emailLoginEmail")?.value||"").trim(),password=document.getElementById("emailLoginPassword")?.value||"";if(!name)return alert("Digite o nome do jogador.");if(!email)return alert("Digite o e-mail.");if(password.length<6)return alert("A senha precisa ter no mínimo 6 caracteres.");const r=await createUserWithEmailAndPassword(auth,email,password);await updateProfile(r.user,{displayName:name});await savePlayer(r.user);updateUI(r.user)}catch(e){alert("Não foi possível criar a conta: "+(e.message||e))}}
+async function loginEmail(){try{const email=(document.getElementById("emailLoginEmail")?.value||"").trim(),password=document.getElementById("emailLoginPassword")?.value||"";if(!email)return alert("Digite o e-mail.");if(!password)return alert("Digite a senha.");const r=await signInWithEmailAndPassword(auth,email,password);await savePlayer(r.user);updateUI(r.user)}catch(e){alert("Não foi possível entrar: "+(e.message||e))}}
+function bindLoginButtons(){const g=document.getElementById("loginGoogleBtn"),c=document.getElementById("createEmailAccountBtn"),e=document.getElementById("loginEmailBtn"),s=document.getElementById("firebaseLogoutBtn");if(g&&!g.__b){g.__b=1;g.onclick=loginGoogle}if(c&&!c.__b){c.__b=1;c.onclick=createEmailAccount}if(e&&!e.__b){e.__b=1;e.onclick=loginEmail}if(s&&!s.__b){s.__b=1;s.onclick=async()=>{await signOut(auth);localStorage.removeItem("pescaria_player");window.currentPlayer=null;updateUI(null)}}const start=document.getElementById("startBtn")||document.querySelector(".start-btn");if(start&&!start.__authGateBound){start.__authGateBound=1;start.addEventListener("click",ev=>{if(!authReady||!currentFirebaseUser){ev.preventDefault();ev.stopImmediatePropagation();alert("Faça login com Google ou crie uma conta com e-mail e senha para jogar.");return false}},true)}}
+document.addEventListener("DOMContentLoaded",bindLoginButtons);window.addEventListener("load",bindLoginButtons);
+onAuthStateChanged(auth,async user=>{authReady=true;currentFirebaseUser=user;updateUI(user);if(user){try{await savePlayer(user)}catch(e){console.warn(e)}}});
+window.savePescariaPlayerProgress=async()=>{if(auth.currentUser)await savePlayer(auth.currentUser)};
+window.getPescariaFirebaseUser=()=>auth.currentUser;window.isPescariaPlayerLoggedIn=()=>!!auth.currentUser;
 </script>
 
 </body>

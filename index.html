@@ -5160,6 +5160,15 @@ html body.player-authenticated #firebaseProfileRow {
 .mission-final-text{font-size:13px!important;white-space:nowrap!important;overflow:visible!important}
 </style>
 
+
+<style id="hide-login-after-auth-css">
+body.player-authenticated #firebaseLoginPanel,
+body.player-authenticated .firebase-login-panel {
+  display: none !important;
+  pointer-events: none !important;
+}
+</style>
+
 </head>
 <body>
   <main class="game-shell" id="game">
@@ -5443,34 +5452,6 @@ Missão: 0/0</div>
 
 
 
-<script id="auth-gate-modal-safe">
-(function(){
-  function logged(){
-    try {
-      if (typeof window.isPescariaPlayerLoggedIn === 'function' && window.isPescariaPlayerLoggedIn()) return true;
-      if (window.currentPlayer && window.currentPlayer.uid) return true;
-      if (document.body.classList.contains('player-authenticated')) return true;
-    } catch(e) {}
-    return false;
-  }
-
-  document.addEventListener('click', function(e){
-    if (e.target && e.target.closest && e.target.closest('#firebaseLoginPanel, .firebase-login-panel')) return;
-
-    const el = e.target && e.target.closest ? e.target.closest('#startBtn, .start-btn, [data-start], button, a') : null;
-    if (!el) return;
-
-    const txt = ((el.textContent || '') + ' ' + (el.id || '') + ' ' + (el.className || '')).toLowerCase();
-
-    if ((txt.includes('jogar') || txt.includes('start') || txt.includes('play')) && !logged()) {
-      e.preventDefault();
-      e.stopPropagation();
-      e.stopImmediatePropagation();
-      alert('Faça login com Google ou crie uma conta com e-mail e senha para jogar.');
-    }
-  }, true);
-})();
-</script>
 
 
 <script type="module" id="firebase-login-module">
@@ -5587,7 +5568,7 @@ function updateLoginUI(user) {
     if (photo) photo.src = user.photoURL || "./assets/fish-normal.png";
     if (name) name.textContent = user.displayName || "Jogador";
     if (email) email.textContent = user.email || providerName(user);
-    if (panel) panel.style.display = "flex";
+    if (panel) panel.style.display = user ? "none" : "flex";
   } else {
     document.body.classList.remove("player-authenticated");
     if (row) row.classList.remove("logged");
@@ -5790,6 +5771,98 @@ window.submitPescariaWorldScore = submitWorldRankingScore;
 window.loadPescariaWorldRanking = loadWorldRanking;
 window.renderPescariaWorldRanking = renderWorldRankingIntoGame;
 window.loginPescariaGoogle = loginGoogle;
+</script>
+
+
+<script id="auth-gate-modal-safe">
+(function(){
+  function logged(){
+    try {
+      if (typeof window.isPescariaPlayerLoggedIn === 'function' && window.isPescariaPlayerLoggedIn()) return true;
+      if (window.currentPlayer && window.currentPlayer.uid) return true;
+      if (document.body.classList.contains('player-authenticated')) return true;
+      const raw = localStorage.getItem('pescaria_player');
+      if (raw) {
+        const p = JSON.parse(raw);
+        if (p && p.uid) return true;
+      }
+    } catch(e) {}
+    return false;
+  }
+
+  document.addEventListener('click', function(e){
+    if (e.target && e.target.closest && e.target.closest('#firebaseLoginPanel, .firebase-login-panel')) return;
+
+    const el = e.target && e.target.closest ? e.target.closest('#startBtn, .start-btn, [data-start], button, a') : null;
+    if (!el) return;
+
+    const txt = ((el.textContent || '') + ' ' + (el.id || '') + ' ' + (el.className || '')).toLowerCase();
+    const isStart = txt.includes('jogar') || txt.includes('start') || txt.includes('play');
+
+    if (isStart && !logged()) {
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      alert('Faça login com Google ou crie uma conta com e-mail e senha para jogar.');
+    }
+    // Se estiver logado, NÃO bloqueia e deixa o clique original do jogo acontecer.
+  }, true);
+
+  window.isPescariaAccessAllowed = logged;
+})();
+</script>
+
+
+<script id="start-after-login-fallback">
+(function(){
+  function logged(){
+    try {
+      if (typeof window.isPescariaAccessAllowed === 'function' && window.isPescariaAccessAllowed()) return true;
+      if (typeof window.isPescariaPlayerLoggedIn === 'function' && window.isPescariaPlayerLoggedIn()) return true;
+      if (window.currentPlayer && window.currentPlayer.uid) return true;
+      if (document.body.classList.contains('player-authenticated')) return true;
+      const raw = localStorage.getItem('pescaria_player');
+      if (raw) {
+        const p = JSON.parse(raw);
+        if (p && p.uid) return true;
+      }
+    } catch(e) {}
+    return false;
+  }
+
+  function tryStartGameFallback(){
+    if (!logged()) return;
+
+    const names = ['startGame', 'startRound', 'beginGame', 'playGame', 'startFishing', 'start'];
+    for (const name of names) {
+      try {
+        if (typeof window[name] === 'function') {
+          window[name]();
+          return;
+        }
+      } catch(e) {
+        console.warn('Falha ao chamar', name, e);
+      }
+    }
+
+    // fallback visual comum: esconder tela inicial caso exista
+    try {
+      const startScreen = document.getElementById('startScreen') || document.querySelector('.start-screen');
+      const gameScreen = document.getElementById('gameScreen') || document.querySelector('.game-screen');
+      if (startScreen) startScreen.style.display = 'none';
+      if (gameScreen) gameScreen.style.display = 'block';
+    } catch(e) {}
+  }
+
+  document.addEventListener('click', function(e){
+    const el = e.target && e.target.closest ? e.target.closest('#startBtn, .start-btn, [data-start]') : null;
+    if (!el) return;
+    if (!logged()) return;
+
+    // Deixa o handler original rodar primeiro; se não iniciar, tenta fallback.
+    setTimeout(tryStartGameFallback, 80);
+  }, false);
+})();
 </script>
 
 </body>

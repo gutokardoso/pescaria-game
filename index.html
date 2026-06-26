@@ -5105,7 +5105,49 @@ html body .ranking-date,html body .map-ranking-date,html body .world-ranking-dat
 }
 #firebaseLoginPanel *,.firebase-login-panel *{animation:none!important;transition:none!important}
 .firebase-login-title{font-size:13px!important;line-height:1!important}.firebase-profile-row{gap:7px!important;padding:6px!important;border-radius:13px!important}.firebase-profile-photo{width:34px!important;height:34px!important}.firebase-profile-name{font-size:10px!important;line-height:1.05!important}.firebase-profile-email{font-size:8px!important;line-height:1.05!important}.firebase-logout-btn{padding:6px 8px!important;font-size:8px!important}.firebase-login-buttons{gap:6px!important}.firebase-login-btn{height:30px!important;min-height:30px!important;font-size:10px!important;border-radius:999px!important}.email-login-form{gap:6px!important}.email-login-form input{height:29px!important;min-height:29px!important;padding:0 10px!important;font-size:9px!important;border-radius:999px!important}.email-login-actions{gap:6px!important}.firebase-login-note{font-size:8px!important;line-height:1.12!important}
-body.player-authenticated #firebaseLoginPanel,body.player-authenticated .firebase-login-panel{display:none!important}
+
+</style>
+
+
+<style id="login-never-disappear-css">
+html body #firebaseLoginPanel,
+html body .firebase-login-panel {
+  display: flex !important;
+  position: fixed !important;
+  left: 50% !important;
+  top: 50% !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: translate(-50%, -50%) !important;
+  width: 280px !important;
+  max-width: 82vw !important;
+  min-width: 260px !important;
+  max-height: 84vh !important;
+  overflow: visible !important;
+  padding: 10px 12px !important;
+  border-radius: 18px !important;
+  gap: 7px !important;
+  z-index: 2147483647 !important;
+  pointer-events: auto !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  animation: none !important;
+  transition: none !important;
+}
+html body #firebaseLoginPanel *,
+html body .firebase-login-panel * {
+  pointer-events: auto !important;
+  animation: none !important;
+  transition: none !important;
+}
+html body.player-authenticated #firebaseLoginButtons,
+html body.player-authenticated .email-login-form,
+html body.player-authenticated .firebase-login-note {
+  display: none !important;
+}
+html body.player-authenticated #firebaseProfileRow {
+  display: flex !important;
+}
 </style>
 
 </head>
@@ -11128,7 +11170,7 @@ function updateLoginUI(user) {
     document.body.classList.add("player-authenticated");
     if (row) row.classList.add("logged");
     if (buttons) buttons.style.display = "none";
-    if (panel) panel.style.display = "none";
+    if (panel) panel.style.display = "flex";
     if (photo) photo.src = user.photoURL || "./assets/fish-normal.png";
     if (name) name.textContent = user.displayName || "Jogador";
     if (email) email.textContent = user.email || providerName(user);
@@ -11342,6 +11384,67 @@ window.renderPescariaWorldRanking = renderWorldRankingIntoGame;
       alert('Faça login com Google ou crie uma conta com e-mail e senha para jogar.');
     }
   }, true);
+})();
+</script>
+
+
+<script id="login-never-disappear-js">
+(function(){
+  function keepLoginVisible(){
+    const panel = document.getElementById('firebaseLoginPanel') || document.querySelector('.firebase-login-panel');
+    if (!panel) return;
+    panel.style.setProperty('display', 'flex', 'important');
+    panel.style.setProperty('position', 'fixed', 'important');
+    panel.style.setProperty('left', '50%', 'important');
+    panel.style.setProperty('top', '50%', 'important');
+    panel.style.setProperty('right', 'auto', 'important');
+    panel.style.setProperty('bottom', 'auto', 'important');
+    panel.style.setProperty('transform', 'translate(-50%, -50%)', 'important');
+    panel.style.setProperty('width', '280px', 'important');
+    panel.style.setProperty('max-width', '82vw', 'important');
+    panel.style.setProperty('min-width', '260px', 'important');
+    panel.style.setProperty('z-index', '2147483647', 'important');
+    panel.style.setProperty('pointer-events', 'auto', 'important');
+    panel.style.setProperty('opacity', '1', 'important');
+    panel.style.setProperty('visibility', 'visible', 'important');
+
+    ['loginGoogleBtn','createEmailAccountBtn','loginEmailBtn'].forEach(id => {
+      const btn = document.getElementById(id);
+      if (btn) {
+        btn.style.setProperty('pointer-events', 'auto', 'important');
+        btn.style.setProperty('opacity', '1', 'important');
+        btn.disabled = false;
+      }
+    });
+  }
+  document.addEventListener('DOMContentLoaded', keepLoginVisible);
+  window.addEventListener('load', keepLoginVisible);
+  setTimeout(keepLoginVisible, 50);
+  setTimeout(keepLoginVisible, 250);
+  setTimeout(keepLoginVisible, 800);
+  setTimeout(keepLoginVisible, 1500);
+  document.addEventListener('DOMContentLoaded', function(){
+    const panel = document.getElementById('firebaseLoginPanel') || document.querySelector('.firebase-login-panel');
+    if (!panel || panel.__loginVisibilityObserver) return;
+    panel.__loginVisibilityObserver = true;
+    new MutationObserver(function(){
+      if (panel.style.display === 'none' || panel.style.visibility === 'hidden' || panel.style.opacity === '0') {
+        keepLoginVisible();
+      }
+    }).observe(panel, { attributes: true, attributeFilter: ['style', 'class'] });
+  });
+  window.keepLoginVisible = keepLoginVisible;
+})();
+</script>
+
+
+<script id="login-click-pass-through">
+(function(){
+  document.addEventListener('click', function(e){
+    if (e.target && e.target.closest && e.target.closest('#firebaseLoginPanel, .firebase-login-panel')) {
+      e.stopPropagation();
+    }
+  }, false);
 })();
 </script>
 

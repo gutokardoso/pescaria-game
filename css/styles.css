@@ -5762,8 +5762,6 @@ html body.screen-result .mission-final-bar,
 html body.screen-result .mission-final-bar * { visibility:visible!important; opacity:1!important; }
 
 
-/* v19 hud-controller-final */
-
 /* HUD principal: oculto por padrão */
 html body #missionProgress,
 html body #liveScore,
@@ -5860,4 +5858,108 @@ html body #finalMissionStatusList .mission-final-icon {
   width: 30px !important;
   height: 30px !important;
   font-size: 20px !important;
+}
+
+
+/* v20 hud coin/result fix */
+
+/* HUD base: hidden unless gameplay or coin-counting */
+html body:not(.screen-playing):not(.hud-coin-counting) #missionProgress,
+html body:not(.screen-playing):not(.hud-coin-counting) #missionProgress *,
+html body:not(.screen-playing):not(.hud-coin-counting) #liveScore,
+html body:not(.screen-playing):not(.hud-coin-counting) #liveScore *,
+html body:not(.screen-playing):not(.hud-coin-counting) #liveFish,
+html body:not(.screen-playing):not(.hud-coin-counting) #liveFish * {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* Final result: never show top HUD unless exact coin counting class is active */
+html body.screen-result:not(.hud-coin-counting) #missionProgress,
+html body.screen-result:not(.hud-coin-counting) #missionProgress *,
+html body.screen-result:not(.hud-coin-counting) #liveScore,
+html body.screen-result:not(.hud-coin-counting) #liveScore *,
+html body.screen-result:not(.hud-coin-counting) #liveFish,
+html body.screen-result:not(.hud-coin-counting) #liveFish * {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* Start/prelevel/shop: hidden */
+html body.screen-start #missionProgress,
+html body.screen-start #missionProgress *,
+html body.screen-start #liveScore,
+html body.screen-start #liveScore *,
+html body.screen-start #liveFish,
+html body.screen-start #liveFish *,
+html body.screen-prelevel #missionProgress,
+html body.screen-prelevel #missionProgress *,
+html body.screen-prelevel #liveScore,
+html body.screen-prelevel #liveScore *,
+html body.screen-prelevel #liveFish,
+html body.screen-prelevel #liveFish *,
+html body.screen-shop #missionProgress,
+html body.screen-shop #missionProgress *,
+html body.screen-shop #liveScore,
+html body.screen-shop #liveScore *,
+html body.screen-shop #liveFish,
+html body.screen-shop #liveFish * {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* Gameplay: show full HUD */
+html body.screen-playing #missionProgress,
+html body.screen-playing #missionProgress *,
+html body.screen-playing #liveScore,
+html body.screen-playing #liveScore *,
+html body.screen-playing #liveFish,
+html body.screen-playing #liveFish * {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+html body.screen-playing #missionProgress { display: block !important; }
+html body.screen-playing #liveScore,
+html body.screen-playing #liveFish { display: flex !important; }
+
+/* Coin counting: keep mission, points and coins fully visible, including text */
+html body.hud-coin-counting #missionProgress,
+html body.hud-coin-counting #missionProgress *,
+html body.hud-coin-counting #liveScore,
+html body.hud-coin-counting #liveScore *,
+html body.hud-coin-counting #liveFish,
+html body.hud-coin-counting #liveFish * {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+html body.hud-coin-counting #missionProgress { display: block !important; }
+html body.hud-coin-counting #liveScore,
+html body.hud-coin-counting #liveFish { display: flex !important; }
+
+/* Final mission text remains contained */
+html body #finalMissionStatusList .final-mission-row,
+html body #finalMissionStatusList .mission-final-bar {
+  width: 500px !important;
+  max-width: 500px !important;
+  min-height: 42px !important;
+  padding-left: 46px !important;
+  padding-right: 12px !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+
+html body #finalMissionStatusList .final-mission-text,
+html body #finalMissionStatusList .mission-final-text {
+  font-size: 10px !important;
+  line-height: .95 !important;
+  white-space: nowrap !important;
+  letter-spacing: -1px !important;
+  transform: scale(.78) !important;
+  transform-origin: left center !important;
+  display: inline-block !important;
+  width: auto !important;
+  max-width: none !important;
 }

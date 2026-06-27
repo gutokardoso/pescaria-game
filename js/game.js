@@ -1052,13 +1052,13 @@ function announceGiantSpawn() {
     function keepHeaderVisibleOnResultV13() { return; }
 
 
-    function updateHudScopeV15() { try { updateHUDVisibilityV19(); } catch(error) {} }
+    function updateHudScopeV15() { try { updateHUDVisibilityV20(); } catch(error) {} }
 
 
-function updateHudScopeV17() { try { updateHUDVisibilityV19(); } catch(error) {} }
+function updateHUDVisibilityV20() { try { updateHUDVisibilityV20(); } catch(error) {} }
 
 
-function hardHideHudOutsideGameV18() { try { updateHUDVisibilityV19(); } catch(error) {} }
+function updateHUDVisibilityV20() { try { updateHUDVisibilityV20(); } catch(error) {} }
 
 
 function getCurrentScreenV19() {
@@ -1086,29 +1086,46 @@ function setHudModeV19(mode) {
       body.classList.add('hud-force-hidden');
     }
 
-    updateHUDVisibilityV19();
+    updateHUDVisibilityV20();
   } catch (error) {}
 }
 
-function updateHUDVisibilityV19() {
+function updateHUDVisibilityV20() { try { updateHUDVisibilityV20(); } catch(error) {} }
+
+
+function updateHUDVisibilityV20() {
   try {
     const body = document.body;
-    const isGame = body.classList.contains('screen-playing');
+    const show = body.classList.contains('screen-playing') || body.classList.contains('hud-coin-counting');
+    const isResult = body.classList.contains('screen-result');
     const isCoin = body.classList.contains('hud-coin-counting');
-    const show = isGame || isCoin;
+    const visible = show && (!isResult || isCoin);
 
-    const ids = ['missionProgress', 'liveScore', 'liveFish', 'depthMeter', 'depthNumber'];
-    ids.forEach(id => {
-      const el = document.getElementById(id);
+    const mission = document.getElementById('missionProgress');
+    const score = document.getElementById('liveScore');
+    const coins = document.getElementById('liveFish');
+
+    if (mission) {
+      mission.style.setProperty('display', visible ? 'block' : 'none', 'important');
+      mission.style.setProperty('visibility', visible ? 'visible' : 'hidden', 'important');
+      mission.style.setProperty('opacity', visible ? '1' : '0', 'important');
+      mission.querySelectorAll('*').forEach(child => {
+        child.style.setProperty('visibility', visible ? 'visible' : 'hidden', 'important');
+        child.style.setProperty('opacity', visible ? '1' : '0', 'important');
+        if (visible) child.style.removeProperty('display');
+      });
+    }
+
+    [score, coins].forEach(el => {
       if (!el) return;
-
-      const visible = show && (id !== 'depthMeter' && id !== 'depthNumber' ? true : isGame);
-      const displayValue = id === 'missionProgress' || id === 'depthMeter' || id === 'depthNumber' ? 'block' : 'flex';
-
-      el.style.setProperty('display', visible ? displayValue : 'none', 'important');
+      el.style.setProperty('display', visible ? 'flex' : 'none', 'important');
       el.style.setProperty('visibility', visible ? 'visible' : 'hidden', 'important');
       el.style.setProperty('opacity', visible ? '1' : '0', 'important');
-      el.style.setProperty('pointer-events', visible ? 'auto' : 'none', 'important');
+      el.querySelectorAll('*').forEach(child => {
+        child.style.setProperty('visibility', visible ? 'visible' : 'hidden', 'important');
+        child.style.setProperty('opacity', visible ? '1' : '0', 'important');
+        if (visible) child.style.removeProperty('display');
+      });
     });
   } catch (error) {}
 }
@@ -1116,10 +1133,8 @@ function updateHUDVisibilityV19() {
 function setGameScreen(screenName) {
       document.body.classList.remove('screen-start', 'screen-prelevel', 'screen-playing', 'screen-result', 'screen-shop');
       document.body.classList.add(`screen-${screenName}`);
-      if (screenName !== 'playing') document.body.classList.remove('hud-coin-counting');
-      updateHUDVisibilityV19();
-      hardHideHudOutsideGameV18();
-      updateHudScopeV17();
+      if (screenName !== 'playing')       updateHUDVisibilityV20();
+      updateHUDVisibilityV20();
       updateHudScopeV16();
       updateHudScopeV15();
 
@@ -2167,12 +2182,8 @@ function checkCollisions() {
     }
 
     function showPreLevelScreen() {
-      setHudModeV19('hidden');
-      document.body.classList.remove('hud-coin-counting');
-      hardHideHudOutsideGameV18();
-      document.body.classList.remove('hud-coin-counting');
-      updateHudScopeV17();
-      document.body.classList.remove('hud-coin-counting');
+      
+                  document.body.classList.remove('hud-coin-counting');
       updateHudScopeV15();
       cleanupRareAnimalSprites();
       setGameScreen('prelevel');
@@ -2882,11 +2893,7 @@ applyHookVisuals();
 
 
     function startRound() {
-      document.body.classList.remove('hud-coin-counting');
-      updateHUDVisibilityV19();
-      document.body.classList.remove('hud-coin-counting');
-      updateHudScopeV17();
-      document.body.classList.remove('hud-coin-counting');
+                  document.body.classList.remove('hud-coin-counting');
       if (typeof window.requirePescariaLoginBeforeStart === 'function' && !window.requirePescariaLoginBeforeStart()) return false;
       cleanupRareAnimalSprites();
       forceHudLayout();
@@ -5522,4 +5529,12 @@ function renderFinalMissionStatusRows(phaseScoreValue) {
       registerMissionCapture.__turtleMissionFixWrapped = true;
     }
 
-function updateHudScopeV16() { try { updateHUDVisibilityV19(); } catch(error) {} }
+function updateHudScopeV16() { try { updateHUDVisibilityV20(); } catch(error) {} }
+
+
+function hideHudOnFinalResultV20() {
+  try {
+    document.body.classList.remove('hud-coin-counting');
+    updateHUDVisibilityV20();
+  } catch (error) {}
+}

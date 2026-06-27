@@ -13,51 +13,6 @@
 
 
 
-<style id="asset-paths-v4">
-/* v4 - restaura os caminhos das imagens sem alterar o layout original */
-.start-screen-bg {
-  background-image: url('./assets/start-screen.png') !important;
-  background-size: cover !important;
-  background-position: center center !important;
-  background-repeat: no-repeat !important;
-}
-
-.sky-image {
-  background-image: url('./assets/sky.png') !important;
-  background-size: cover !important;
-  background-position: center top !important;
-  background-repeat: no-repeat !important;
-}
-
-.sea-background {
-  background-image: url('./assets/sea-bg.png') !important;
-  background-size: cover !important;
-  background-position: center top !important;
-  background-repeat: repeat-y !important;
-}
-
-.boat-wrap#boat,
-.boat-wrap {
-  background-image: url('./assets/boat.png') !important;
-  background-size: contain !important;
-  background-position: center center !important;
-  background-repeat: no-repeat !important;
-}
-
-.hook#hook,
-.hook {
-  background-image: url('./assets/hook.png') !important;
-  background-size: contain !important;
-  background-position: center center !important;
-  background-repeat: no-repeat !important;
-}
-
-/* Fallback apenas de imagem; não muda posição/tamanho dos peixes */
-.fish[data-type="normal"], .fish.normal, .fish-normal { background-image: url('./assets/fish-normal.png') !important; }
-.fish[data-type="gold"], .fish.gold, .fish-gold { background-image: url('./assets/fish-gold.png') !important; }
-.fish[data-type="baiacu"], .fish[data-type="puffer"], .fish.baiacu, .fish.puffer, .fish-baiacu { background-image: url('./assets/fish-baiacu.png') !important; }
-.fish[data-type="rainbow"], .fish.rainbow, .fish-rainbow { background-image: url('./assets/fish-rainbow.png') !important; }
-</style>
 
 </head>
 <body>
@@ -266,6 +221,37 @@ Missão: 0/0</div>
 <script src="./js/auth-gate.js"></script>
 
 <script src="./js/ranking-submit.js"></script>
+
+
+<script id="special-items-v6-dom-patch">
+(function(){
+  function assetForSpecial(kind){
+    const key = String(kind || '').toLowerCase();
+    if (key.includes('bottle') || key.includes('garrafa')) return './assets/item-bottle.png';
+    if (key.includes('chest') || key.includes('bau') || key.includes('baú')) return './assets/item-chest.png';
+    if (key.includes('giant') || key.includes('gigante')) return './assets/fish-giant.png';
+    return null;
+  }
+  function fixSpecialAssets(){
+    document.querySelectorAll('.special-item, .special-sprite, .rare-animal-sprite, [data-special-kind], [data-item-kind]').forEach(el => {
+      const kind = el.dataset.specialKind || el.dataset.itemKind || el.dataset.kind || el.dataset.type || el.className || '';
+      const src = assetForSpecial(kind);
+      if (!src) return;
+      if (el.tagName === 'IMG') {
+        if (!el.getAttribute('src')) el.setAttribute('src', src);
+      } else {
+        el.style.backgroundImage = 'url("' + src + '")';
+        el.style.backgroundSize = 'contain';
+        el.style.backgroundRepeat = 'no-repeat';
+        el.style.backgroundPosition = 'center';
+      }
+    });
+  }
+  document.addEventListener('DOMContentLoaded', fixSpecialAssets);
+  window.addEventListener('load', fixSpecialAssets);
+  setInterval(fixSpecialAssets, 1200);
+})();
+</script>
 
 </body>
 </html>

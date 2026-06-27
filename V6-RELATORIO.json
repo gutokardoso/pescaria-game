@@ -1,0 +1,18 @@
+{
+  "version": "v6",
+  "source": "pescaria-game-v5.zip",
+  "required_assets_missing": [],
+  "missing_asset_references": [],
+  "special_refs": {
+    "item-bottle.png": true,
+    "item-chest.png": true,
+    "fish-giant.png": true
+  },
+  "final_mission_snapshot": {
+    "has_snapshot": true,
+    "has_lock_call": true,
+    "render_replaced": true
+  },
+  "js_external_validated": true,
+  "js_inline_validated": true
+}

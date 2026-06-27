@@ -5105,3 +5105,51 @@ body:not(.player-authenticated) button[onclick*="start"] {
 @media(max-width:560px){.firebase-login-panel{bottom:calc(24.5% + 90px)!important}}
 .world-ranking-badge{display:inline-flex!important;align-items:center!important;justify-content:center!important;margin:0 auto 8px auto!important;padding:6px 14px!important;border-radius:999px!important;color:#fff!important;background:linear-gradient(180deg,#1ea7ff,#004fa8)!important;border:2px solid rgba(255,255,255,.85)!important;box-shadow:0 4px 0 rgba(0,0,0,.20)!important;font-family:Arial Black,Impact,system-ui,sans-serif!important;font-size:13px!important;text-shadow:0 2px 0 rgba(0,0,0,.32)!important}
 
+
+
+
+/* asset-audit-v6-css: caminhos de assets sem forçar layout */
+.start-screen-bg {
+  background-image: url('../assets/start-screen.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.sky-image {
+  background-image: url('../assets/sky.png');
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+}
+
+.sea-background {
+  background-image: url('../assets/sea-bg.png');
+  background-size: cover;
+  background-position: center top;
+  background-repeat: repeat-y;
+}
+
+.boat-wrap {
+  background-image: url('../assets/boat.png');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.hook {
+  background-image: url('../assets/hook.png');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.fish,
+.special-item,
+.special-sprite,
+.rare-animal-sprite {
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+

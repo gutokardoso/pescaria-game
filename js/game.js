@@ -86,7 +86,33 @@ const game = document.getElementById('game');
     // Moedas servem para comprar barcos e anzóis melhores.
     // Profundidades maiores e áreas avançadas serão liberadas indiretamente pelos upgrades de barco/anzol, nunca por compra direta de profundidade/abismo.
 
-    const config = {
+    
+    const SPECIAL_ITEM_ASSETS_V6 = {
+      bottle: './assets/item-bottle.png',
+      chest: './assets/item-chest.png',
+      giant: './assets/fish-giant.png'
+    };
+
+    function getSpecialItemAssetV6(kind) {
+      const key = String(kind || '').toLowerCase();
+      if (key.includes('bottle') || key.includes('garrafa')) return SPECIAL_ITEM_ASSETS_V6.bottle;
+      if (key.includes('chest') || key.includes('bau') || key.includes('baú')) return SPECIAL_ITEM_ASSETS_V6.chest;
+      if (key.includes('giant') || key.includes('gigante')) return SPECIAL_ITEM_ASSETS_V6.giant;
+      return SPECIAL_ITEM_ASSETS_V6.bottle;
+    }
+
+    function applySpecialItemVisualV6(element, kind) {
+      if (!element) return;
+      const src = getSpecialItemAssetV6(kind);
+      element.style.backgroundImage = `url("${src}")`;
+      element.style.backgroundSize = 'contain';
+      element.style.backgroundPosition = 'center';
+      element.style.backgroundRepeat = 'no-repeat';
+      element.style.display = element.style.display || 'block';
+      element.classList.add('special-item-v6');
+    }
+
+const config = {
       rodTipXRatio: 0.75,
       rodTipY: 92,
       startY: 245,
@@ -227,7 +253,25 @@ const game = document.getElementById('game');
       cameraY = clamp(desired, 0, config.cameraLimit);
     }
 
+    
+    function refreshSpecialItemVisualsV6() {
+      try {
+        document.querySelectorAll('.special-item, .special-sprite, .rare-animal-sprite, [data-special-kind], [data-item-kind]').forEach(el => {
+          const kind = el.dataset.specialKind || el.dataset.itemKind || el.dataset.kind || el.dataset.type || el.className || '';
+          if (String(kind).toLowerCase().includes('bottle') || String(kind).toLowerCase().includes('garrafa')) {
+            applySpecialItemVisualV6(el, 'bottle');
+          } else if (String(kind).toLowerCase().includes('chest') || String(kind).toLowerCase().includes('bau') || String(kind).toLowerCase().includes('baú')) {
+            applySpecialItemVisualV6(el, 'chest');
+          } else if (String(kind).toLowerCase().includes('giant') || String(kind).toLowerCase().includes('gigante')) {
+            applySpecialItemVisualV6(el, 'giant');
+          }
+        });
+      } catch (error) {}
+    }
+
+
     function renderAll() {
+      refreshSpecialItemVisualsV6();
       applyRareAnimalSpawnRules();
       enforceSpecialVisibleSpawnZone();
       updateDepthNumber();
@@ -5061,6 +5105,7 @@ applyHookVisuals();
 
     /* FUNÇÃO FINAL ÚNICA: BARRAS DE MISSÃO SEM CONFLITO */
     
+
 function renderFinalMissionStatusRows(phaseScoreValue) {
       try {
         const target = document.getElementById('finalMissionStatusList');

@@ -256,26 +256,26 @@ Missão: 0/0</div>
 })();
 </script>
 
-<script id="coin-count-hud-v14">
+
+<script id="coin-count-hud-v15">
 (function(){
-  function forceHudVisible(){
+  function applyHudScope(){
     try {
-      if (!document.body.classList.contains('coin-counting-active')) return;
+      var show = document.body.classList.contains('screen-playing') || document.body.classList.contains('coin-counting-active');
       ['missionProgress','liveScore','liveFish'].forEach(function(id){
         var el = document.getElementById(id);
         if (!el) return;
-        el.style.setProperty('display', id === 'missionProgress' ? 'block' : 'flex', 'important');
-        el.style.setProperty('visibility', 'visible', 'important');
-        el.style.setProperty('opacity', '1', 'important');
-        el.style.setProperty('z-index', '2147483000', 'important');
+        el.style.setProperty('display', show ? (id === 'missionProgress' ? 'block' : 'flex') : 'none', 'important');
+        el.style.setProperty('visibility', show ? 'visible' : 'hidden', 'important');
+        el.style.setProperty('opacity', show ? '1' : '0', 'important');
       });
     } catch(e) {}
   }
-  window.forceHudVisibleDuringCoinCountV14 = forceHudVisible;
-  document.addEventListener('DOMContentLoaded', forceHudVisible);
-  window.addEventListener('load', forceHudVisible);
-  document.addEventListener('click', function(){ setTimeout(forceHudVisible, 60); }, true);
-  setInterval(forceHudVisible, 500);
+  window.applyHudScopeV15 = applyHudScope;
+  document.addEventListener('DOMContentLoaded', applyHudScope);
+  window.addEventListener('load', applyHudScope);
+  document.addEventListener('click', function(){ setTimeout(applyHudScope, 60); }, true);
+  setInterval(applyHudScope, 400);
 })();
 </script>
 </body>

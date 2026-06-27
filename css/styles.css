@@ -5411,23 +5411,6 @@ body.coin-counting-active #liveFish {
 }
 
 
-/* v14 ajuste final: fonte final travada em 10px e HUD só na contagem */
-html body #resultOverlay #finalMissionStatusList .final-mission-text,
-html body #resultOverlay #finalMissionStatusList .mission-final-text,
-html body #finalMissionStatusList .final-mission-row .final-mission-text,
-html body #finalMissionStatusList .mission-final-bar .mission-final-text,
-html body #finalMissionStatusList .final-mission-text,
-html body #finalMissionStatusList .mission-final-text,
-html body .final-mission-status-list .final-mission-text,
-html body .final-mission-status-list .mission-final-text {
-  font-size: 10px !important;
-  line-height: 1 !important;
-  white-space: nowrap !important;
-  letter-spacing: -0.55px !important;
-  transform: none !important;
-  display: inline-block !important;
-}
-
 /* HUD/header somente durante contagem de moedas */
 body.coin-counting-active #missionProgress,
 body.coin-counting-active #liveScore,
@@ -5458,4 +5441,77 @@ body.screen-result:not(.coin-counting-active) #missionProgress {
   display: none !important;
   visibility: hidden !important;
   opacity: 0 !important;
+}
+
+
+/* v15 escopo correto do HUD */
+/* Fonte das missões finais travada em 10px */
+html body #resultOverlay #finalMissionStatusList .final-mission-text,
+html body #resultOverlay #finalMissionStatusList .mission-final-text,
+html body #finalMissionStatusList .final-mission-row .final-mission-text,
+html body #finalMissionStatusList .mission-final-bar .mission-final-text,
+html body #finalMissionStatusList .final-mission-text,
+html body #finalMissionStatusList .mission-final-text,
+html body .final-mission-status-list .final-mission-text,
+html body .final-mission-status-list .mission-final-text {
+  font-size: 10px !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  letter-spacing: -0.55px !important;
+  transform: none !important;
+  display: inline-block !important;
+}
+
+/* HUD/header escondido por padrão em start, missão/prelevel, loja e resultado final */
+body.screen-start #missionProgress,
+body.screen-start #liveScore,
+body.screen-start #liveFish,
+body.screen-start #depthMeter,
+body.screen-start #depthNumber,
+body.screen-prelevel #missionProgress,
+body.screen-prelevel #liveScore,
+body.screen-prelevel #liveFish,
+body.screen-prelevel #depthMeter,
+body.screen-prelevel #depthNumber,
+body.screen-result:not(.coin-counting-active) #missionProgress,
+body.screen-result:not(.coin-counting-active) #liveScore,
+body.screen-result:not(.coin-counting-active) #liveFish,
+body.screen-result:not(.coin-counting-active) #depthMeter,
+body.screen-result:not(.coin-counting-active) #depthNumber,
+body.screen-shop #missionProgress,
+body.screen-shop #liveScore,
+body.screen-shop #liveFish,
+body.screen-shop #depthMeter,
+body.screen-shop #depthNumber {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* HUD/header visível somente no gameplay */
+body.screen-playing #missionProgress,
+body.screen-playing #liveScore,
+body.screen-playing #liveFish {
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* Durante a contagem de moedas: manter missão, pontos e moedas */
+body.coin-counting-active #missionProgress {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: none !important;
+  z-index: 2147483000 !important;
+}
+
+body.coin-counting-active #liveScore,
+body.coin-counting-active #liveFish {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: none !important;
+  z-index: 2147483000 !important;
 }

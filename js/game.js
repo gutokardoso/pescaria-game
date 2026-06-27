@@ -1051,14 +1051,40 @@ function announceGiantSpawn() {
     
     function keepHeaderVisibleOnResultV13() { return; }
 
+
+    function updateHudScopeV15() {
+      try {
+        const isPlaying = document.body.classList.contains('screen-playing');
+        const isCoinCounting = document.body.classList.contains('coin-counting-active');
+        const showHud = isPlaying || isCoinCounting;
+
+        const mission = document.getElementById('missionProgress');
+        const score = document.getElementById('liveScore');
+        const coins = document.getElementById('liveFish');
+
+        if (mission) {
+          mission.style.setProperty('display', showHud ? 'block' : 'none', 'important');
+          mission.style.setProperty('visibility', showHud ? 'visible' : 'hidden', 'important');
+          mission.style.setProperty('opacity', showHud ? '1' : '0', 'important');
+        }
+
+        [score, coins].forEach(el => {
+          if (!el) return;
+          el.style.setProperty('display', showHud ? 'flex' : 'none', 'important');
+          el.style.setProperty('visibility', showHud ? 'visible' : 'hidden', 'important');
+          el.style.setProperty('opacity', showHud ? '1' : '0', 'important');
+        });
+      } catch (error) {}
+    }
+
 function setGameScreen(screenName) {
       document.body.classList.remove('screen-start', 'screen-prelevel', 'screen-playing', 'screen-result', 'screen-shop');
       document.body.classList.add(`screen-${screenName}`);
+      updateHudScopeV15();
 
       const isPlaying = screenName === 'playing';
-      const showHeaderHud = screenName === 'playing' || screenName === 'result';
       setDepthUiVisible(isPlaying);
-      setMissionUiVisible(showHeaderHud);
+      setMissionUiVisible(isPlaying || document.body.classList.contains('coin-counting-active'));
 
       if (typeof updateShopButtonVisibility === 'function') {
         updateShopButtonVisibility();
@@ -1080,9 +1106,9 @@ function setGameScreen(screenName) {
         mission.style.setProperty('max-width', '230px', 'important');
         mission.style.setProperty('height', 'auto', 'important');
         mission.style.setProperty('aspect-ratio', '1307 / 548', 'important');
-        mission.style.setProperty('display', (document.body.classList.contains('screen-playing') || document.body.classList.contains('screen-result') || document.body.classList.contains('coin-counting-active')) ? 'block' : 'none', 'important');
-        mission.style.setProperty('visibility', (document.body.classList.contains('screen-playing') || document.body.classList.contains('screen-result') || document.body.classList.contains('coin-counting-active')) ? 'visible' : 'hidden', 'important');
-        mission.style.setProperty('opacity', (document.body.classList.contains('screen-playing') || document.body.classList.contains('screen-result') || document.body.classList.contains('coin-counting-active')) ? '1' : '0', 'important');
+        mission.style.setProperty('display', (document.body.classList.contains('screen-playing') || document.body.classList.contains('coin-counting-active')) ? 'block' : 'none', 'important');
+        mission.style.setProperty('visibility', (document.body.classList.contains('screen-playing') || document.body.classList.contains('coin-counting-active')) ? 'visible' : 'hidden', 'important');
+        mission.style.setProperty('opacity', (document.body.classList.contains('screen-playing') || document.body.classList.contains('coin-counting-active')) ? '1' : '0', 'important');
         mission.style.setProperty('overflow', 'visible', 'important');
         mission.style.setProperty('background', "transparent url('./assets/hud-missao-perfil-final.png') left top / contain no-repeat", 'important');
         mission.style.setProperty('border', '0', 'important');
@@ -1161,7 +1187,7 @@ function setGameScreen(screenName) {
       const progressFill = document.getElementById('missionProgressFill');
       const progressLabel = document.getElementById('missionProgressLabel');
       if (!progressFill || !progressLabel) return;
-      if (document.body.classList.contains('screen-playing') || document.body.classList.contains('screen-result')) setMissionUiVisible(true);
+      if (document.body.classList.contains('screen-playing') || document.body.classList.contains('coin-counting-active')) setMissionUiVisible(true);
 
       const progress = lockedMissionProgressSnapshot || getMissionProgress();
       const pct = progress.target > 0 ? Math.min(100, (progress.current / progress.target) * 100) : 0;
@@ -2098,6 +2124,8 @@ function checkCollisions() {
     }
 
     function showPreLevelScreen() {
+      document.body.classList.remove('coin-counting-active');
+      updateHudScopeV15();
       cleanupRareAnimalSprites();
       setGameScreen('prelevel');
       setDepthUiVisible(false);

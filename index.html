@@ -229,43 +229,40 @@ Missão: 0/0</div>
 
 
 
-<script id="final-mission-text-size-v13">
+
+
+
+
+<script id="final-mission-text-size-v14">
 (function(){
-  function fixFinalMissionTextSizeV13(){
+  function fixFinalMissionTextSizeV14(){
     try {
-      const list = document.getElementById('finalMissionStatusList');
+      var list = document.getElementById('finalMissionStatusList');
       if (!list) return;
-      list.querySelectorAll('.final-mission-row, .mission-final-bar').forEach(row => {
-        row.style.setProperty('width', '560px', 'important');
-        row.style.setProperty('max-width', 'calc(100% - 80px)', 'important');
-        row.style.setProperty('box-sizing', 'border-box', 'important');
-      });
-      list.querySelectorAll('.final-mission-text, .mission-final-text').forEach(text => {
+      list.querySelectorAll('.final-mission-text, .mission-final-text').forEach(function(text){
         text.style.setProperty('font-size', '10px', 'important');
         text.style.setProperty('line-height', '1', 'important');
-        text.style.setProperty('white-space', 'nowrap', 'important');
         text.style.setProperty('letter-spacing', '-0.55px', 'important');
-        text.style.setProperty('transform', 'scale(0.88)', 'important');
-        text.style.setProperty('transform-origin', 'left center', 'important');
+        text.style.setProperty('white-space', 'nowrap', 'important');
+        text.style.setProperty('transform', 'none', 'important');
         text.style.setProperty('display', 'inline-block', 'important');
       });
     } catch(e) {}
   }
-  document.addEventListener('DOMContentLoaded', fixFinalMissionTextSizeV13);
-  window.addEventListener('load', fixFinalMissionTextSizeV13);
-  document.addEventListener('click', function(){ setTimeout(fixFinalMissionTextSizeV13, 80); }, true);
-  window.fixFinalMissionTextSizeV13 = fixFinalMissionTextSizeV13;
+  document.addEventListener('DOMContentLoaded', fixFinalMissionTextSizeV14);
+  window.addEventListener('load', fixFinalMissionTextSizeV14);
+  document.addEventListener('click', function(){ setTimeout(fixFinalMissionTextSizeV14, 80); }, true);
+  window.fixFinalMissionTextSizeV14 = fixFinalMissionTextSizeV14;
 })();
 </script>
 
-
-<script id="coin-count-hud-v13">
+<script id="coin-count-hud-v14">
 (function(){
   function forceHudVisible(){
     try {
-      if (!document.body.classList.contains('screen-result')) return;
-      ['missionProgress','liveScore','liveFish'].forEach(id => {
-        const el = document.getElementById(id);
+      if (!document.body.classList.contains('coin-counting-active')) return;
+      ['missionProgress','liveScore','liveFish'].forEach(function(id){
+        var el = document.getElementById(id);
         if (!el) return;
         el.style.setProperty('display', id === 'missionProgress' ? 'block' : 'flex', 'important');
         el.style.setProperty('visibility', 'visible', 'important');
@@ -274,13 +271,12 @@ Missão: 0/0</div>
       });
     } catch(e) {}
   }
-  window.forceHudVisibleDuringCoinCountV13 = forceHudVisible;
+  window.forceHudVisibleDuringCoinCountV14 = forceHudVisible;
   document.addEventListener('DOMContentLoaded', forceHudVisible);
   window.addEventListener('load', forceHudVisible);
   document.addEventListener('click', function(){ setTimeout(forceHudVisible, 60); }, true);
   setInterval(forceHudVisible, 500);
 })();
 </script>
-
 </body>
 </html>

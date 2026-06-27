@@ -4683,7 +4683,7 @@ text-shadow:0 0 3px #000,0 0 6px #000 !important;
       max-width: none !important;
       min-width: 0 !important;
       flex: 1 1 auto !important;
-      font-size: 14px !important;
+      font-size: 10px !important;
       line-height: 1 !important;
       white-space: nowrap !important;
       overflow: visible !important;
@@ -4758,7 +4758,7 @@ text-shadow:0 0 3px #000,0 0 6px #000 !important;
       align-items: center !important;
       justify-content: center !important;
       flex: 0 0 auto !important;
-      font-size: 28px !important;
+      font-size: 10px !important;
       line-height: 1 !important;
       font-weight: 900 !important;
       color: #ffffff !important;
@@ -4774,7 +4774,7 @@ text-shadow:0 0 3px #000,0 0 6px #000 !important;
       width: auto !important;
       max-width: none !important;
       min-width: 0 !important;
-      font-size: 14px !important;
+      font-size: 10px !important;
       line-height: 1 !important;
       white-space: nowrap !important;
       overflow: visible !important;
@@ -4804,14 +4804,14 @@ text-shadow:0 0 3px #000,0 0 6px #000 !important;
 
       html body #resultOverlay #finalMissionStatusList .final-mission-text,
       html body .final-mission-status-list .final-mission-text {
-        font-size: 14px !important;
+        font-size: 10px !important;
       }
 
       html body #resultOverlay #finalMissionStatusList .final-mission-icon,
       html body .final-mission-status-list .final-mission-icon {
         width: 32px !important;
         height: 32px !important;
-        font-size: 24px !important;
+        font-size: 10px !important;
       }
     }
 
@@ -4820,7 +4820,7 @@ text-shadow:0 0 3px #000,0 0 6px #000 !important;
 html body #resultOverlay #finalMissionStatusList{width:660px!important;max-width:92%!important}
 html body #resultOverlay #finalMissionStatusList .final-mission-row{width:660px!important;max-width:100%!important;min-height:42px!important;padding:6px 20px 6px 54px!important;overflow:hidden!important}
 html body #resultOverlay #finalMissionStatusList .final-mission-icon{left:4px!important}
-html body #resultOverlay #finalMissionStatusList .final-mission-text{font-size:14px!important;overflow:visible!important;text-overflow:clip!important;white-space:nowrap!important}
+html body #resultOverlay #finalMissionStatusList .final-mission-text{font-size: 10px !important;overflow:visible!important;text-overflow:clip!important;white-space:nowrap!important}
 html body #resultOverlay #finalMissionStatusList .final-mission-progress{display:none!important}
 
 
@@ -4873,7 +4873,7 @@ html body #resultOverlay .mission-final-icon {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  font-size: 28px !important;
+  font-size: 10px !important;
   line-height: 1 !important;
   font-weight: 900 !important;
   color: #fff !important;
@@ -4888,7 +4888,7 @@ html body #resultOverlay .mission-final-text {
   width: 100% !important;
   min-width: 0 !important;
   max-width: 100% !important;
-  font-size: 13px !important;
+  font-size: 10px !important;
   line-height: 1 !important;
   white-space: nowrap !important;
   overflow: visible !important;
@@ -4912,12 +4912,12 @@ html body #resultOverlay .final-mission-progress {
     padding-right: 12px !important;
   }
   html body #resultOverlay .mission-final-text {
-    font-size: 12px !important;
+    font-size: 10px !important;
   }
   html body #resultOverlay .mission-final-icon {
     width: 32px !important;
     height: 32px !important;
-    font-size: 24px !important;
+    font-size: 10px !important;
   }
 }
 
@@ -5158,7 +5158,7 @@ body:not(.player-authenticated) button[onclick*="start"] {
 /* v8 ajustes seguros */
 .final-mission-text,
 .mission-final-text {
-  font-size: 12px !important;
+  font-size: 10px !important;
   white-space: nowrap !important;
 }
 
@@ -5234,10 +5234,10 @@ body:not(.player-authenticated) button[onclick*="start"] {
 .final-mission-row span.final-mission-text,
 .mission-final-bar .mission-final-text,
 .mission-final-bar span.mission-final-text {
-  font-size: 12px !important;
-  line-height: 1.05 !important;
+  font-size: 10px !important;
+  line-height: 1 !important;
   white-space: nowrap !important;
-  letter-spacing: -0.4px !important;
+  letter-spacing: -0.55px !important;
   transform: scale(0.92) !important;
   transform-origin: left center !important;
   display: inline-block !important;
@@ -5248,7 +5248,7 @@ body:not(.player-authenticated) button[onclick*="start"] {
 #finalMissionStatusList .mission-final-icon {
   width: 34px !important;
   height: 34px !important;
-  font-size: 25px !important;
+  font-size: 10px !important;
 }
 
 
@@ -5278,10 +5278,10 @@ body:not(.player-authenticated) button[onclick*="start"] {
 .final-mission-row span.final-mission-text,
 .mission-final-bar .mission-final-text,
 .mission-final-bar span.mission-final-text {
-  font-size: 11px !important;
-  line-height: 1.02 !important;
+  font-size: 10px !important;
+  line-height: 1 !important;
   white-space: nowrap !important;
-  letter-spacing: -0.45px !important;
+  letter-spacing: -0.55px !important;
   transform: scale(0.9) !important;
   transform-origin: left center !important;
   display: inline-block !important;
@@ -5333,7 +5333,7 @@ body:not(.player-authenticated) button[onclick*="start"] {
 .final-mission-row span.final-mission-text,
 .mission-final-bar .mission-final-text,
 .mission-final-bar span.mission-final-text {
-  font-size: 11px !important;
+  font-size: 10px !important;
 }
 
 
@@ -5344,10 +5344,10 @@ body:not(.player-authenticated) button[onclick*="start"] {
 .final-mission-row span.final-mission-text,
 .mission-final-bar .mission-final-text,
 .mission-final-bar span.mission-final-text {
-  font-size: 11px !important;
-  line-height: 1.02 !important;
+  font-size: 10px !important;
+  line-height: 1 !important;
   white-space: nowrap !important;
-  letter-spacing: -0.45px !important;
+  letter-spacing: -0.55px !important;
   transform: scale(0.9) !important;
   transform-origin: left center !important;
   display: inline-block !important;
@@ -5372,22 +5372,6 @@ body:not(.player-authenticated) button[onclick*="start"] {
   100% { opacity: 0; transform: translate(-50%, -125%) scale(0.9); }
 }
 
-
-/* v13 ajustes hud moeda */
-#finalMissionStatusList .final-mission-text,
-#finalMissionStatusList .mission-final-text,
-.final-mission-row .final-mission-text,
-.final-mission-row span.final-mission-text,
-.mission-final-bar .mission-final-text,
-.mission-final-bar span.mission-final-text {
-  font-size: 10px !important;
-  line-height: 1 !important;
-  white-space: nowrap !important;
-  letter-spacing: -0.55px !important;
-  transform: scale(0.88) !important;
-  transform-origin: left center !important;
-  display: inline-block !important;
-}
 
 /* Mantém o header/HUD visível também na tela de resultado/contagem de moedas */
 body.screen-result #missionProgress,
@@ -5424,4 +5408,54 @@ body.screen-result #liveFish,
 body.coin-counting-active #liveScore,
 body.coin-counting-active #liveFish {
   display: flex !important;
+}
+
+
+/* v14 ajuste final: fonte final travada em 10px e HUD só na contagem */
+html body #resultOverlay #finalMissionStatusList .final-mission-text,
+html body #resultOverlay #finalMissionStatusList .mission-final-text,
+html body #finalMissionStatusList .final-mission-row .final-mission-text,
+html body #finalMissionStatusList .mission-final-bar .mission-final-text,
+html body #finalMissionStatusList .final-mission-text,
+html body #finalMissionStatusList .mission-final-text,
+html body .final-mission-status-list .final-mission-text,
+html body .final-mission-status-list .mission-final-text {
+  font-size: 10px !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  letter-spacing: -0.55px !important;
+  transform: none !important;
+  display: inline-block !important;
+}
+
+/* HUD/header somente durante contagem de moedas */
+body.coin-counting-active #missionProgress,
+body.coin-counting-active #liveScore,
+body.coin-counting-active #liveFish,
+body.coin-counting-active #phaseNumber,
+body.coin-counting-active #missionProgressLabel,
+body.coin-counting-active #missionProgressFill,
+body.coin-counting-active .game-hud,
+body.coin-counting-active .hud,
+body.coin-counting-active .top-hud {
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  z-index: 2147483000 !important;
+}
+
+body.coin-counting-active #missionProgress {
+  display: block !important;
+}
+
+body.coin-counting-active #liveScore,
+body.coin-counting-active #liveFish {
+  display: flex !important;
+}
+
+/* Garante que no resultado comum o header não seja forçado */
+body.screen-result:not(.coin-counting-active) #missionProgress {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
 }

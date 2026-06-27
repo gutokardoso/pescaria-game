@@ -1049,28 +1049,7 @@ function announceGiantSpawn() {
 
 
     
-    function keepHeaderVisibleOnResultV13() {
-      try {
-        const active = document.body.classList.contains('screen-result') || document.body.classList.contains('coin-counting-active');
-        if (!active) return;
-        const mission = document.getElementById('missionProgress');
-        if (mission) {
-          mission.style.setProperty('display', 'block', 'important');
-          mission.style.setProperty('visibility', 'visible', 'important');
-          mission.style.setProperty('opacity', '1', 'important');
-          mission.style.setProperty('z-index', '2147483000', 'important');
-        }
-        ['liveScore','liveFish'].forEach(id => {
-          const el = document.getElementById(id);
-          if (el) {
-            el.style.setProperty('display', 'flex', 'important');
-            el.style.setProperty('visibility', 'visible', 'important');
-            el.style.setProperty('opacity', '1', 'important');
-            el.style.setProperty('z-index', '2147483000', 'important');
-          }
-        });
-      } catch (error) {}
-    }
+    function keepHeaderVisibleOnResultV13() { return; }
 
 function setGameScreen(screenName) {
       document.body.classList.remove('screen-start', 'screen-prelevel', 'screen-playing', 'screen-result', 'screen-shop');
@@ -1691,6 +1670,7 @@ function checkCollisions() {
     }
 
     function updateCoinHud() {
+      document.body.classList.add('coin-counting-active');
       const coinTarget = document.getElementById('liveFish');
       if (coinTarget) {
         coinTarget.innerHTML = `<span class="coin-hud"><img src="./assets/coin-gold.png" alt="Moeda"><span>${totalCoins}</span></span>`;
@@ -1717,6 +1697,7 @@ function checkCollisions() {
     }
 
     function showCoinPopFeedback(amount) {
+      document.body.classList.add('coin-counting-active');
       const pop = document.createElement('div');
       pop.className = 'coin-pop-feedback';
       pop.textContent = `+${amount} moedas`;
@@ -2825,6 +2806,7 @@ applyHookVisuals();
 
 
     function startRound() {
+      document.body.classList.remove('coin-counting-active');
       if (typeof window.requirePescariaLoginBeforeStart === 'function' && !window.requirePescariaLoginBeforeStart()) return false;
       cleanupRareAnimalSprites();
       forceHudLayout();
@@ -5315,7 +5297,7 @@ function renderFinalMissionStatusRows(phaseScoreValue) {
 
         if (typeof forceFinalMissionBarsRestored === 'function') forceFinalMissionBarsRestored();
         if (typeof fixFinalMissionBarsTextFull === 'function') fixFinalMissionBarsTextFull();
-        if (typeof window.fixFinalMissionTextSizeV13 === 'function') window.fixFinalMissionTextSizeV13();
+        if (typeof window.fixFinalMissionTextSizeV14 === 'function') window.fixFinalMissionTextSizeV14();
       } catch (error) {
         console.warn('Erro ao renderizar missões finais:', error);
       }

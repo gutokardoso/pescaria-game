@@ -140,6 +140,7 @@ const config = {
         targetX = hookWorldX;
         cameraY = 0;
         renderAll();
+      ensureVisibleEntityAssetsV8();
       }
     }
 
@@ -245,7 +246,6 @@ const config = {
         fish.el.style.left = `${fish.x}px`;
         fish.el.style.top = `${fish.y}px`;
         fish.el.style.transform = flip.trim();
-          applyEntityAssetV7(el, fish);
       });
     }
 
@@ -254,38 +254,40 @@ const config = {
       cameraY = clamp(desired, 0, config.cameraLimit);
     }
     
-    function getEntityAssetV7(item) {
-      const raw = String(
-        (item && (item.asset || item.src || item.image || item.imageSrc || item.missionType || item.kind || item.type || item.variant || item.name || item.id)) || ''
-      ).toLowerCase();
+    function ensureVisibleEntityAssetsV8() {
+      try {
+        document.querySelectorAll('.fish, .fish-sprite, .special-item, .special-sprite, .rare-animal-sprite, [data-fish-type], [data-special-kind], [data-item-kind]').forEach(el => {
+          const raw = String(
+            (el.dataset && (el.dataset.type || el.dataset.kind || el.dataset.fishType || el.dataset.specialKind || el.dataset.itemKind)) ||
+            el.className ||
+            ''
+          ).toLowerCase();
 
-      if (raw.includes('bottle') || raw.includes('garrafa')) return './assets/item-bottle.png';
-      if (raw.includes('chest') || raw.includes('bau') || raw.includes('baú')) return './assets/item-chest.png';
-      if (raw.includes('giant') || raw.includes('gigante')) return './assets/fish-giant.png';
-      if (raw.includes('rainbow') || raw.includes('arco')) return './assets/fish-rainbow.png';
-      if (raw.includes('gold') || raw.includes('dourado')) return './assets/fish-gold.png';
-      if (raw.includes('baiacu') || raw.includes('puffer')) return './assets/fish-baiacu.png';
-      if (raw.includes('turtle') || raw.includes('tartaruga')) return './assets/tartaruga-marinha.png';
-      if (raw.includes('seahorse') || raw.includes('cavalo')) return './assets/cavalo-marinho.png';
-      if (raw.includes('shark') || raw.includes('tubarao') || raw.includes('tubarão')) return './assets/tubarao.png';
-      return './assets/fish-normal.png';
-    }
+          let src = '';
+          if (raw.includes('bottle') || raw.includes('garrafa')) src = './assets/item-bottle.png';
+          else if (raw.includes('chest') || raw.includes('bau') || raw.includes('baú')) src = './assets/item-chest.png';
+          else if (raw.includes('giant') || raw.includes('gigante')) src = './assets/fish-giant.png';
+          else if (raw.includes('rainbow') || raw.includes('arco')) src = './assets/fish-rainbow.png';
+          else if (raw.includes('gold') || raw.includes('dourado')) src = './assets/fish-gold.png';
+          else if (raw.includes('baiacu') || raw.includes('puffer')) src = './assets/fish-baiacu.png';
+          else if (raw.includes('turtle') || raw.includes('tartaruga')) src = './assets/tartaruga-marinha.png';
+          else if (raw.includes('seahorse') || raw.includes('cavalo')) src = './assets/cavalo-marinho.png';
+          else if (raw.includes('shark') || raw.includes('tubarao') || raw.includes('tubarão')) src = './assets/tubarao.png';
+          else if (raw.includes('fish')) src = './assets/fish-normal.png';
 
-    function applyEntityAssetV7(el, item) {
-      if (!el) return;
-      const src = getEntityAssetV7(item);
-      if (el.tagName === 'IMG') {
-        if (!el.getAttribute('src') || el.getAttribute('src') === '#' || el.getAttribute('src') === '') {
-          el.setAttribute('src', src);
-        }
-      } else {
-        el.style.backgroundImage = `url("${src}")`;
-        el.style.backgroundSize = 'contain';
-        el.style.backgroundRepeat = 'no-repeat';
-        el.style.backgroundPosition = 'center';
-      }
-      el.style.visibility = 'visible';
-      el.style.opacity = '1';
+          if (!src) return;
+          if (el.tagName === 'IMG') {
+            if (!el.getAttribute('src')) el.setAttribute('src', src);
+          } else if (!el.style.backgroundImage || el.style.backgroundImage === 'none') {
+            el.style.backgroundImage = `url("${src}")`;
+          }
+          el.style.backgroundSize = 'contain';
+          el.style.backgroundRepeat = 'no-repeat';
+          el.style.backgroundPosition = 'center';
+          el.style.visibility = 'visible';
+          el.style.opacity = '1';
+        });
+      } catch (error) {}
     }
 
 function renderAll() {
@@ -508,7 +510,7 @@ function renderAll() {
     }
 
     
-    function playerNameForRankingV7() {
+    function playerNameForRankingV8() {
       try {
         const raw = localStorage.getItem('pescaria_player');
         if (raw) {
@@ -524,7 +526,7 @@ function renderAll() {
       const now = new Date();
       ranking.push({
         score: scoreValue,
-        name: playerNameForRankingV7(),
+        name: playerNameForRankingV8(),
         date: now.toLocaleDateString('pt-BR')
       });
       ranking.sort((a, b) => b.score - a.score);
@@ -1842,6 +1844,7 @@ function showGiantQuickNotice() {
       updateRainbowTimer();
       syncTopGameUiVisibility(); // guard hud visibility
       renderAll();
+      ensureVisibleEntityAssetsV8();
       animationId = requestAnimationFrame(update);
     }
 
@@ -2781,6 +2784,7 @@ applyHookVisuals();
       forceHudLayout();
       updateMissionProgress();
       renderAll();
+      ensureVisibleEntityAssetsV8();
       animationId = requestAnimationFrame(update);
     }
 
@@ -3462,7 +3466,6 @@ applyHookVisuals();
         fish.el.style.left = `${fish.x}px`;
         fish.el.style.top = `${fish.y}px`;
         fish.el.style.transform = fish.dir === -1 ? 'scaleX(-1)' : '';
-          applyEntityAssetV7(el, fish);
         fish.el.style.opacity = '1';
         fish.el.style.display = 'block';
         fish.el.style.zIndex = '30';
@@ -3609,7 +3612,6 @@ applyHookVisuals();
       fish.el.style.left = `${fish.x}px`;
       fish.el.style.top = `${fish.y}px`;
       fish.el.style.transform = flip;
-          applyEntityAssetV7(el, fish);
       fish.el.style.opacity = '1';
       fish.el.style.display = 'block';
     }
@@ -3851,7 +3853,6 @@ applyHookVisuals();
       fish.el.style.left = `${fish.x}px`;
       fish.el.style.top = `${fish.y}px`;
       fish.el.style.transform = flip;
-          applyEntityAssetV7(el, fish);
       fish.el.style.opacity = '1';
       fish.el.style.display = 'block';
       if (fish.type === 'giant') fish.el.style.zIndex = '30';

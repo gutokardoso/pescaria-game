@@ -5155,16 +5155,11 @@ body:not(.player-authenticated) button[onclick*="start"] {
 
 
 
-/* v7 ajustes solicitados */
+/* v8 ajustes seguros */
 .final-mission-text,
 .mission-final-text {
   font-size: 12px !important;
   white-space: nowrap !important;
-}
-
-.final-mission-row,
-.mission-final-bar {
-  max-width: 620px !important;
 }
 
 #rankingList,
@@ -5184,3 +5179,36 @@ body:not(.player-authenticated) button[onclick*="start"] {
   visibility: visible !important;
   opacity: 1 !important;
 }
+
+.fish-normal,
+[data-fish-type="normal"],
+[data-type="normal"] { background-image: url("../assets/fish-normal.png") !important; }
+
+.fish-gold,
+[data-fish-type="gold"],
+[data-type="gold"],
+[data-type="dourado"] { background-image: url("../assets/fish-gold.png") !important; }
+
+.fish-baiacu,
+[data-fish-type="baiacu"],
+[data-type="baiacu"],
+[data-type="puffer"] { background-image: url("../assets/fish-baiacu.png") !important; }
+
+.fish-rainbow,
+[data-fish-type="rainbow"],
+[data-type="rainbow"] { background-image: url("../assets/fish-rainbow.png") !important; }
+
+.item-bottle,
+[data-item-kind="bottle"],
+[data-special-kind="bottle"],
+[data-type="bottle"] { background-image: url("../assets/item-bottle.png") !important; }
+
+.item-chest,
+[data-item-kind="chest"],
+[data-special-kind="chest"],
+[data-type="chest"] { background-image: url("../assets/item-chest.png") !important; }
+
+.fish-giant,
+[data-fish-type="giant"],
+[data-special-kind="giant"],
+[data-type="giant"] { background-image: url("../assets/fish-giant.png") !important; }

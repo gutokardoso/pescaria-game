@@ -1,0 +1,23 @@
+{
+  "version": "v8",
+  "source": "pescaria-game-v6.zip",
+  "fixes": [
+    "Removido patch v6 que podia interferir em sprites.",
+    "Adicionado ensureVisibleEntityAssetsV8 seguro.",
+    "Texto das missões finais em 12px.",
+    "Ranking subiu 20px.",
+    "Ranking local evita undefined."
+  ],
+  "validated_assets": [
+    "fish-normal.png",
+    "fish-gold.png",
+    "fish-baiacu.png",
+    "fish-rainbow.png",
+    "item-bottle.png",
+    "item-chest.png",
+    "fish-giant.png"
+  ],
+  "js_external_validated": true,
+  "js_inline_validated": true,
+  "missing_asset_refs": []
+}

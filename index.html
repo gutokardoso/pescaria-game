@@ -236,9 +236,11 @@ Missão: 0/0</div>
 
 
 
-<script id="coin-count-hud-v16">
+
+
+<script id="coin-count-hud-v17">
 (function(){
-  function applyHudScopeV16(){
+  function applyHudScopeV17(){
     try {
       var show = document.body.classList.contains('screen-playing') || document.body.classList.contains('coin-counting-active');
       ['missionProgress','liveScore','liveFish'].forEach(function(id){
@@ -247,48 +249,49 @@ Missão: 0/0</div>
         el.style.setProperty('display', show ? (id === 'missionProgress' ? 'block' : 'flex') : 'none', 'important');
         el.style.setProperty('visibility', show ? 'visible' : 'hidden', 'important');
         el.style.setProperty('opacity', show ? '1' : '0', 'important');
+        el.style.setProperty('pointer-events', show ? 'auto' : 'none', 'important');
       });
     } catch(e) {}
   }
-  window.applyHudScopeV16 = applyHudScopeV16;
-  document.addEventListener('DOMContentLoaded', applyHudScopeV16);
-  window.addEventListener('load', applyHudScopeV16);
-  document.addEventListener('click', function(){ setTimeout(applyHudScopeV16, 50); }, true);
-  setInterval(applyHudScopeV16, 250);
+  window.applyHudScopeV17 = applyHudScopeV17;
+  document.addEventListener('DOMContentLoaded', applyHudScopeV17);
+  window.addEventListener('load', applyHudScopeV17);
+  document.addEventListener('click', function(){ setTimeout(applyHudScopeV17, 20); }, true);
+  setInterval(applyHudScopeV17, 100);
 })();
 </script>
 
-<script id="final-mission-text-size-v16">
+<script id="final-mission-text-size-v17">
 (function(){
-  function fixFinalMissionTextSizeV16(){
+  function fixFinalMissionTextSizeV17(){
     try {
       var list = document.getElementById('finalMissionStatusList');
       if (!list) return;
       list.querySelectorAll('.final-mission-row, .mission-final-bar').forEach(function(row){
         row.style.setProperty('width', '500px', 'important');
         row.style.setProperty('max-width', '500px', 'important');
-        row.style.setProperty('padding-left', '48px', 'important');
-        row.style.setProperty('padding-right', '10px', 'important');
+        row.style.setProperty('padding-left', '46px', 'important');
+        row.style.setProperty('padding-right', '12px', 'important');
         row.style.setProperty('overflow', 'hidden', 'important');
       });
       list.querySelectorAll('.final-mission-text, .mission-final-text').forEach(function(text){
         text.style.setProperty('font-size', '10px', 'important');
-        text.style.setProperty('line-height', '1', 'important');
-        text.style.setProperty('letter-spacing', '-0.7px', 'important');
+        text.style.setProperty('line-height', '.95', 'important');
+        text.style.setProperty('letter-spacing', '-1px', 'important');
         text.style.setProperty('white-space', 'nowrap', 'important');
-        text.style.setProperty('transform', 'none', 'important');
-        text.style.setProperty('display', 'block', 'important');
-        text.style.setProperty('width', '100%', 'important');
-        text.style.setProperty('max-width', '100%', 'important');
-        text.style.setProperty('overflow', 'hidden', 'important');
-        text.style.setProperty('text-overflow', 'clip', 'important');
+        text.style.setProperty('transform', 'scale(.78)', 'important');
+        text.style.setProperty('transform-origin', 'left center', 'important');
+        text.style.setProperty('display', 'inline-block', 'important');
+        text.style.setProperty('width', 'auto', 'important');
+        text.style.setProperty('max-width', 'none', 'important');
+        text.style.setProperty('overflow', 'visible', 'important');
       });
     } catch(e) {}
   }
-  document.addEventListener('DOMContentLoaded', fixFinalMissionTextSizeV16);
-  window.addEventListener('load', fixFinalMissionTextSizeV16);
-  document.addEventListener('click', function(){ setTimeout(fixFinalMissionTextSizeV16, 80); }, true);
-  window.fixFinalMissionTextSizeV16 = fixFinalMissionTextSizeV16;
+  document.addEventListener('DOMContentLoaded', fixFinalMissionTextSizeV17);
+  window.addEventListener('load', fixFinalMissionTextSizeV17);
+  document.addEventListener('click', function(){ setTimeout(fixFinalMissionTextSizeV17, 50); }, true);
+  window.fixFinalMissionTextSizeV17 = fixFinalMissionTextSizeV17;
 })();
 </script>
 </body>

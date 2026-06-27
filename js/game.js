@@ -1049,38 +1049,30 @@ function announceGiantSpawn() {
 
 
     
-    function keepHeaderVisibleOnResultV13() {
-      return;
-    }
+    function keepHeaderVisibleOnResultV13() { return; }
 
 
-    function updateHudScopeV15() {
+    function updateHudScopeV15() { try { updateHudScopeV17(); } catch(error) {} }
 
-      try {
-        const show = document.body.classList.contains('screen-playing') || document.body.classList.contains('coin-counting-active');
-        const mission = document.getElementById('missionProgress');
-        const score = document.getElementById('liveScore');
-        const coins = document.getElementById('liveFish');
 
-        if (mission) {
-          mission.style.setProperty('display', show ? 'block' : 'none', 'important');
-          mission.style.setProperty('visibility', show ? 'visible' : 'hidden', 'important');
-          mission.style.setProperty('opacity', show ? '1' : '0', 'important');
-        }
-
-        [score, coins].forEach(el => {
-          if (!el) return;
-          el.style.setProperty('display', show ? 'flex' : 'none', 'important');
-          el.style.setProperty('visibility', show ? 'visible' : 'hidden', 'important');
-          el.style.setProperty('opacity', show ? '1' : '0', 'important');
-        });
-      } catch (error) {}
-
-    }
+function updateHudScopeV17() {
+  try {
+    const show = document.body.classList.contains('screen-playing') || document.body.classList.contains('coin-counting-active');
+    ['missionProgress','liveScore','liveFish'].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.style.setProperty('display', show ? (id === 'missionProgress' ? 'block' : 'flex') : 'none', 'important');
+      el.style.setProperty('visibility', show ? 'visible' : 'hidden', 'important');
+      el.style.setProperty('opacity', show ? '1' : '0', 'important');
+      el.style.setProperty('pointer-events', show ? 'auto' : 'none', 'important');
+    });
+  } catch (error) {}
+}
 
 function setGameScreen(screenName) {
       document.body.classList.remove('screen-start', 'screen-prelevel', 'screen-playing', 'screen-result', 'screen-shop');
       document.body.classList.add(`screen-${screenName}`);
+      updateHudScopeV17();
       updateHudScopeV16();
       updateHudScopeV15();
 
@@ -2127,6 +2119,8 @@ function checkCollisions() {
 
     function showPreLevelScreen() {
       document.body.classList.remove('coin-counting-active');
+      updateHudScopeV17();
+      document.body.classList.remove('coin-counting-active');
       updateHudScopeV15();
       cleanupRareAnimalSprites();
       setGameScreen('prelevel');
@@ -2836,6 +2830,8 @@ applyHookVisuals();
 
 
     function startRound() {
+      document.body.classList.remove('coin-counting-active');
+      updateHudScopeV17();
       document.body.classList.remove('coin-counting-active');
       if (typeof window.requirePescariaLoginBeforeStart === 'function' && !window.requirePescariaLoginBeforeStart()) return false;
       cleanupRareAnimalSprites();
@@ -5327,7 +5323,7 @@ function renderFinalMissionStatusRows(phaseScoreValue) {
 
         if (typeof forceFinalMissionBarsRestored === 'function') forceFinalMissionBarsRestored();
         if (typeof fixFinalMissionBarsTextFull === 'function') fixFinalMissionBarsTextFull();
-        if (typeof window.fixFinalMissionTextSizeV16 === 'function') window.fixFinalMissionTextSizeV16();
+        if (typeof window.fixFinalMissionTextSizeV17 === 'function') window.fixFinalMissionTextSizeV17();
       } catch (error) {
         console.warn('Erro ao renderizar missões finais:', error);
       }
@@ -5472,4 +5468,4 @@ function renderFinalMissionStatusRows(phaseScoreValue) {
       registerMissionCapture.__turtleMissionFixWrapped = true;
     }
 
-function updateHudScopeV16() { try { updateHudScopeV15(); } catch (error) {} }
+function updateHudScopeV16() { try { updateHudScopeV17(); } catch(error) {} }

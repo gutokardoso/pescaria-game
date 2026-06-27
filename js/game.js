@@ -1049,37 +1049,39 @@ function announceGiantSpawn() {
 
 
     
-    function keepHeaderVisibleOnResultV13() { return; }
+    function keepHeaderVisibleOnResultV13() {
+      return;
+    }
 
 
     function updateHudScopeV15() {
-      try {
-        const isPlaying = document.body.classList.contains('screen-playing');
-        const isCoinCounting = document.body.classList.contains('coin-counting-active');
-        const showHud = isPlaying || isCoinCounting;
 
+      try {
+        const show = document.body.classList.contains('screen-playing') || document.body.classList.contains('coin-counting-active');
         const mission = document.getElementById('missionProgress');
         const score = document.getElementById('liveScore');
         const coins = document.getElementById('liveFish');
 
         if (mission) {
-          mission.style.setProperty('display', showHud ? 'block' : 'none', 'important');
-          mission.style.setProperty('visibility', showHud ? 'visible' : 'hidden', 'important');
-          mission.style.setProperty('opacity', showHud ? '1' : '0', 'important');
+          mission.style.setProperty('display', show ? 'block' : 'none', 'important');
+          mission.style.setProperty('visibility', show ? 'visible' : 'hidden', 'important');
+          mission.style.setProperty('opacity', show ? '1' : '0', 'important');
         }
 
         [score, coins].forEach(el => {
           if (!el) return;
-          el.style.setProperty('display', showHud ? 'flex' : 'none', 'important');
-          el.style.setProperty('visibility', showHud ? 'visible' : 'hidden', 'important');
-          el.style.setProperty('opacity', showHud ? '1' : '0', 'important');
+          el.style.setProperty('display', show ? 'flex' : 'none', 'important');
+          el.style.setProperty('visibility', show ? 'visible' : 'hidden', 'important');
+          el.style.setProperty('opacity', show ? '1' : '0', 'important');
         });
       } catch (error) {}
+
     }
 
 function setGameScreen(screenName) {
       document.body.classList.remove('screen-start', 'screen-prelevel', 'screen-playing', 'screen-result', 'screen-shop');
       document.body.classList.add(`screen-${screenName}`);
+      updateHudScopeV16();
       updateHudScopeV15();
 
       const isPlaying = screenName === 'playing';
@@ -5325,7 +5327,7 @@ function renderFinalMissionStatusRows(phaseScoreValue) {
 
         if (typeof forceFinalMissionBarsRestored === 'function') forceFinalMissionBarsRestored();
         if (typeof fixFinalMissionBarsTextFull === 'function') fixFinalMissionBarsTextFull();
-        if (typeof window.fixFinalMissionTextSizeV14 === 'function') window.fixFinalMissionTextSizeV14();
+        if (typeof window.fixFinalMissionTextSizeV16 === 'function') window.fixFinalMissionTextSizeV16();
       } catch (error) {
         console.warn('Erro ao renderizar missões finais:', error);
       }
@@ -5469,3 +5471,5 @@ function renderFinalMissionStatusRows(phaseScoreValue) {
       };
       registerMissionCapture.__turtleMissionFixWrapped = true;
     }
+
+function updateHudScopeV16() { try { updateHudScopeV15(); } catch (error) {} }

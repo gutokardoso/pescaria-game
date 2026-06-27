@@ -5444,7 +5444,6 @@ body.screen-result:not(.coin-counting-active) #missionProgress {
 }
 
 
-/* v15 escopo correto do HUD */
 /* Fonte das missões finais travada em 10px */
 html body #resultOverlay #finalMissionStatusList .final-mission-text,
 html body #resultOverlay #finalMissionStatusList .mission-final-text,
@@ -5514,4 +5513,109 @@ body.coin-counting-active #liveFish {
   opacity: 1 !important;
   pointer-events: none !important;
   z-index: 2147483000 !important;
+}
+
+
+/* v16 hud e missão final definitivos */
+
+/* HUD escondido por padrão em qualquer tela que não seja jogo/contagem */
+html body:not(.screen-playing):not(.coin-counting-active) #missionProgress,
+html body:not(.screen-playing):not(.coin-counting-active) #liveScore,
+html body:not(.screen-playing):not(.coin-counting-active) #liveFish,
+html body:not(.screen-playing):not(.coin-counting-active) #depthMeter,
+html body:not(.screen-playing):not(.coin-counting-active) #depthNumber {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* HUD visível no jogo */
+html body.screen-playing #missionProgress {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+html body.screen-playing #liveScore,
+html body.screen-playing #liveFish {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* Na contagem de moedas: mantém exatamente missão, pontos e moedas sem piscar */
+html body.coin-counting-active #missionProgress {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: none !important;
+  z-index: 2147483000 !important;
+}
+
+html body.coin-counting-active #liveScore,
+html body.coin-counting-active #liveFish {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: none !important;
+  z-index: 2147483000 !important;
+}
+
+/* Resultado final/tela inicial/tela de missão nunca mostram HUD, exceto se a contagem estiver ativa */
+html body.screen-start:not(.coin-counting-active) #missionProgress,
+html body.screen-start:not(.coin-counting-active) #liveScore,
+html body.screen-start:not(.coin-counting-active) #liveFish,
+html body.screen-prelevel:not(.coin-counting-active) #missionProgress,
+html body.screen-prelevel:not(.coin-counting-active) #liveScore,
+html body.screen-prelevel:not(.coin-counting-active) #liveFish,
+html body.screen-result:not(.coin-counting-active) #missionProgress,
+html body.screen-result:not(.coin-counting-active) #liveScore,
+html body.screen-result:not(.coin-counting-active) #liveFish {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Fonte das missões finais: fixa em 10px, sem ultrapassar a barra */
+html body #resultOverlay #finalMissionStatusList .final-mission-row,
+html body #resultOverlay #finalMissionStatusList .mission-final-bar,
+html body #finalMissionStatusList .final-mission-row,
+html body #finalMissionStatusList .mission-final-bar {
+  width: 500px !important;
+  max-width: 500px !important;
+  min-height: 42px !important;
+  padding-left: 48px !important;
+  padding-right: 10px !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+
+html body #resultOverlay #finalMissionStatusList .final-mission-text,
+html body #resultOverlay #finalMissionStatusList .mission-final-text,
+html body #finalMissionStatusList .final-mission-row .final-mission-text,
+html body #finalMissionStatusList .mission-final-bar .mission-final-text,
+html body #finalMissionStatusList .final-mission-text,
+html body #finalMissionStatusList .mission-final-text {
+  font-size: 10px !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  letter-spacing: -0.7px !important;
+  transform: none !important;
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: clip !important;
+}
+
+/* Ícone menor para liberar mais espaço pro texto */
+html body #finalMissionStatusList .final-mission-icon,
+html body #finalMissionStatusList .mission-final-icon {
+  width: 32px !important;
+  height: 32px !important;
+  font-size: 22px !important;
 }

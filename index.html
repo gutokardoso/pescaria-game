@@ -233,33 +233,12 @@ Missão: 0/0</div>
 
 
 
-<script id="final-mission-text-size-v14">
-(function(){
-  function fixFinalMissionTextSizeV14(){
-    try {
-      var list = document.getElementById('finalMissionStatusList');
-      if (!list) return;
-      list.querySelectorAll('.final-mission-text, .mission-final-text').forEach(function(text){
-        text.style.setProperty('font-size', '10px', 'important');
-        text.style.setProperty('line-height', '1', 'important');
-        text.style.setProperty('letter-spacing', '-0.55px', 'important');
-        text.style.setProperty('white-space', 'nowrap', 'important');
-        text.style.setProperty('transform', 'none', 'important');
-        text.style.setProperty('display', 'inline-block', 'important');
-      });
-    } catch(e) {}
-  }
-  document.addEventListener('DOMContentLoaded', fixFinalMissionTextSizeV14);
-  window.addEventListener('load', fixFinalMissionTextSizeV14);
-  document.addEventListener('click', function(){ setTimeout(fixFinalMissionTextSizeV14, 80); }, true);
-  window.fixFinalMissionTextSizeV14 = fixFinalMissionTextSizeV14;
-})();
-</script>
 
 
-<script id="coin-count-hud-v15">
+
+<script id="coin-count-hud-v16">
 (function(){
-  function applyHudScope(){
+  function applyHudScopeV16(){
     try {
       var show = document.body.classList.contains('screen-playing') || document.body.classList.contains('coin-counting-active');
       ['missionProgress','liveScore','liveFish'].forEach(function(id){
@@ -271,11 +250,45 @@ Missão: 0/0</div>
       });
     } catch(e) {}
   }
-  window.applyHudScopeV15 = applyHudScope;
-  document.addEventListener('DOMContentLoaded', applyHudScope);
-  window.addEventListener('load', applyHudScope);
-  document.addEventListener('click', function(){ setTimeout(applyHudScope, 60); }, true);
-  setInterval(applyHudScope, 400);
+  window.applyHudScopeV16 = applyHudScopeV16;
+  document.addEventListener('DOMContentLoaded', applyHudScopeV16);
+  window.addEventListener('load', applyHudScopeV16);
+  document.addEventListener('click', function(){ setTimeout(applyHudScopeV16, 50); }, true);
+  setInterval(applyHudScopeV16, 250);
+})();
+</script>
+
+<script id="final-mission-text-size-v16">
+(function(){
+  function fixFinalMissionTextSizeV16(){
+    try {
+      var list = document.getElementById('finalMissionStatusList');
+      if (!list) return;
+      list.querySelectorAll('.final-mission-row, .mission-final-bar').forEach(function(row){
+        row.style.setProperty('width', '500px', 'important');
+        row.style.setProperty('max-width', '500px', 'important');
+        row.style.setProperty('padding-left', '48px', 'important');
+        row.style.setProperty('padding-right', '10px', 'important');
+        row.style.setProperty('overflow', 'hidden', 'important');
+      });
+      list.querySelectorAll('.final-mission-text, .mission-final-text').forEach(function(text){
+        text.style.setProperty('font-size', '10px', 'important');
+        text.style.setProperty('line-height', '1', 'important');
+        text.style.setProperty('letter-spacing', '-0.7px', 'important');
+        text.style.setProperty('white-space', 'nowrap', 'important');
+        text.style.setProperty('transform', 'none', 'important');
+        text.style.setProperty('display', 'block', 'important');
+        text.style.setProperty('width', '100%', 'important');
+        text.style.setProperty('max-width', '100%', 'important');
+        text.style.setProperty('overflow', 'hidden', 'important');
+        text.style.setProperty('text-overflow', 'clip', 'important');
+      });
+    } catch(e) {}
+  }
+  document.addEventListener('DOMContentLoaded', fixFinalMissionTextSizeV16);
+  window.addEventListener('load', fixFinalMissionTextSizeV16);
+  document.addEventListener('click', function(){ setTimeout(fixFinalMissionTextSizeV16, 80); }, true);
+  window.fixFinalMissionTextSizeV16 = fixFinalMissionTextSizeV16;
 })();
 </script>
 </body>

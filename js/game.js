@@ -1052,13 +1052,16 @@ function announceGiantSpawn() {
     function keepHeaderVisibleOnResultV13() { return; }
 
 
-    function updateHudScopeV15() { try { updateHudScopeV17(); } catch(error) {} }
+    function updateHudScopeV15() { try { hardHideHudOutsideGameV18(); } catch(error) {} }
 
 
-function updateHudScopeV17() {
+function updateHudScopeV17() { try { hardHideHudOutsideGameV18(); } catch(error) {} }
+
+
+function hardHideHudOutsideGameV18() {
   try {
     const show = document.body.classList.contains('screen-playing') || document.body.classList.contains('coin-counting-active');
-    ['missionProgress','liveScore','liveFish'].forEach(id => {
+    ['missionProgress','liveScore','liveFish','depthMeter','depthNumber'].forEach(id => {
       const el = document.getElementById(id);
       if (!el) return;
       el.style.setProperty('display', show ? (id === 'missionProgress' ? 'block' : 'flex') : 'none', 'important');
@@ -1072,6 +1075,7 @@ function updateHudScopeV17() {
 function setGameScreen(screenName) {
       document.body.classList.remove('screen-start', 'screen-prelevel', 'screen-playing', 'screen-result', 'screen-shop');
       document.body.classList.add(`screen-${screenName}`);
+      hardHideHudOutsideGameV18();
       updateHudScopeV17();
       updateHudScopeV16();
       updateHudScopeV15();
@@ -2118,6 +2122,8 @@ function checkCollisions() {
     }
 
     function showPreLevelScreen() {
+      document.body.classList.remove('coin-counting-active');
+      hardHideHudOutsideGameV18();
       document.body.classList.remove('coin-counting-active');
       updateHudScopeV17();
       document.body.classList.remove('coin-counting-active');
@@ -5468,4 +5474,4 @@ function renderFinalMissionStatusRows(phaseScoreValue) {
       registerMissionCapture.__turtleMissionFixWrapped = true;
     }
 
-function updateHudScopeV16() { try { updateHudScopeV17(); } catch(error) {} }
+function updateHudScopeV16() { try { hardHideHudOutsideGameV18(); } catch(error) {} }

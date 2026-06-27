@@ -238,28 +238,6 @@ Missão: 0/0</div>
 
 
 
-<script id="coin-count-hud-v17">
-(function(){
-  function applyHudScopeV17(){
-    try {
-      var show = document.body.classList.contains('screen-playing') || document.body.classList.contains('coin-counting-active');
-      ['missionProgress','liveScore','liveFish'].forEach(function(id){
-        var el = document.getElementById(id);
-        if (!el) return;
-        el.style.setProperty('display', show ? (id === 'missionProgress' ? 'block' : 'flex') : 'none', 'important');
-        el.style.setProperty('visibility', show ? 'visible' : 'hidden', 'important');
-        el.style.setProperty('opacity', show ? '1' : '0', 'important');
-        el.style.setProperty('pointer-events', show ? 'auto' : 'none', 'important');
-      });
-    } catch(e) {}
-  }
-  window.applyHudScopeV17 = applyHudScopeV17;
-  document.addEventListener('DOMContentLoaded', applyHudScopeV17);
-  window.addEventListener('load', applyHudScopeV17);
-  document.addEventListener('click', function(){ setTimeout(applyHudScopeV17, 20); }, true);
-  setInterval(applyHudScopeV17, 100);
-})();
-</script>
 
 <script id="final-mission-text-size-v17">
 (function(){
@@ -292,6 +270,28 @@ Missão: 0/0</div>
   window.addEventListener('load', fixFinalMissionTextSizeV17);
   document.addEventListener('click', function(){ setTimeout(fixFinalMissionTextSizeV17, 50); }, true);
   window.fixFinalMissionTextSizeV17 = fixFinalMissionTextSizeV17;
+})();
+</script>
+
+<script id="coin-count-hud-v18">
+(function(){
+  function hardHideHudOutsideGameV18(){
+    try{
+      var show=document.body.classList.contains('screen-playing')||document.body.classList.contains('coin-counting-active');
+      ['missionProgress','liveScore','liveFish','depthMeter','depthNumber'].forEach(function(id){
+        var el=document.getElementById(id); if(!el) return;
+        el.style.setProperty('display', show ? (id==='missionProgress'?'block':'flex') : 'none', 'important');
+        el.style.setProperty('visibility', show?'visible':'hidden', 'important');
+        el.style.setProperty('opacity', show?'1':'0', 'important');
+        el.style.setProperty('pointer-events', show?'auto':'none', 'important');
+      });
+    }catch(e){}
+  }
+  window.hardHideHudOutsideGameV18=hardHideHudOutsideGameV18;
+  document.addEventListener('DOMContentLoaded', hardHideHudOutsideGameV18);
+  window.addEventListener('load', hardHideHudOutsideGameV18);
+  document.addEventListener('click', function(){setTimeout(hardHideHudOutsideGameV18,10);}, true);
+  setInterval(hardHideHudOutsideGameV18,50);
 })();
 </script>
 </body>

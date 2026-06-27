@@ -5714,3 +5714,51 @@ html body #finalMissionStatusList .mission-final-icon {
   font-size: 20px !important;
   left: 5px !important;
 }
+
+
+/* v18 HUD hardfix: hide mission/top HUD on initial and final screens */
+html body.screen-start #missionProgress,
+html body.screen-start #missionProgress *,
+html body.screen-start #liveScore,
+html body.screen-start #liveScore *,
+html body.screen-start #liveFish,
+html body.screen-start #liveFish *,
+html body.screen-start #depthMeter,
+html body.screen-start #depthNumber,
+html body.screen-start .top-hud,
+html body.screen-start .game-hud,
+html body.screen-start .hud,
+html body.screen-start .mission-hud,
+html body.screen-start .phase-badge,
+html body.screen-start .mission-pill {
+  display:none!important; visibility:hidden!important; opacity:0!important; pointer-events:none!important;
+}
+html body.screen-result:not(.coin-counting-active) #missionProgress,
+html body.screen-result:not(.coin-counting-active) #missionProgress *,
+html body.screen-result:not(.coin-counting-active) #liveScore,
+html body.screen-result:not(.coin-counting-active) #liveScore *,
+html body.screen-result:not(.coin-counting-active) #liveFish,
+html body.screen-result:not(.coin-counting-active) #liveFish *,
+html body.screen-result:not(.coin-counting-active) #depthMeter,
+html body.screen-result:not(.coin-counting-active) #depthNumber,
+html body.screen-result:not(.coin-counting-active) .top-hud,
+html body.screen-result:not(.coin-counting-active) .game-hud,
+html body.screen-result:not(.coin-counting-active) .hud,
+html body.screen-result:not(.coin-counting-active) .mission-hud,
+html body.screen-result:not(.coin-counting-active) .phase-badge,
+html body.screen-result:not(.coin-counting-active) .mission-pill {
+  display:none!important; visibility:hidden!important; opacity:0!important; pointer-events:none!important;
+}
+html body.screen-playing #missionProgress { display:block!important; visibility:visible!important; opacity:1!important; }
+html body.screen-playing #liveScore,
+html body.screen-playing #liveFish { display:flex!important; visibility:visible!important; opacity:1!important; }
+html body.coin-counting-active #missionProgress { display:block!important; visibility:visible!important; opacity:1!important; }
+html body.coin-counting-active #liveScore,
+html body.coin-counting-active #liveFish { display:flex!important; visibility:visible!important; opacity:1!important; }
+/* keep result mission rows visible */
+html body.screen-result #finalMissionStatusList,
+html body.screen-result #finalMissionStatusList *,
+html body.screen-result .final-mission-row,
+html body.screen-result .final-mission-row *,
+html body.screen-result .mission-final-bar,
+html body.screen-result .mission-final-bar * { visibility:visible!important; opacity:1!important; }

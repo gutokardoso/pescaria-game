@@ -5153,3 +5153,34 @@ body:not(.player-authenticated) button[onclick*="start"] {
   background-repeat: no-repeat;
 }
 
+
+
+/* v7 ajustes solicitados */
+.final-mission-text,
+.mission-final-text {
+  font-size: 12px !important;
+  white-space: nowrap !important;
+}
+
+.final-mission-row,
+.mission-final-bar {
+  max-width: 620px !important;
+}
+
+#rankingList,
+.ranking-list,
+.map-ranking-list {
+  transform: translateY(-20px) !important;
+}
+
+.fish,
+.fish-sprite,
+.special-item,
+.special-sprite,
+.rare-animal-sprite {
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}

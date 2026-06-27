@@ -1,0 +1,23 @@
+{
+  "version": "v7",
+  "source": "pescaria-game-v6.zip",
+  "fixes": [
+    "Restauração de imagens de peixes e itens especiais.",
+    "Garrafa, baú e peixe gigante com fallback visual.",
+    "Texto das missões finais reduzido para 12px.",
+    "Ranking subiu 20px.",
+    "Ranking local evita undefined."
+  ],
+  "validated_assets": [
+    "fish-normal.png",
+    "fish-gold.png",
+    "fish-baiacu.png",
+    "fish-rainbow.png",
+    "item-bottle.png",
+    "item-chest.png",
+    "fish-giant.png"
+  ],
+  "js_external_validated": true,
+  "js_inline_validated": true,
+  "missing_asset_refs": []
+}

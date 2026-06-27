@@ -223,33 +223,53 @@ Missão: 0/0</div>
 <script src="./js/ranking-submit.js"></script>
 
 
-<script id="special-items-v6-dom-patch">
+
+
+<script id="entity-assets-v7-dom-fallback">
 (function(){
-  function assetForSpecial(kind){
-    const key = String(kind || '').toLowerCase();
-    if (key.includes('bottle') || key.includes('garrafa')) return './assets/item-bottle.png';
-    if (key.includes('chest') || key.includes('bau') || key.includes('baú')) return './assets/item-chest.png';
-    if (key.includes('giant') || key.includes('gigante')) return './assets/fish-giant.png';
+  function assetFor(el){
+    const raw = String(
+      (el.dataset && (el.dataset.type || el.dataset.kind || el.dataset.fishType || el.dataset.specialKind || el.dataset.itemKind)) ||
+      el.className ||
+      el.getAttribute('aria-label') ||
+      ''
+    ).toLowerCase();
+
+    if (raw.includes('bottle') || raw.includes('garrafa')) return './assets/item-bottle.png';
+    if (raw.includes('chest') || raw.includes('bau') || raw.includes('baú')) return './assets/item-chest.png';
+    if (raw.includes('giant') || raw.includes('gigante')) return './assets/fish-giant.png';
+    if (raw.includes('rainbow') || raw.includes('arco')) return './assets/fish-rainbow.png';
+    if (raw.includes('gold') || raw.includes('dourado')) return './assets/fish-gold.png';
+    if (raw.includes('baiacu') || raw.includes('puffer')) return './assets/fish-baiacu.png';
+    if (raw.includes('turtle') || raw.includes('tartaruga')) return './assets/tartaruga-marinha.png';
+    if (raw.includes('seahorse') || raw.includes('cavalo')) return './assets/cavalo-marinho.png';
+    if (raw.includes('shark') || raw.includes('tubarao') || raw.includes('tubarão')) return './assets/tubarao.png';
+    if (raw.includes('fish')) return './assets/fish-normal.png';
     return null;
   }
-  function fixSpecialAssets(){
-    document.querySelectorAll('.special-item, .special-sprite, .rare-animal-sprite, [data-special-kind], [data-item-kind]').forEach(el => {
-      const kind = el.dataset.specialKind || el.dataset.itemKind || el.dataset.kind || el.dataset.type || el.className || '';
-      const src = assetForSpecial(kind);
+
+  function fixEntityAssetsV7(){
+    document.querySelectorAll('.fish, .fish-sprite, .special-item, .special-sprite, .rare-animal-sprite, [data-fish-type], [data-special-kind], [data-item-kind]').forEach(function(el){
+      const src = assetFor(el);
       if (!src) return;
       if (el.tagName === 'IMG') {
         if (!el.getAttribute('src')) el.setAttribute('src', src);
-      } else {
+      } else if (!el.style.backgroundImage || el.style.backgroundImage === 'none') {
         el.style.backgroundImage = 'url("' + src + '")';
         el.style.backgroundSize = 'contain';
         el.style.backgroundRepeat = 'no-repeat';
         el.style.backgroundPosition = 'center';
       }
+      el.style.visibility = 'visible';
+      el.style.opacity = '1';
     });
   }
-  document.addEventListener('DOMContentLoaded', fixSpecialAssets);
-  window.addEventListener('load', fixSpecialAssets);
-  setInterval(fixSpecialAssets, 1200);
+
+  document.addEventListener('DOMContentLoaded', fixEntityAssetsV7);
+  window.addEventListener('load', fixEntityAssetsV7);
+  window.addEventListener('pescaria:start', fixEntityAssetsV7);
+  setTimeout(fixEntityAssetsV7, 400);
+  setTimeout(fixEntityAssetsV7, 1200);
 })();
 </script>
 

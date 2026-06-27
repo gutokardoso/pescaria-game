@@ -1,0 +1,22 @@
+{
+  "version": "v10",
+  "source": "pescaria-game-v9.zip",
+  "fixes": [
+    "Fonte das missões finais reduzida para 11px.",
+    "Feedback do peixe gigante alterado para 1500 pontos.",
+    "showScorePop agora suporta score-1500.png.",
+    "Aviso do peixe gigante usa aviso-gigante.png em container do jogo.",
+    "Removido score +1000 incorreto da v9."
+  ],
+  "created_assets": [
+    "score-1500.png"
+  ],
+  "validated_assets": [
+    "aviso-gigante.png",
+    "score-1500.png",
+    "fish-giant.png"
+  ],
+  "js_external_validated": true,
+  "js_inline_validated": true,
+  "missing_asset_refs": []
+}

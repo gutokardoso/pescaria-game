@@ -739,65 +739,13 @@ function renderAll() {
         label: goal.text
       };
     }
-
-    
-    function showGiantRewardV9(item) {
-      try {
-        const gameArea = document.getElementById('game') || document.getElementById('gameScreen') || document.querySelector('.game-screen') || document.body;
-
-        const alert = document.createElement('img');
-        alert.src = './assets/aviso-gigante.png';
-        alert.alt = 'Peixe gigante!';
-        alert.className = 'giant-alert-v9';
-        alert.style.position = 'absolute';
-        alert.style.left = '50%';
-        alert.style.top = '26%';
-        alert.style.width = 'min(72%, 430px)';
-        alert.style.transform = 'translate(-50%, -50%)';
-        alert.style.zIndex = '9999';
-        alert.style.pointerEvents = 'none';
-        alert.style.animation = 'giantAlertV9 1.15s ease-out forwards';
-        gameArea.appendChild(alert);
-        setTimeout(() => alert.remove(), 1200);
-
-        const scoreImg = document.createElement('img');
-        scoreImg.src = './assets/score-1000.png';
-        scoreImg.alt = '+1000';
-        scoreImg.className = 'giant-score-v9';
-        scoreImg.style.position = 'absolute';
-        scoreImg.style.left = item && Number.isFinite(Number(item.x)) ? `${item.x}px` : '50%';
-        scoreImg.style.top = item && Number.isFinite(Number(item.y)) ? `${item.y}px` : '42%';
-        scoreImg.style.width = '120px';
-        scoreImg.style.transform = 'translate(-50%, -50%)';
-        scoreImg.style.zIndex = '9998';
-        scoreImg.style.pointerEvents = 'none';
-        scoreImg.style.animation = 'giantScoreV9 900ms ease-out forwards';
-        gameArea.appendChild(scoreImg);
-        setTimeout(() => scoreImg.remove(), 950);
-      } catch (error) {}
-    }
-
-    function applyGiantScoreV9(item) {
-      try {
-        if (item && item.__giantScoreAppliedV9) return;
-        if (item) item.__giantScoreAppliedV9 = true;
-
-        if (typeof score === 'number') score += 1000;
-        if (typeof phaseScore === 'number') phaseScore += 1000;
-        if (typeof updateScoreHud === 'function') updateScoreHud();
-        if (typeof updateHud === 'function') updateHud();
-
-        showGiantRewardV9(item || null);
-      } catch (error) {}
-    }
-
 function registerCaptureForMission(kind) {
       if (kind === 'normal') normalCaught += 1;
       if (kind === 'gold') goldCaught += 1;
       if (kind === 'giant') {
         giantCaught += 1;
         specialCaught += 1;
-        applyGiantScoreV9({ type: 'giant' });
+        applyGiantScoreV10({ type: 'giant' });
       }
       if (kind === 'bottle') {
         bottleCaught += 1;
@@ -1482,7 +1430,11 @@ function showGiantQuickNotice() {
       const img = document.createElement('img');
       img.className = 'score-pop';
 
-      if (value === 250) {
+      if (value === 1500) {
+        img.src = './assets/score-1500.png';
+        img.classList.add('special-score-img');
+        img.alt = '+1500 pontos';
+      } else if (value === 250) {
         img.src = './assets/score-250.png';
         img.classList.add('special-score-img');
         img.alt = '+250 pontos';
@@ -1511,7 +1463,65 @@ function showGiantQuickNotice() {
       setTimeout(() => img.remove(), 700);
     }
 
-    function checkCollisions() {
+    
+    function getGameVisualContainerV10() {
+      return document.getElementById('game') ||
+        document.getElementById('gameScreen') ||
+        document.querySelector('.game-screen') ||
+        document.querySelector('.game-area') ||
+        document.body;
+    }
+
+    function showGiantRewardV10(item) {
+      try {
+        const container = getGameVisualContainerV10();
+        const rect = container.getBoundingClientRect ? container.getBoundingClientRect() : { width: window.innerWidth, height: window.innerHeight };
+        const x = item && Number.isFinite(Number(item.x)) ? Number(item.x) : rect.width / 2;
+        const y = item && Number.isFinite(Number(item.y)) ? Number(item.y) : rect.height * 0.42;
+
+        const alert = document.createElement('img');
+        alert.src = './assets/aviso-gigante.png';
+        alert.alt = 'Peixe gigante!';
+        alert.className = 'giant-alert-v10';
+        alert.style.position = 'absolute';
+        alert.style.left = '50%';
+        alert.style.top = '28%';
+        alert.style.width = 'min(72%, 430px)';
+        alert.style.transform = 'translate(-50%, -50%)';
+        alert.style.zIndex = '999999';
+        alert.style.pointerEvents = 'none';
+        alert.style.animation = 'giantAlertV10 1.25s ease-out forwards';
+        container.appendChild(alert);
+        setTimeout(() => alert.remove(), 1300);
+
+        const scoreImg = document.createElement('img');
+        scoreImg.src = './assets/score-1500.png';
+        scoreImg.alt = '+1500';
+        scoreImg.className = 'giant-score-v10';
+        scoreImg.style.position = 'absolute';
+        scoreImg.style.left = `${x}px`;
+        scoreImg.style.top = `${y}px`;
+        scoreImg.style.width = '128px';
+        scoreImg.style.transform = 'translate(-50%, -50%)';
+        scoreImg.style.zIndex = '999998';
+        scoreImg.style.pointerEvents = 'none';
+        scoreImg.style.animation = 'giantScoreV10 1s ease-out forwards';
+        container.appendChild(scoreImg);
+        setTimeout(() => scoreImg.remove(), 1050);
+      } catch (error) {
+        console.warn('Erro no aviso do peixe gigante:', error);
+      }
+    }
+
+    function applyGiantScoreV10(item) {
+      try {
+        if (item && item.__giantRewardAppliedV10) return;
+        if (item) item.__giantRewardAppliedV10 = true;
+        showGiantRewardV10(item || null);
+      } catch (error) {}
+    }
+
+function checkCollisions() {
       const visualHookWorldY = hookWorldY + hookVisualOffsetY;
       fishes.forEach(fish => {
         if (fish.caught) return;
@@ -1558,6 +1568,7 @@ function showGiantQuickNotice() {
             cinematicCaptureFeedback(fish.type, popX, popY);
 
             if (fish.type === 'giant') {
+              applyGiantScoreV10(fish);
               fish.value = 1500;
               fish.baseValue = 1500;
               fish.normalValue = 0;
@@ -5237,7 +5248,7 @@ function renderFinalMissionStatusRows(phaseScoreValue) {
 
         if (typeof forceFinalMissionBarsRestored === 'function') forceFinalMissionBarsRestored();
         if (typeof fixFinalMissionBarsTextFull === 'function') fixFinalMissionBarsTextFull();
-        if (typeof window.fixFinalMissionTextSizeV9 === 'function') window.fixFinalMissionTextSizeV9();
+        if (typeof window.fixFinalMissionTextSizeV10 === 'function') window.fixFinalMissionTextSizeV10();
       } catch (error) {
         console.warn('Erro ao renderizar missões finais:', error);
       }

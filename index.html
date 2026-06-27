@@ -225,9 +225,11 @@ Missão: 0/0</div>
 
 
 
-<script id="final-mission-text-size-v9">
+
+
+<script id="final-mission-text-size-v10">
 (function(){
-  function fixFinalMissionTextSizeV9(){
+  function fixFinalMissionTextSizeV10(){
     try {
       const list = document.getElementById('finalMissionStatusList');
       if (!list) return;
@@ -237,20 +239,20 @@ Missão: 0/0</div>
         row.style.setProperty('box-sizing', 'border-box', 'important');
       });
       list.querySelectorAll('.final-mission-text, .mission-final-text').forEach(text => {
-        text.style.setProperty('font-size', '12px', 'important');
-        text.style.setProperty('line-height', '1.05', 'important');
+        text.style.setProperty('font-size', '11px', 'important');
+        text.style.setProperty('line-height', '1.02', 'important');
         text.style.setProperty('white-space', 'nowrap', 'important');
-        text.style.setProperty('letter-spacing', '-0.4px', 'important');
-        text.style.setProperty('transform', 'scale(0.92)', 'important');
+        text.style.setProperty('letter-spacing', '-0.45px', 'important');
+        text.style.setProperty('transform', 'scale(0.9)', 'important');
         text.style.setProperty('transform-origin', 'left center', 'important');
         text.style.setProperty('display', 'inline-block', 'important');
       });
     } catch(e) {}
   }
-  document.addEventListener('DOMContentLoaded', fixFinalMissionTextSizeV9);
-  window.addEventListener('load', fixFinalMissionTextSizeV9);
-  window.addEventListener('click', function(){ setTimeout(fixFinalMissionTextSizeV9, 80); }, true);
-  window.fixFinalMissionTextSizeV9 = fixFinalMissionTextSizeV9;
+  document.addEventListener('DOMContentLoaded', fixFinalMissionTextSizeV10);
+  window.addEventListener('load', fixFinalMissionTextSizeV10);
+  window.addEventListener('click', function(){ setTimeout(fixFinalMissionTextSizeV10, 80); }, true);
+  window.fixFinalMissionTextSizeV10 = fixFinalMissionTextSizeV10;
 })();
 </script>
 

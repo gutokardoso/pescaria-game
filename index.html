@@ -224,5 +224,35 @@ Missão: 0/0</div>
 
 
 
+
+<script id="final-mission-text-size-v9">
+(function(){
+  function fixFinalMissionTextSizeV9(){
+    try {
+      const list = document.getElementById('finalMissionStatusList');
+      if (!list) return;
+      list.querySelectorAll('.final-mission-row, .mission-final-bar').forEach(row => {
+        row.style.setProperty('width', '560px', 'important');
+        row.style.setProperty('max-width', 'calc(100% - 80px)', 'important');
+        row.style.setProperty('box-sizing', 'border-box', 'important');
+      });
+      list.querySelectorAll('.final-mission-text, .mission-final-text').forEach(text => {
+        text.style.setProperty('font-size', '12px', 'important');
+        text.style.setProperty('line-height', '1.05', 'important');
+        text.style.setProperty('white-space', 'nowrap', 'important');
+        text.style.setProperty('letter-spacing', '-0.4px', 'important');
+        text.style.setProperty('transform', 'scale(0.92)', 'important');
+        text.style.setProperty('transform-origin', 'left center', 'important');
+        text.style.setProperty('display', 'inline-block', 'important');
+      });
+    } catch(e) {}
+  }
+  document.addEventListener('DOMContentLoaded', fixFinalMissionTextSizeV9);
+  window.addEventListener('load', fixFinalMissionTextSizeV9);
+  window.addEventListener('click', function(){ setTimeout(fixFinalMissionTextSizeV9, 80); }, true);
+  window.fixFinalMissionTextSizeV9 = fixFinalMissionTextSizeV9;
+})();
+</script>
+
 </body>
 </html>

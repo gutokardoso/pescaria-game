@@ -1,0 +1,18 @@
+{
+  "version": "v9",
+  "source": "pescaria-game-v8.zip",
+  "fixes": [
+    "Forçado texto das missões finais para 12px com CSS e ajuste inline pós-render.",
+    "Adicionado aviso do peixe gigante usando aviso-gigante.png.",
+    "Adicionada pontuação visual +1000 do peixe gigante usando score-1000.png.",
+    "Adicionado score +1000 ao capturar giant no registerCaptureForMission."
+  ],
+  "validated_assets": [
+    "aviso-gigante.png",
+    "score-1000.png",
+    "fish-giant.png"
+  ],
+  "js_external_validated": true,
+  "js_inline_validated": true,
+  "missing_asset_refs": []
+}

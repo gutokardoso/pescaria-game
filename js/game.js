@@ -740,12 +740,64 @@ function renderAll() {
       };
     }
 
-    function registerCaptureForMission(kind) {
+    
+    function showGiantRewardV9(item) {
+      try {
+        const gameArea = document.getElementById('game') || document.getElementById('gameScreen') || document.querySelector('.game-screen') || document.body;
+
+        const alert = document.createElement('img');
+        alert.src = './assets/aviso-gigante.png';
+        alert.alt = 'Peixe gigante!';
+        alert.className = 'giant-alert-v9';
+        alert.style.position = 'absolute';
+        alert.style.left = '50%';
+        alert.style.top = '26%';
+        alert.style.width = 'min(72%, 430px)';
+        alert.style.transform = 'translate(-50%, -50%)';
+        alert.style.zIndex = '9999';
+        alert.style.pointerEvents = 'none';
+        alert.style.animation = 'giantAlertV9 1.15s ease-out forwards';
+        gameArea.appendChild(alert);
+        setTimeout(() => alert.remove(), 1200);
+
+        const scoreImg = document.createElement('img');
+        scoreImg.src = './assets/score-1000.png';
+        scoreImg.alt = '+1000';
+        scoreImg.className = 'giant-score-v9';
+        scoreImg.style.position = 'absolute';
+        scoreImg.style.left = item && Number.isFinite(Number(item.x)) ? `${item.x}px` : '50%';
+        scoreImg.style.top = item && Number.isFinite(Number(item.y)) ? `${item.y}px` : '42%';
+        scoreImg.style.width = '120px';
+        scoreImg.style.transform = 'translate(-50%, -50%)';
+        scoreImg.style.zIndex = '9998';
+        scoreImg.style.pointerEvents = 'none';
+        scoreImg.style.animation = 'giantScoreV9 900ms ease-out forwards';
+        gameArea.appendChild(scoreImg);
+        setTimeout(() => scoreImg.remove(), 950);
+      } catch (error) {}
+    }
+
+    function applyGiantScoreV9(item) {
+      try {
+        if (item && item.__giantScoreAppliedV9) return;
+        if (item) item.__giantScoreAppliedV9 = true;
+
+        if (typeof score === 'number') score += 1000;
+        if (typeof phaseScore === 'number') phaseScore += 1000;
+        if (typeof updateScoreHud === 'function') updateScoreHud();
+        if (typeof updateHud === 'function') updateHud();
+
+        showGiantRewardV9(item || null);
+      } catch (error) {}
+    }
+
+function registerCaptureForMission(kind) {
       if (kind === 'normal') normalCaught += 1;
       if (kind === 'gold') goldCaught += 1;
       if (kind === 'giant') {
         giantCaught += 1;
         specialCaught += 1;
+        applyGiantScoreV9({ type: 'giant' });
       }
       if (kind === 'bottle') {
         bottleCaught += 1;
@@ -5185,6 +5237,7 @@ function renderFinalMissionStatusRows(phaseScoreValue) {
 
         if (typeof forceFinalMissionBarsRestored === 'function') forceFinalMissionBarsRestored();
         if (typeof fixFinalMissionBarsTextFull === 'function') fixFinalMissionBarsTextFull();
+        if (typeof window.fixFinalMissionTextSizeV9 === 'function') window.fixFinalMissionTextSizeV9();
       } catch (error) {
         console.warn('Erro ao renderizar missões finais:', error);
       }

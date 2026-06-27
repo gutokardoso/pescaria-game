@@ -1,0 +1,17 @@
+{
+  "version": "v11",
+  "source": "pescaria-game-v10.zip",
+  "fixes": [
+    "Aviso do peixe gigante movido para o spawn/entrada do gigante.",
+    "Captura do peixe gigante mostra apenas score visual de 1500.",
+    "Mantida fonte das missões finais em 11px."
+  ],
+  "validated_assets": [
+    "aviso-gigante.png",
+    "score-1500.png",
+    "fish-giant.png"
+  ],
+  "js_external_validated": true,
+  "js_inline_validated": true,
+  "missing_asset_refs": []
+}

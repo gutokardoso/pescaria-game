@@ -745,7 +745,6 @@ function registerCaptureForMission(kind) {
       if (kind === 'giant') {
         giantCaught += 1;
         specialCaught += 1;
-        applyGiantScoreV10({ type: 'giant' });
       }
       if (kind === 'bottle') {
         bottleCaught += 1;
@@ -1254,6 +1253,7 @@ function announceGiantSpawn() {
         missionForced: true
       });
 
+      if (item && item.type === 'giant') markGiantSpawnWarningV11(item);
       specialSpawnState[item.type] += 1;
       specialSpawnState.activeId = id;
     }
@@ -1463,8 +1463,7 @@ function showGiantQuickNotice() {
       setTimeout(() => img.remove(), 700);
     }
 
-    
-    function getGameVisualContainerV10() {
+    function getGameVisualContainerV11() {
       return document.getElementById('game') ||
         document.getElementById('gameScreen') ||
         document.querySelector('.game-screen') ||
@@ -1472,17 +1471,13 @@ function showGiantQuickNotice() {
         document.body;
     }
 
-    function showGiantRewardV10(item) {
+    function showGiantSpawnWarningV11() {
       try {
-        const container = getGameVisualContainerV10();
-        const rect = container.getBoundingClientRect ? container.getBoundingClientRect() : { width: window.innerWidth, height: window.innerHeight };
-        const x = item && Number.isFinite(Number(item.x)) ? Number(item.x) : rect.width / 2;
-        const y = item && Number.isFinite(Number(item.y)) ? Number(item.y) : rect.height * 0.42;
-
+        const container = getGameVisualContainerV11();
         const alert = document.createElement('img');
         alert.src = './assets/aviso-gigante.png';
         alert.alt = 'Peixe gigante!';
-        alert.className = 'giant-alert-v10';
+        alert.className = 'giant-alert-v11';
         alert.style.position = 'absolute';
         alert.style.left = '50%';
         alert.style.top = '28%';
@@ -1490,14 +1485,25 @@ function showGiantQuickNotice() {
         alert.style.transform = 'translate(-50%, -50%)';
         alert.style.zIndex = '999999';
         alert.style.pointerEvents = 'none';
-        alert.style.animation = 'giantAlertV10 1.25s ease-out forwards';
+        alert.style.animation = 'giantAlertV11 1.35s ease-out forwards';
         container.appendChild(alert);
-        setTimeout(() => alert.remove(), 1300);
+        setTimeout(() => alert.remove(), 1400);
+      } catch (error) {
+        console.warn('Erro no aviso de spawn do peixe gigante:', error);
+      }
+    }
+
+    function showGiantScoreV11(item) {
+      try {
+        const container = getGameVisualContainerV11();
+        const rect = container.getBoundingClientRect ? container.getBoundingClientRect() : { width: window.innerWidth, height: window.innerHeight };
+        const x = item && Number.isFinite(Number(item.x)) ? Number(item.x) : rect.width / 2;
+        const y = item && Number.isFinite(Number(item.y)) ? Number(item.y) : rect.height * 0.42;
 
         const scoreImg = document.createElement('img');
         scoreImg.src = './assets/score-1500.png';
         scoreImg.alt = '+1500';
-        scoreImg.className = 'giant-score-v10';
+        scoreImg.className = 'giant-score-v11';
         scoreImg.style.position = 'absolute';
         scoreImg.style.left = `${x}px`;
         scoreImg.style.top = `${y}px`;
@@ -1505,19 +1511,27 @@ function showGiantQuickNotice() {
         scoreImg.style.transform = 'translate(-50%, -50%)';
         scoreImg.style.zIndex = '999998';
         scoreImg.style.pointerEvents = 'none';
-        scoreImg.style.animation = 'giantScoreV10 1s ease-out forwards';
+        scoreImg.style.animation = 'giantScoreV11 1s ease-out forwards';
         container.appendChild(scoreImg);
         setTimeout(() => scoreImg.remove(), 1050);
       } catch (error) {
-        console.warn('Erro no aviso do peixe gigante:', error);
+        console.warn('Erro no score do peixe gigante:', error);
       }
     }
 
-    function applyGiantScoreV10(item) {
+    function markGiantSpawnWarningV11(item) {
       try {
-        if (item && item.__giantRewardAppliedV10) return;
-        if (item) item.__giantRewardAppliedV10 = true;
-        showGiantRewardV10(item || null);
+        if (item && item.__giantSpawnWarningShownV11) return;
+        if (item) item.__giantSpawnWarningShownV11 = true;
+        showGiantSpawnWarningV11();
+      } catch (error) {}
+    }
+
+    function applyGiantScoreV11(item) {
+      try {
+        if (item && item.__giantScoreShownV11) return;
+        if (item) item.__giantScoreShownV11 = true;
+        showGiantScoreV11(item || null);
       } catch (error) {}
     }
 
@@ -1568,7 +1582,7 @@ function checkCollisions() {
             cinematicCaptureFeedback(fish.type, popX, popY);
 
             if (fish.type === 'giant') {
-              applyGiantScoreV10(fish);
+              applyGiantScoreV11(fish);
               fish.value = 1500;
               fish.baseValue = 1500;
               fish.normalValue = 0;
@@ -4193,6 +4207,7 @@ applyHookVisuals();
       if (fish.__giantCaptureHandled) return true;
 
       fish.__giantCaptureHandled = true;
+      applyGiantScoreV11(fish);
       
 
       playGiant1500SoundNoFreeze();

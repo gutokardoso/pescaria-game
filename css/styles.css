@@ -5619,8 +5619,6 @@ html body #finalMissionStatusList .mission-final-icon {
 }
 
 
-/* v17 hud/font hardfix */
-
 /* HUD oculto por padrão fora do jogo e fora da contagem de moedas */
 html body:not(.screen-playing):not(.coin-counting-active) #missionProgress,
 html body:not(.screen-playing):not(.coin-counting-active) #liveScore,
@@ -5711,7 +5709,7 @@ html body #finalMissionStatusList .final-mission-icon,
 html body #finalMissionStatusList .mission-final-icon {
   width: 30px !important;
   height: 30px !important;
-  font-size: 20px !important;
+  font-size: 10px !important;
   left: 5px !important;
 }
 
@@ -5762,3 +5760,104 @@ html body.screen-result .final-mission-row,
 html body.screen-result .final-mission-row *,
 html body.screen-result .mission-final-bar,
 html body.screen-result .mission-final-bar * { visibility:visible!important; opacity:1!important; }
+
+
+/* v19 hud-controller-final */
+
+/* HUD principal: oculto por padrão */
+html body #missionProgress,
+html body #liveScore,
+html body #liveFish,
+html body #depthMeter,
+html body #depthNumber {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* HUD visível SOMENTE durante gameplay */
+html body.screen-playing:not(.hud-force-hidden) #missionProgress {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+html body.screen-playing:not(.hud-force-hidden) #liveScore,
+html body.screen-playing:not(.hud-force-hidden) #liveFish {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* HUD visível durante contagem de moedas */
+html body.hud-coin-counting #missionProgress {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: none !important;
+}
+html body.hud-coin-counting #liveScore,
+html body.hud-coin-counting #liveFish {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: none !important;
+}
+
+/* Bloqueio explícito: inicial, missão/prelevel, loja e resultado final */
+html body.screen-start:not(.hud-coin-counting) #missionProgress,
+html body.screen-start:not(.hud-coin-counting) #liveScore,
+html body.screen-start:not(.hud-coin-counting) #liveFish,
+html body.screen-prelevel:not(.hud-coin-counting) #missionProgress,
+html body.screen-prelevel:not(.hud-coin-counting) #liveScore,
+html body.screen-prelevel:not(.hud-coin-counting) #liveFish,
+html body.screen-shop:not(.hud-coin-counting) #missionProgress,
+html body.screen-shop:not(.hud-coin-counting) #liveScore,
+html body.screen-shop:not(.hud-coin-counting) #liveFish,
+html body.screen-result:not(.hud-coin-counting) #missionProgress,
+html body.screen-result:not(.hud-coin-counting) #liveScore,
+html body.screen-result:not(.hud-coin-counting) #liveFish {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Missões finais: texto contido dentro das barras */
+html body #finalMissionStatusList .final-mission-row,
+html body #finalMissionStatusList .mission-final-bar {
+  width: 500px !important;
+  max-width: 500px !important;
+  min-height: 42px !important;
+  padding-left: 46px !important;
+  padding-right: 12px !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+html body #finalMissionStatusList .final-mission-text,
+html body #finalMissionStatusList .mission-final-text {
+  font-size: 10px !important;
+  line-height: .95 !important;
+  white-space: nowrap !important;
+  letter-spacing: -1px !important;
+  transform: scale(.78) !important;
+  transform-origin: left center !important;
+  display: inline-block !important;
+  width: auto !important;
+  max-width: none !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  flex: 0 0 auto !important;
+}
+
+html body #finalMissionStatusList .final-mission-icon,
+html body #finalMissionStatusList .mission-final-icon {
+  width: 30px !important;
+  height: 30px !important;
+  font-size: 20px !important;
+}

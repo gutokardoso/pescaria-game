@@ -239,9 +239,36 @@ Missão: 0/0</div>
 
 
 
-<script id="final-mission-text-size-v17">
+
+
+<script id="coin-count-hud-v19">
 (function(){
-  function fixFinalMissionTextSizeV17(){
+  function applyHudScopeV19(){
+    try {
+      var body = document.body;
+      var show = body.classList.contains('screen-playing') || body.classList.contains('hud-coin-counting');
+      ['missionProgress','liveScore','liveFish','depthMeter','depthNumber'].forEach(function(id){
+        var el = document.getElementById(id);
+        if (!el) return;
+        var visible = show && (id === 'depthMeter' || id === 'depthNumber' ? body.classList.contains('screen-playing') : true);
+        el.style.setProperty('display', visible ? (id === 'missionProgress' || id === 'depthMeter' || id === 'depthNumber' ? 'block' : 'flex') : 'none', 'important');
+        el.style.setProperty('visibility', visible ? 'visible' : 'hidden', 'important');
+        el.style.setProperty('opacity', visible ? '1' : '0', 'important');
+        el.style.setProperty('pointer-events', visible ? 'auto' : 'none', 'important');
+      });
+    } catch(e) {}
+  }
+  window.applyHudScopeV19 = applyHudScopeV19;
+  document.addEventListener('DOMContentLoaded', applyHudScopeV19);
+  window.addEventListener('load', applyHudScopeV19);
+  document.addEventListener('click', function(){ setTimeout(applyHudScopeV19, 20); }, true);
+  setInterval(applyHudScopeV19, 150);
+})();
+</script>
+
+<script id="final-mission-text-size-v19">
+(function(){
+  function fixFinalMissionTextSizeV19(){
     try {
       var list = document.getElementById('finalMissionStatusList');
       if (!list) return;
@@ -266,33 +293,12 @@ Missão: 0/0</div>
       });
     } catch(e) {}
   }
-  document.addEventListener('DOMContentLoaded', fixFinalMissionTextSizeV17);
-  window.addEventListener('load', fixFinalMissionTextSizeV17);
-  document.addEventListener('click', function(){ setTimeout(fixFinalMissionTextSizeV17, 50); }, true);
-  window.fixFinalMissionTextSizeV17 = fixFinalMissionTextSizeV17;
+  document.addEventListener('DOMContentLoaded', fixFinalMissionTextSizeV19);
+  window.addEventListener('load', fixFinalMissionTextSizeV19);
+  document.addEventListener('click', function(){ setTimeout(fixFinalMissionTextSizeV19, 50); }, true);
+  window.fixFinalMissionTextSizeV19 = fixFinalMissionTextSizeV19;
 })();
 </script>
 
-<script id="coin-count-hud-v18">
-(function(){
-  function hardHideHudOutsideGameV18(){
-    try{
-      var show=document.body.classList.contains('screen-playing')||document.body.classList.contains('coin-counting-active');
-      ['missionProgress','liveScore','liveFish','depthMeter','depthNumber'].forEach(function(id){
-        var el=document.getElementById(id); if(!el) return;
-        el.style.setProperty('display', show ? (id==='missionProgress'?'block':'flex') : 'none', 'important');
-        el.style.setProperty('visibility', show?'visible':'hidden', 'important');
-        el.style.setProperty('opacity', show?'1':'0', 'important');
-        el.style.setProperty('pointer-events', show?'auto':'none', 'important');
-      });
-    }catch(e){}
-  }
-  window.hardHideHudOutsideGameV18=hardHideHudOutsideGameV18;
-  document.addEventListener('DOMContentLoaded', hardHideHudOutsideGameV18);
-  window.addEventListener('load', hardHideHudOutsideGameV18);
-  document.addEventListener('click', function(){setTimeout(hardHideHudOutsideGameV18,10);}, true);
-  setInterval(hardHideHudOutsideGameV18,50);
-})();
-</script>
 </body>
 </html>

@@ -1052,22 +1052,63 @@ function announceGiantSpawn() {
     function keepHeaderVisibleOnResultV13() { return; }
 
 
-    function updateHudScopeV15() { try { hardHideHudOutsideGameV18(); } catch(error) {} }
+    function updateHudScopeV15() { try { updateHUDVisibilityV19(); } catch(error) {} }
 
 
-function updateHudScopeV17() { try { hardHideHudOutsideGameV18(); } catch(error) {} }
+function updateHudScopeV17() { try { updateHUDVisibilityV19(); } catch(error) {} }
 
 
-function hardHideHudOutsideGameV18() {
+function hardHideHudOutsideGameV18() { try { updateHUDVisibilityV19(); } catch(error) {} }
+
+
+function getCurrentScreenV19() {
   try {
-    const show = document.body.classList.contains('screen-playing') || document.body.classList.contains('coin-counting-active');
-    ['missionProgress','liveScore','liveFish','depthMeter','depthNumber'].forEach(id => {
+    const body = document.body;
+    if (body.classList.contains('screen-playing')) return 'playing';
+    if (body.classList.contains('screen-start')) return 'start';
+    if (body.classList.contains('screen-prelevel')) return 'prelevel';
+    if (body.classList.contains('screen-result')) return 'result';
+    if (body.classList.contains('screen-shop')) return 'shop';
+    return 'unknown';
+  } catch (error) {
+    return 'unknown';
+  }
+}
+
+function setHudModeV19(mode) {
+  try {
+    const body = document.body;
+    body.classList.remove('hud-coin-counting', 'hud-force-hidden');
+
+    if (mode === 'coin') {
+      body.classList.add('hud-coin-counting');
+    } else if (mode === 'hidden') {
+      body.classList.add('hud-force-hidden');
+    }
+
+    updateHUDVisibilityV19();
+  } catch (error) {}
+}
+
+function updateHUDVisibilityV19() {
+  try {
+    const body = document.body;
+    const isGame = body.classList.contains('screen-playing');
+    const isCoin = body.classList.contains('hud-coin-counting');
+    const show = isGame || isCoin;
+
+    const ids = ['missionProgress', 'liveScore', 'liveFish', 'depthMeter', 'depthNumber'];
+    ids.forEach(id => {
       const el = document.getElementById(id);
       if (!el) return;
-      el.style.setProperty('display', show ? (id === 'missionProgress' ? 'block' : 'flex') : 'none', 'important');
-      el.style.setProperty('visibility', show ? 'visible' : 'hidden', 'important');
-      el.style.setProperty('opacity', show ? '1' : '0', 'important');
-      el.style.setProperty('pointer-events', show ? 'auto' : 'none', 'important');
+
+      const visible = show && (id !== 'depthMeter' && id !== 'depthNumber' ? true : isGame);
+      const displayValue = id === 'missionProgress' || id === 'depthMeter' || id === 'depthNumber' ? 'block' : 'flex';
+
+      el.style.setProperty('display', visible ? displayValue : 'none', 'important');
+      el.style.setProperty('visibility', visible ? 'visible' : 'hidden', 'important');
+      el.style.setProperty('opacity', visible ? '1' : '0', 'important');
+      el.style.setProperty('pointer-events', visible ? 'auto' : 'none', 'important');
     });
   } catch (error) {}
 }
@@ -1075,6 +1116,8 @@ function hardHideHudOutsideGameV18() {
 function setGameScreen(screenName) {
       document.body.classList.remove('screen-start', 'screen-prelevel', 'screen-playing', 'screen-result', 'screen-shop');
       document.body.classList.add(`screen-${screenName}`);
+      if (screenName !== 'playing') document.body.classList.remove('hud-coin-counting');
+      updateHUDVisibilityV19();
       hardHideHudOutsideGameV18();
       updateHudScopeV17();
       updateHudScopeV16();
@@ -1082,7 +1125,7 @@ function setGameScreen(screenName) {
 
       const isPlaying = screenName === 'playing';
       setDepthUiVisible(isPlaying);
-      setMissionUiVisible(isPlaying || document.body.classList.contains('coin-counting-active'));
+      setMissionUiVisible(isPlaying || document.body.classList.contains('hud-coin-counting'));
 
       if (typeof updateShopButtonVisibility === 'function') {
         updateShopButtonVisibility();
@@ -1104,9 +1147,9 @@ function setGameScreen(screenName) {
         mission.style.setProperty('max-width', '230px', 'important');
         mission.style.setProperty('height', 'auto', 'important');
         mission.style.setProperty('aspect-ratio', '1307 / 548', 'important');
-        mission.style.setProperty('display', (document.body.classList.contains('screen-playing') || document.body.classList.contains('coin-counting-active')) ? 'block' : 'none', 'important');
-        mission.style.setProperty('visibility', (document.body.classList.contains('screen-playing') || document.body.classList.contains('coin-counting-active')) ? 'visible' : 'hidden', 'important');
-        mission.style.setProperty('opacity', (document.body.classList.contains('screen-playing') || document.body.classList.contains('coin-counting-active')) ? '1' : '0', 'important');
+        mission.style.setProperty('display', (document.body.classList.contains('screen-playing') || document.body.classList.contains('hud-coin-counting')) ? 'block' : 'none', 'important');
+        mission.style.setProperty('visibility', (document.body.classList.contains('screen-playing') || document.body.classList.contains('hud-coin-counting')) ? 'visible' : 'hidden', 'important');
+        mission.style.setProperty('opacity', (document.body.classList.contains('screen-playing') || document.body.classList.contains('hud-coin-counting')) ? '1' : '0', 'important');
         mission.style.setProperty('overflow', 'visible', 'important');
         mission.style.setProperty('background', "transparent url('./assets/hud-missao-perfil-final.png') left top / contain no-repeat", 'important');
         mission.style.setProperty('border', '0', 'important');
@@ -1185,7 +1228,7 @@ function setGameScreen(screenName) {
       const progressFill = document.getElementById('missionProgressFill');
       const progressLabel = document.getElementById('missionProgressLabel');
       if (!progressFill || !progressLabel) return;
-      if (document.body.classList.contains('screen-playing') || document.body.classList.contains('coin-counting-active')) setMissionUiVisible(true);
+      if (document.body.classList.contains('screen-playing') || document.body.classList.contains('hud-coin-counting')) setMissionUiVisible(true);
 
       const progress = lockedMissionProgressSnapshot || getMissionProgress();
       const pct = progress.target > 0 ? Math.min(100, (progress.current / progress.target) * 100) : 0;
@@ -1694,7 +1737,8 @@ function checkCollisions() {
     }
 
     function updateCoinHud() {
-      document.body.classList.add('coin-counting-active');
+      setHudModeV19('coin');
+      document.body.classList.add('hud-coin-counting');
       const coinTarget = document.getElementById('liveFish');
       if (coinTarget) {
         coinTarget.innerHTML = `<span class="coin-hud"><img src="./assets/coin-gold.png" alt="Moeda"><span>${totalCoins}</span></span>`;
@@ -1721,7 +1765,8 @@ function checkCollisions() {
     }
 
     function showCoinPopFeedback(amount) {
-      document.body.classList.add('coin-counting-active');
+      setHudModeV19('coin');
+      document.body.classList.add('hud-coin-counting');
       const pop = document.createElement('div');
       pop.className = 'coin-pop-feedback';
       pop.textContent = `+${amount} moedas`;
@@ -2122,11 +2167,12 @@ function checkCollisions() {
     }
 
     function showPreLevelScreen() {
-      document.body.classList.remove('coin-counting-active');
+      setHudModeV19('hidden');
+      document.body.classList.remove('hud-coin-counting');
       hardHideHudOutsideGameV18();
-      document.body.classList.remove('coin-counting-active');
+      document.body.classList.remove('hud-coin-counting');
       updateHudScopeV17();
-      document.body.classList.remove('coin-counting-active');
+      document.body.classList.remove('hud-coin-counting');
       updateHudScopeV15();
       cleanupRareAnimalSprites();
       setGameScreen('prelevel');
@@ -2836,9 +2882,11 @@ applyHookVisuals();
 
 
     function startRound() {
-      document.body.classList.remove('coin-counting-active');
+      document.body.classList.remove('hud-coin-counting');
+      updateHUDVisibilityV19();
+      document.body.classList.remove('hud-coin-counting');
       updateHudScopeV17();
-      document.body.classList.remove('coin-counting-active');
+      document.body.classList.remove('hud-coin-counting');
       if (typeof window.requirePescariaLoginBeforeStart === 'function' && !window.requirePescariaLoginBeforeStart()) return false;
       cleanupRareAnimalSprites();
       forceHudLayout();
@@ -5329,7 +5377,7 @@ function renderFinalMissionStatusRows(phaseScoreValue) {
 
         if (typeof forceFinalMissionBarsRestored === 'function') forceFinalMissionBarsRestored();
         if (typeof fixFinalMissionBarsTextFull === 'function') fixFinalMissionBarsTextFull();
-        if (typeof window.fixFinalMissionTextSizeV17 === 'function') window.fixFinalMissionTextSizeV17();
+        if (typeof window.fixFinalMissionTextSizeV19 === 'function') window.fixFinalMissionTextSizeV19();
       } catch (error) {
         console.warn('Erro ao renderizar missões finais:', error);
       }
@@ -5474,4 +5522,4 @@ function renderFinalMissionStatusRows(phaseScoreValue) {
       registerMissionCapture.__turtleMissionFixWrapped = true;
     }
 
-function updateHudScopeV16() { try { hardHideHudOutsideGameV18(); } catch(error) {} }
+function updateHudScopeV16() { try { updateHUDVisibilityV19(); } catch(error) {} }

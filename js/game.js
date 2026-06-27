@@ -1048,13 +1048,38 @@ function announceGiantSpawn() {
 
 
 
-    function setGameScreen(screenName) {
+    
+    function keepHeaderVisibleOnResultV13() {
+      try {
+        const active = document.body.classList.contains('screen-result') || document.body.classList.contains('coin-counting-active');
+        if (!active) return;
+        const mission = document.getElementById('missionProgress');
+        if (mission) {
+          mission.style.setProperty('display', 'block', 'important');
+          mission.style.setProperty('visibility', 'visible', 'important');
+          mission.style.setProperty('opacity', '1', 'important');
+          mission.style.setProperty('z-index', '2147483000', 'important');
+        }
+        ['liveScore','liveFish'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) {
+            el.style.setProperty('display', 'flex', 'important');
+            el.style.setProperty('visibility', 'visible', 'important');
+            el.style.setProperty('opacity', '1', 'important');
+            el.style.setProperty('z-index', '2147483000', 'important');
+          }
+        });
+      } catch (error) {}
+    }
+
+function setGameScreen(screenName) {
       document.body.classList.remove('screen-start', 'screen-prelevel', 'screen-playing', 'screen-result', 'screen-shop');
       document.body.classList.add(`screen-${screenName}`);
 
       const isPlaying = screenName === 'playing';
+      const showHeaderHud = screenName === 'playing' || screenName === 'result';
       setDepthUiVisible(isPlaying);
-      setMissionUiVisible(isPlaying);
+      setMissionUiVisible(showHeaderHud);
 
       if (typeof updateShopButtonVisibility === 'function') {
         updateShopButtonVisibility();
@@ -1076,9 +1101,9 @@ function announceGiantSpawn() {
         mission.style.setProperty('max-width', '230px', 'important');
         mission.style.setProperty('height', 'auto', 'important');
         mission.style.setProperty('aspect-ratio', '1307 / 548', 'important');
-        mission.style.setProperty('display', document.body.classList.contains('screen-playing') ? 'block' : 'none', 'important');
-        mission.style.setProperty('visibility', document.body.classList.contains('screen-playing') ? 'visible' : 'hidden', 'important');
-        mission.style.setProperty('opacity', document.body.classList.contains('screen-playing') ? '1' : '0', 'important');
+        mission.style.setProperty('display', (document.body.classList.contains('screen-playing') || document.body.classList.contains('screen-result') || document.body.classList.contains('coin-counting-active')) ? 'block' : 'none', 'important');
+        mission.style.setProperty('visibility', (document.body.classList.contains('screen-playing') || document.body.classList.contains('screen-result') || document.body.classList.contains('coin-counting-active')) ? 'visible' : 'hidden', 'important');
+        mission.style.setProperty('opacity', (document.body.classList.contains('screen-playing') || document.body.classList.contains('screen-result') || document.body.classList.contains('coin-counting-active')) ? '1' : '0', 'important');
         mission.style.setProperty('overflow', 'visible', 'important');
         mission.style.setProperty('background', "transparent url('./assets/hud-missao-perfil-final.png') left top / contain no-repeat", 'important');
         mission.style.setProperty('border', '0', 'important');
@@ -1157,7 +1182,7 @@ function announceGiantSpawn() {
       const progressFill = document.getElementById('missionProgressFill');
       const progressLabel = document.getElementById('missionProgressLabel');
       if (!progressFill || !progressLabel) return;
-      if (document.body.classList.contains('screen-playing')) setMissionUiVisible(true);
+      if (document.body.classList.contains('screen-playing') || document.body.classList.contains('screen-result')) setMissionUiVisible(true);
 
       const progress = lockedMissionProgressSnapshot || getMissionProgress();
       const pct = progress.target > 0 ? Math.min(100, (progress.current / progress.target) * 100) : 0;
@@ -1827,6 +1852,7 @@ function checkCollisions() {
         if (coinsEarned <= 0) {
           localStorage.setItem('pescaria_total_coins', String(totalCoins));
           updateCoinHud();
+      keepHeaderVisibleOnResultV13();
           resolve();
           return;
         }
@@ -2884,6 +2910,7 @@ applyHookVisuals();
     async function finishRound() {
       cleanupRareAnimalSprites();
       setGameScreen('result');
+      keepHeaderVisibleOnResultV13();
       refreshGameplayUiVisibility();
       lockMissionProgressSnapshot();
       setDepthUiVisible(false);
@@ -5288,7 +5315,7 @@ function renderFinalMissionStatusRows(phaseScoreValue) {
 
         if (typeof forceFinalMissionBarsRestored === 'function') forceFinalMissionBarsRestored();
         if (typeof fixFinalMissionBarsTextFull === 'function') fixFinalMissionBarsTextFull();
-        if (typeof window.fixFinalMissionTextSizeV10 === 'function') window.fixFinalMissionTextSizeV10();
+        if (typeof window.fixFinalMissionTextSizeV13 === 'function') window.fixFinalMissionTextSizeV13();
       } catch (error) {
         console.warn('Erro ao renderizar missões finais:', error);
       }

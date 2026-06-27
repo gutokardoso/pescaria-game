@@ -5371,3 +5371,57 @@ body:not(.player-authenticated) button[onclick*="start"] {
   20% { opacity: 1; transform: translate(-50%, -50%) scale(1.08); }
   100% { opacity: 0; transform: translate(-50%, -125%) scale(0.9); }
 }
+
+
+/* v13 ajustes hud moeda */
+#finalMissionStatusList .final-mission-text,
+#finalMissionStatusList .mission-final-text,
+.final-mission-row .final-mission-text,
+.final-mission-row span.final-mission-text,
+.mission-final-bar .mission-final-text,
+.mission-final-bar span.mission-final-text {
+  font-size: 10px !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  letter-spacing: -0.55px !important;
+  transform: scale(0.88) !important;
+  transform-origin: left center !important;
+  display: inline-block !important;
+}
+
+/* Mantém o header/HUD visível também na tela de resultado/contagem de moedas */
+body.screen-result #missionProgress,
+body.screen-result #liveScore,
+body.screen-result #liveFish,
+body.screen-result #phaseNumber,
+body.screen-result #missionProgressLabel,
+body.screen-result #missionProgressFill,
+body.screen-result .game-hud,
+body.screen-result .hud,
+body.screen-result .top-hud,
+body.coin-counting-active #missionProgress,
+body.coin-counting-active #liveScore,
+body.coin-counting-active #liveFish,
+body.coin-counting-active #phaseNumber,
+body.coin-counting-active #missionProgressLabel,
+body.coin-counting-active #missionProgressFill,
+body.coin-counting-active .game-hud,
+body.coin-counting-active .hud,
+body.coin-counting-active .top-hud {
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  z-index: 2147483000 !important;
+}
+
+body.screen-result #missionProgress,
+body.coin-counting-active #missionProgress {
+  display: block !important;
+}
+
+body.screen-result #liveScore,
+body.screen-result #liveFish,
+body.coin-counting-active #liveScore,
+body.coin-counting-active #liveFish {
+  display: flex !important;
+}

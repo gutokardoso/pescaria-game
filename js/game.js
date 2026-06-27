@@ -932,8 +932,11 @@ function registerCaptureForMission(kind) {
     }
 
     
+
 function announceGiantSpawn() {
-  document.querySelectorAll('.giant-spawn-alert, .giant-quick-notice, .combo-pop.giant-quick-notice').forEach(alert => alert.remove());
+  try {
+    showGiantSpawnWarningV12();
+  } catch (error) {}
 
   try {
     if (typeof initAudio === 'function') initAudio();
@@ -953,17 +956,6 @@ function announceGiantSpawn() {
       osc.stop(now + 0.38);
     }
   } catch (error) {}
-
-  const alert = document.createElement('div');
-  alert.className = 'giant-spawn-alert';
-  alert.setAttribute('aria-label', 'Peixe Gigante!');
-  alert.textContent = 'Peixe Gigante!';
-  const gameRoot = document.getElementById('game') || document.body;
-  gameRoot.appendChild(alert);
-
-  setTimeout(() => {
-    if (alert && alert.parentNode) alert.remove();
-  }, 1400);
 }
 
 
@@ -1253,7 +1245,9 @@ function announceGiantSpawn() {
         missionForced: true
       });
 
-      if (item && item.type === 'giant') markGiantSpawnWarningV11(item);
+      
+      if (item && item.type === 'giant') notifyGiantSpawnV12(fishes[fishes.length - 1]);
+      if (item && item.type === 'giant') 
       specialSpawnState[item.type] += 1;
       specialSpawnState.activeId = id;
     }
@@ -1463,75 +1457,95 @@ function showGiantQuickNotice() {
       setTimeout(() => img.remove(), 700);
     }
 
-    function getGameVisualContainerV11() {
+    /* v12 - sistema definitivo do peixe gigante:
+       - Aviso aparece no spawn/entrada.
+       - Captura mostra somente a pontuação visual 1500.
+       - Sem pontuação duplicada. */
+    function getGameVisualContainerV12() {
       return document.getElementById('game') ||
+        document.getElementById('world') ||
         document.getElementById('gameScreen') ||
         document.querySelector('.game-screen') ||
         document.querySelector('.game-area') ||
         document.body;
     }
 
-    function showGiantSpawnWarningV11() {
+    function showGiantSpawnWarningV12() {
       try {
-        const container = getGameVisualContainerV11();
+        const container = getGameVisualContainerV12();
+        if (!container) return;
+
+        document.querySelectorAll('.giant-alert-v12, .giant-alert-v11, .giant-alert-v10, .giant-spawn-alert, .giant-quick-notice').forEach(el => el.remove());
+
         const alert = document.createElement('img');
         alert.src = './assets/aviso-gigante.png';
         alert.alt = 'Peixe gigante!';
-        alert.className = 'giant-alert-v11';
+        alert.className = 'giant-alert-v12';
         alert.style.position = 'absolute';
         alert.style.left = '50%';
         alert.style.top = '28%';
         alert.style.width = 'min(72%, 430px)';
         alert.style.transform = 'translate(-50%, -50%)';
-        alert.style.zIndex = '999999';
+        alert.style.zIndex = '2147483646';
         alert.style.pointerEvents = 'none';
-        alert.style.animation = 'giantAlertV11 1.35s ease-out forwards';
+        alert.style.animation = 'giantAlertV12 1.35s ease-out forwards';
+
         container.appendChild(alert);
-        setTimeout(() => alert.remove(), 1400);
+        setTimeout(() => alert.remove(), 1450);
       } catch (error) {
-        console.warn('Erro no aviso de spawn do peixe gigante:', error);
+        console.warn('Erro ao mostrar aviso do peixe gigante:', error);
       }
     }
 
-    function showGiantScoreV11(item) {
+    function showGiantScore1500V12(fish) {
       try {
-        const container = getGameVisualContainerV11();
-        const rect = container.getBoundingClientRect ? container.getBoundingClientRect() : { width: window.innerWidth, height: window.innerHeight };
-        const x = item && Number.isFinite(Number(item.x)) ? Number(item.x) : rect.width / 2;
-        const y = item && Number.isFinite(Number(item.y)) ? Number(item.y) : rect.height * 0.42;
+        const container = getGameVisualContainerV12();
+        if (!container) return;
+
+        const x = fish && Number.isFinite(Number(fish.x)) ? Number(fish.x) : hookWorldX;
+        const y = fish && Number.isFinite(Number(fish.y)) ? (Number(fish.y) - cameraY) : ((hookWorldY || 0) - (cameraY || 0));
 
         const scoreImg = document.createElement('img');
         scoreImg.src = './assets/score-1500.png';
         scoreImg.alt = '+1500';
-        scoreImg.className = 'giant-score-v11';
+        scoreImg.className = 'giant-score-v12';
         scoreImg.style.position = 'absolute';
         scoreImg.style.left = `${x}px`;
         scoreImg.style.top = `${y}px`;
         scoreImg.style.width = '128px';
         scoreImg.style.transform = 'translate(-50%, -50%)';
-        scoreImg.style.zIndex = '999998';
+        scoreImg.style.zIndex = '2147483645';
         scoreImg.style.pointerEvents = 'none';
-        scoreImg.style.animation = 'giantScoreV11 1s ease-out forwards';
+        scoreImg.style.animation = 'giantScoreV12 1s ease-out forwards';
+
         container.appendChild(scoreImg);
-        setTimeout(() => scoreImg.remove(), 1050);
+        setTimeout(() => scoreImg.remove(), 1100);
       } catch (error) {
-        console.warn('Erro no score do peixe gigante:', error);
+        console.warn('Erro ao mostrar score 1500 do peixe gigante:', error);
       }
     }
 
-    function markGiantSpawnWarningV11(item) {
+    function notifyGiantSpawnV12(fish) {
       try {
-        if (item && item.__giantSpawnWarningShownV11) return;
-        if (item) item.__giantSpawnWarningShownV11 = true;
-        showGiantSpawnWarningV11();
+        if (fish && fish.__giantSpawnWarningShownV12) return;
+        if (fish) fish.__giantSpawnWarningShownV12 = true;
+
+        showGiantSpawnWarningV12();
+
+        // Mantém o som já existente do projeto, sem depender dele para mostrar o aviso.
+        try {
+          if (typeof playGiantImpactSound === 'function') playGiantImpactSound();
+          else if (typeof announceGiantSpawn === 'function') announceGiantSpawn();
+          else if (typeof showGiantQuickNotice === 'function') showGiantQuickNotice();
+        } catch (error) {}
       } catch (error) {}
     }
 
-    function applyGiantScoreV11(item) {
+    function notifyGiantCaptureScoreV12(fish) {
       try {
-        if (item && item.__giantScoreShownV11) return;
-        if (item) item.__giantScoreShownV11 = true;
-        showGiantScoreV11(item || null);
+        if (fish && fish.__giantScore1500ShownV12) return;
+        if (fish) fish.__giantScore1500ShownV12 = true;
+        showGiantScore1500V12(fish);
       } catch (error) {}
     }
 
@@ -1582,7 +1596,7 @@ function checkCollisions() {
             cinematicCaptureFeedback(fish.type, popX, popY);
 
             if (fish.type === 'giant') {
-              applyGiantScoreV11(fish);
+              
               fish.value = 1500;
               fish.baseValue = 1500;
               fish.normalValue = 0;
@@ -1590,6 +1604,8 @@ function checkCollisions() {
               if (!canScoreGiantOnce(fish)) {
                 return;
               }
+
+              notifyGiantCaptureScoreV12(fish);
 
               if (typeof giantCaptureNoFreeze === 'function') {
                 giantCaptureNoFreeze(fish);
@@ -3640,6 +3656,8 @@ applyHookVisuals();
       };
 
       fishes.push(fish);
+      
+      if (fish && fish.type === 'giant') notifyGiantSpawnV12(fish);
       el.style.left = `${fish.x}px`;
       el.style.top = `${fish.y}px`;
       el.style.opacity = '1';
@@ -3849,6 +3867,8 @@ applyHookVisuals();
       };
 
       fishes.push(fish);
+      
+      if (fish && fish.type === 'giant') notifyGiantSpawnV12(fish);
       setNaturalElementPosition(fish);
 
       specialSpawnState.giant += 1;
@@ -3980,6 +4000,8 @@ applyHookVisuals();
       };
 
       fishes.push(fish);
+      
+      if (fish && fish.type === 'giant') notifyGiantSpawnV12(fish);
       setBalancedElementPosition(fish);
 
       specialSpawnState.giant += 1;
@@ -4207,7 +4229,8 @@ applyHookVisuals();
       if (fish.__giantCaptureHandled) return true;
 
       fish.__giantCaptureHandled = true;
-      applyGiantScoreV11(fish);
+      notifyGiantCaptureScoreV12(fish);
+      
       
 
       playGiant1500SoundNoFreeze();
@@ -4544,6 +4567,8 @@ applyHookVisuals();
         fixSeahorseSizeDirectionAndSeparation(fish);
       }
       fishes.push(fish);
+      
+      if (fish && fish.type === 'giant') notifyGiantSpawnV12(fish);
       return true;
     }
 

@@ -5335,3 +5335,39 @@ body:not(.player-authenticated) button[onclick*="start"] {
 .mission-final-bar span.mission-final-text {
   font-size: 11px !important;
 }
+
+
+/* v12 clean giant final */
+#finalMissionStatusList .final-mission-text,
+#finalMissionStatusList .mission-final-text,
+.final-mission-row .final-mission-text,
+.final-mission-row span.final-mission-text,
+.mission-final-bar .mission-final-text,
+.mission-final-bar span.mission-final-text {
+  font-size: 11px !important;
+  line-height: 1.02 !important;
+  white-space: nowrap !important;
+  letter-spacing: -0.45px !important;
+  transform: scale(0.9) !important;
+  transform-origin: left center !important;
+  display: inline-block !important;
+}
+
+.giant-alert-v12,
+.giant-score-v12 {
+  pointer-events: none !important;
+  user-select: none !important;
+}
+
+@keyframes giantAlertV12 {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.65); }
+  18% { opacity: 1; transform: translate(-50%, -50%) scale(1.06); }
+  78% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -75%) scale(0.9); }
+}
+
+@keyframes giantScoreV12 {
+  0% { opacity: 0; transform: translate(-50%, -30%) scale(0.7); }
+  20% { opacity: 1; transform: translate(-50%, -50%) scale(1.08); }
+  100% { opacity: 0; transform: translate(-50%, -125%) scale(0.9); }
+}

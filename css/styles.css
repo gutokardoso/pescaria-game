@@ -5861,8 +5861,6 @@ html body #finalMissionStatusList .mission-final-icon {
 }
 
 
-/* v20 hud coin/result fix */
-
 /* HUD base: hidden unless gameplay or coin-counting */
 html body:not(.screen-playing):not(.hud-coin-counting) #missionProgress,
 html body:not(.screen-playing):not(.hud-coin-counting) #missionProgress *,
@@ -5963,3 +5961,29 @@ html body #finalMissionStatusList .mission-final-text {
   width: auto !important;
   max-width: none !important;
 }
+
+
+/* v21 overlay hud fix */
+html body:not(.hud-visible-v21) #missionProgress,
+html body:not(.hud-visible-v21) #missionProgress *,
+html body:not(.hud-visible-v21) #liveScore,
+html body:not(.hud-visible-v21) #liveScore *,
+html body:not(.hud-visible-v21) #liveFish,
+html body:not(.hud-visible-v21) #liveFish *,
+html body:not(.hud-visible-v21) #depthMeter,
+html body:not(.hud-visible-v21) #depthNumber { display:none!important; visibility:hidden!important; opacity:0!important; pointer-events:none!important; }
+html body.hud-visible-v21 #missionProgress,
+html body.hud-visible-v21 #missionProgress *,
+html body.hud-visible-v21 #liveScore,
+html body.hud-visible-v21 #liveScore *,
+html body.hud-visible-v21 #liveFish,
+html body.hud-visible-v21 #liveFish * { visibility:visible!important; opacity:1!important; }
+html body.hud-visible-v21 #missionProgress { display:block!important; }
+html body.hud-visible-v21 #liveScore,
+html body.hud-visible-v21 #liveFish { display:flex!important; }
+html body.hud-visible-v21.screen-playing #depthMeter,
+html body.hud-visible-v21.screen-playing #depthNumber { display:block!important; visibility:visible!important; opacity:1!important; }
+html body #finalMissionStatusList .final-mission-row,
+html body #finalMissionStatusList .mission-final-bar { width:500px!important; max-width:500px!important; min-height:42px!important; padding-left:46px!important; padding-right:12px!important; overflow:hidden!important; box-sizing:border-box!important; }
+html body #finalMissionStatusList .final-mission-text,
+html body #finalMissionStatusList .mission-final-text { font-size:10px!important; line-height:.95!important; white-space:nowrap!important; letter-spacing:-1px!important; transform:scale(.78)!important; transform-origin:left center!important; display:inline-block!important; width:auto!important; max-width:none!important; }

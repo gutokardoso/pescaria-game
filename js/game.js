@@ -1052,13 +1052,13 @@ function announceGiantSpawn() {
     function keepHeaderVisibleOnResultV13() { return; }
 
 
-    function updateHudScopeV15() { try { updateHUDVisibilityV20(); } catch(error) {} }
+    function updateHudScopeV15() { try { updateHUDVisibilityV21(); } catch(error) {} }
 
 
-function updateHUDVisibilityV20() { try { updateHUDVisibilityV20(); } catch(error) {} }
+function updateHUDVisibilityV21() { try { updateHUDVisibilityV21(); } catch(error) {} }
 
 
-function updateHUDVisibilityV20() { try { updateHUDVisibilityV20(); } catch(error) {} }
+function updateHUDVisibilityV21() { try { updateHUDVisibilityV21(); } catch(error) {} }
 
 
 function getCurrentScreenV19() {
@@ -1086,14 +1086,14 @@ function setHudModeV19(mode) {
       body.classList.add('hud-force-hidden');
     }
 
-    updateHUDVisibilityV20();
+    updateHUDVisibilityV21();
   } catch (error) {}
 }
 
-function updateHUDVisibilityV20() { try { updateHUDVisibilityV20(); } catch(error) {} }
+function updateHUDVisibilityV21() { try { updateHUDVisibilityV21(); } catch(error) {} }
 
 
-function updateHUDVisibilityV20() {
+function updateHUDVisibilityV21() {
   try {
     const body = document.body;
     const show = body.classList.contains('screen-playing') || body.classList.contains('hud-coin-counting');
@@ -1130,11 +1130,39 @@ function updateHUDVisibilityV20() {
   } catch (error) {}
 }
 
+
+function updateHUDVisibilityV21() {
+  try {
+    const isOverlayVisible = (id) => {
+      const el = document.getElementById(id);
+      if (!el) return false;
+      if (el.classList.contains('hidden')) return false;
+      if (el.getAttribute('aria-hidden') === 'true') return false;
+      const cs = window.getComputedStyle(el);
+      return cs.display !== 'none' && cs.visibility !== 'hidden' && Number(cs.opacity || 1) !== 0;
+    };
+    const coinDim = document.getElementById('coinDimOverlay');
+    const coinCounting = !!(coinDim && coinDim.classList.contains('active'));
+    const gameplayVisible = !isOverlayVisible('startOverlay') && !isOverlayVisible('preLevelOverlay') && !isOverlayVisible('shopOverlay') && !isOverlayVisible('mapOverlay') && !isOverlayVisible('resultOverlay');
+    const showHud = coinCounting || gameplayVisible;
+    document.body.classList.toggle('hud-visible-v21', !!showHud);
+    ['missionProgress', 'liveScore', 'liveFish', 'depthMeter', 'depthNumber'].forEach(id => {
+      const el = document.getElementById(id); if (!el) return;
+      const visible = showHud && (id === 'depthMeter' || id === 'depthNumber' ? !coinCounting : true);
+      el.style.setProperty('display', visible ? (id === 'missionProgress' || id === 'depthMeter' || id === 'depthNumber' ? 'block' : 'flex') : 'none', 'important');
+      el.style.setProperty('visibility', visible ? 'visible' : 'hidden', 'important');
+      el.style.setProperty('opacity', visible ? '1' : '0', 'important');
+      el.style.setProperty('pointer-events', visible ? 'auto' : 'none', 'important');
+      el.querySelectorAll('*').forEach(child => { child.style.setProperty('visibility', visible ? 'visible' : 'hidden', 'important'); child.style.setProperty('opacity', visible ? '1' : '0', 'important'); if (!visible) child.style.setProperty('display', 'none', 'important'); else child.style.removeProperty('display'); });
+    });
+  } catch (error) {}
+}
+
 function setGameScreen(screenName) {
       document.body.classList.remove('screen-start', 'screen-prelevel', 'screen-playing', 'screen-result', 'screen-shop');
       document.body.classList.add(`screen-${screenName}`);
-      if (screenName !== 'playing')       updateHUDVisibilityV20();
-      updateHUDVisibilityV20();
+      if (screenName !== 'playing')       updateHUDVisibilityV21();
+      updateHUDVisibilityV21();
       updateHudScopeV16();
       updateHudScopeV15();
 
@@ -5529,12 +5557,12 @@ function renderFinalMissionStatusRows(phaseScoreValue) {
       registerMissionCapture.__turtleMissionFixWrapped = true;
     }
 
-function updateHudScopeV16() { try { updateHUDVisibilityV20(); } catch(error) {} }
+function updateHudScopeV16() { try { updateHUDVisibilityV21(); } catch(error) {} }
 
 
 function hideHudOnFinalResultV20() {
   try {
     document.body.classList.remove('hud-coin-counting');
-    updateHUDVisibilityV20();
+    updateHUDVisibilityV21();
   } catch (error) {}
 }

@@ -277,36 +277,14 @@ Missão: 0/0</div>
 </script>
 
 
-<script id="coin-count-hud-v20">
-(function(){
-  function applyHudScopeV20(){
-    try {
-      var body = document.body;
-      var show = body.classList.contains('screen-playing') || body.classList.contains('hud-coin-counting');
-      var isResult = body.classList.contains('screen-result');
-      var isCoin = body.classList.contains('hud-coin-counting');
-      var visible = show && (!isResult || isCoin);
 
-      ['missionProgress','liveScore','liveFish'].forEach(function(id){
-        var el = document.getElementById(id);
-        if (!el) return;
-        el.style.setProperty('display', visible ? (id === 'missionProgress' ? 'block' : 'flex') : 'none', 'important');
-        el.style.setProperty('visibility', visible ? 'visible' : 'hidden', 'important');
-        el.style.setProperty('opacity', visible ? '1' : '0', 'important');
-        Array.prototype.forEach.call(el.querySelectorAll('*'), function(child){
-          child.style.setProperty('visibility', visible ? 'visible' : 'hidden', 'important');
-          child.style.setProperty('opacity', visible ? '1' : '0', 'important');
-          if (visible) child.style.removeProperty('display');
-        });
-      });
-    } catch(e) {}
-  }
-  window.applyHudScopeV20 = applyHudScopeV20;
-  document.addEventListener('DOMContentLoaded', applyHudScopeV20);
-  window.addEventListener('load', applyHudScopeV20);
-  document.addEventListener('click', function(){ setTimeout(applyHudScopeV20, 20); }, true);
-  setInterval(applyHudScopeV20, 150);
+<script id="coin-count-hud-v21">
+(function(){
+  function isOverlayVisibleV21(id){var el=document.getElementById(id); if(!el) return false; if(el.classList.contains('hidden')) return false; if(el.getAttribute('aria-hidden')==='true') return false; var cs=getComputedStyle(el); return cs.display!=='none'&&cs.visibility!=='hidden'&&Number(cs.opacity||1)!==0;}
+  function applyHudScopeV21(){try{var coinDim=document.getElementById('coinDimOverlay'); var coinCounting=!!(coinDim&&coinDim.classList.contains('active')); var gameplayVisible=!isOverlayVisibleV21('startOverlay')&&!isOverlayVisibleV21('preLevelOverlay')&&!isOverlayVisibleV21('shopOverlay')&&!isOverlayVisibleV21('mapOverlay')&&!isOverlayVisibleV21('resultOverlay'); var showHud=coinCounting||gameplayVisible; document.body.classList.toggle('hud-visible-v21',!!showHud); ['missionProgress','liveScore','liveFish','depthMeter','depthNumber'].forEach(function(id){var el=document.getElementById(id); if(!el) return; var visible=showHud&&((id==='depthMeter'||id==='depthNumber')?!coinCounting:true); el.style.setProperty('display',visible?(id==='missionProgress'||id==='depthMeter'||id==='depthNumber'?'block':'flex'):'none','important'); el.style.setProperty('visibility',visible?'visible':'hidden','important'); el.style.setProperty('opacity',visible?'1':'0','important'); el.style.setProperty('pointer-events',visible?'auto':'none','important'); Array.prototype.forEach.call(el.querySelectorAll('*'),function(child){child.style.setProperty('visibility',visible?'visible':'hidden','important'); child.style.setProperty('opacity',visible?'1':'0','important'); if(!visible) child.style.setProperty('display','none','important'); else child.style.removeProperty('display');});});}catch(e){}}
+  window.applyHudScopeV21=applyHudScopeV21; document.addEventListener('DOMContentLoaded',applyHudScopeV21); window.addEventListener('load',applyHudScopeV21); document.addEventListener('click',function(){setTimeout(applyHudScopeV21,10);},true); new MutationObserver(applyHudScopeV21).observe(document.documentElement,{attributes:true,childList:true,subtree:true}); setInterval(applyHudScopeV21,80);
 })();
 </script>
+
 </body>
 </html>
